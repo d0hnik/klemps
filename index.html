@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klemps</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="cards.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div class="title">
+    <h1>KLEMPS</h1>
+</div>
+
+
+
+<div id="description" class="description">
+    <p>Klemps is a card game, where each player get 4 cards. Siin on veel palju palju teksti, mida ma ei viitsi kirjutada</p>
+</div>
+
+
+<div id="player-setup" class="player-setup">
+    <label for="player-count">How many players?</label>
+    <input class='number-input' type="number" id="player-count" min="2" max="6">
+    <button onclick="setupPlayers()">LETS GET DRUNK</button>
+</div>
+
+
+<div id="name-setup" style="display: none;" class="player-setup">
+    <form id="player-form">
+        <div id="name-inputs"></div>
+        <button type="button" onclick="startGame()">Alusta mängu</button>
+    </form>
+</div>
+<div id="overlay"></div>
+<div id="game" style="display: none;" class="game">
+    <div id="players"></div>
+</div>
+
+<div id="popup">
+    <h2>PUNANE VÕI MUST</h2>
+    <button class="btn black" onclick="checkColorChoice('black')">MUST</button>
+    <button class="btn red" onclick="checkColorChoice('red')">PUNANE</button>
+</div>
+
+<div id="popup2">
+    <h2>SA ARVASID ÕIGESTI</h2>
+    <h3>JAGA <span id="drinks-win"></span> LONKSU!</h3>
+</div>
+
+<div id="popup3">
+    <h2>SA ARVASID VALESTI</h2>
+    <h3>VÕTA <span id="drinks-lose"></span> LONKSU!</h3>
+</div>
+
+<div id="popup4">
+    <h2>SUUREM VÕI VÄIKSEM</h2>
+    <button class="btn black" onclick="checkHigherLowerChoice('higher')">HIGHER</button>
+    <button class="btn red" onclick="checkHigherLowerChoice('lower')">LOWER</button>
+</div>
+
+<div id="popup5">
+    <h2>KAS JÄRGMINE KAART JÄÄB KAHE EELMISE KAARDI VAHELE?</h2>
+    <button class="btn black" onclick="checkHigherLowerChoice('higher')">JÄÄB</button>
+    <button class="btn red" onclick="checkHigherLowerChoice('lower')">EI JÄÄ</button>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

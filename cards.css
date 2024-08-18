@@ -1,0 +1,80 @@
+.card {
+    width: 140px;
+    height: 190px;
+    background-image: url('playingCards.png');
+    background-size: 1024px 2048px; /* 8 veergu, 7 rida */
+    display: inline-block;
+}
+
+.cardBack {
+    width: 140px;
+    height: 190px;
+    background-image: url('playingCardBacks.png');
+    background-size: 512px 1024px;
+    display: inline-block;
+}
+
+.cardBack.redBack {
+    background-position: 0 0;
+
+}
+
+/* Poti kaardid */
+.card.spadesA { background-position: -0px -570px; }
+.card.spades2 { background-position: -140px -380px; }
+.card.spades3 { background-position: -140px -190px; }
+.card.spades4 { background-position: -140px -0px; }
+.card.spades5 { background-position: -0px -1710px; }
+.card.spades6 { background-position: -0px -1520px; }
+.card.spades7 { background-position: -0px -1330px; }
+.card.spades8 { background-position: -0px -1140px; }
+.card.spades9 { background-position: -0px -950px; }
+.card.spades10 { background-position: -0px -760px; }
+.card.spadesJ { background-position: -0px -380px; }
+.card.spadesQ { background-position: -0px -0px; }
+.card.spadesK { background-position: -0px -190px; }
+
+/* Ruutu kaardid */
+.card.diamondsA { background-position: -420px -0px; }
+.card.diamonds2 { background-position: -420px -1710px; }
+.card.diamonds3 { background-position: -420px -1520px; }
+.card.diamonds4 { background-position: -420px -1330px; }
+.card.diamonds5 { background-position: -420px -1140px; }
+.card.diamonds6 { background-position: -420px -950px; }
+.card.diamonds7 { background-position: -420px -760px; }
+.card.diamonds8 { background-position: -420px -570px; }
+.card.diamonds9 { background-position: -420px -380px; }
+.card.diamonds10 { background-position: -420px -190px; }
+.card.diamondsJ { background-position: -280px -1710px; }
+.card.diamondsQ { background-position: -280px -1330px; }
+.card.diamondsK { background-position: -280px -1520px; }
+
+/* Risti kaardid */
+.card.clubsA { background-position: -560px -570px; }
+.card.clubs2 { background-position: -280px -1140px; }
+.card.clubs3 { background-position: -700px -190px; }
+.card.clubs4 { background-position: -700px -0px; }
+.card.clubs5 { background-position: -560px -1710px; }
+.card.clubs6 { background-position: -560px -1520px; }
+.card.clubs7 { background-position: -560px -1330px; }
+.card.clubs8 { background-position: -560px -1140px; }
+.card.clubs9 { background-position: -560px -950px; }
+.card.clubs10 { background-position: -560px -760px; }
+.card.clubsJ { background-position: -560px -380px; }
+.card.clubsQ { background-position: -560px -0px; }
+.card.clubsK { background-position: -560px -190px; }
+
+/* Ärtu kaardid */
+.card.heartsA { background-position: -140px -1330px; }
+.card.hearts2 { background-position: -700px -380px; }
+.card.hearts3 { background-position: -280px -950px; }
+.card.hearts4 { background-position: -280px -760px; }
+.card.hearts5 { background-position: -280px -570px; }
+.card.hearts6 { background-position: -280px -380px; }
+.card.hearts7 { background-position: -280px -190px; }
+.card.hearts8 { background-position: -280px -0px; }
+.card.hearts9 { background-position: -140px -1710px; }
+.card.hearts10 { background-position: -140px -1520px; }
+.card.heartsJ { background-position: -140px -1140px; }
+.card.heartsQ { background-position: -140px -760px; }
+.card.heartsK { background-position: -140px -950px; }
