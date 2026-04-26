@@ -1,4 +1,3 @@
-import type { RoundType } from "./roundType";
 
 export const RED_BLACK_GUESSES = ["RED", "BLACK"] as const;
 
