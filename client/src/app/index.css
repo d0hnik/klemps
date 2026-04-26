@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+body {
+  font-family: 'Pixelify Sans', sans-serif;
+}
+
+.my-red {
+    background: var(--color-red);
+}

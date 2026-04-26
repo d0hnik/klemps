@@ -1,0 +1,22 @@
+:root {
+  /* colors */
+  --color-bg: #2f6f8f;
+  --color-panel: #f6c453;
+  --color-card: #fff2cf;
+  --color-red: #e53935;
+  --color-secondary: #4fd1ff;
+  --color-text: #1b1b1b;
+  --color-border: #1b1b1b;
+
+  /* borders */
+  --border-width: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* shadows */
+  --shadow-pixel: 4px 4px 0 var(--color-border);
+
+  /* font */
+  --font-pixel: 'Pixelify Sans', sans-serif;
+}
