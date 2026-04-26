@@ -1,10 +1,9 @@
 import type { Card } from "./card";
 
-type Player = {
-    id: string
+export type Player = {
+    id: string,
     name: string,
-    drinkGiven: number,
+    drinksGiven: number,
     drinksTaken: number,
     hand: Card[],
-    currentCardIndex: number,
 }
