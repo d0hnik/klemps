@@ -1,4 +1,4 @@
-import { DIFFICULTY_MAP } from "./difficulty.config";
+import { DIFFICULTIES } from "./difficulty.config";
 
 export type Difficulty = {
     name: DifficultyName,
@@ -9,6 +9,6 @@ export const DIFFICULTYNAMES = ["EASY", "HARD"] as const;
 
 export type DifficultyName = typeof DIFFICULTYNAMES[number];
 
-export const getDifficultyByName = (name: DifficultyName): Difficulty => {
-  return DIFFICULTY_MAP[name];
+export const getDifficultyByName = (name: DifficultyName): Difficulty | undefined => {
+  return DIFFICULTIES.find((d) => d.name === name);
 };

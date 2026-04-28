@@ -1,6 +1,7 @@
 import type { Card } from "./card";
 import { createDeck } from "./deck";
 import { getDifficultyByName, type Difficulty, type DifficultyName } from "./difficulty/difficulty";
+import { EASY_DIFFICULTY } from "./difficulty/difficulty.config";
 import { type GameStatus } from "./gameStatus";
 import { createPlayersFromNames, type Player } from "./player";
 import type { RoundType } from "./roundType";
@@ -23,7 +24,7 @@ export function createGame(playerNames: string[], difficultyName: DifficultyName
 
     const players: Player[] = createPlayersFromNames(playerNames, deck);
 
-    const difficulty: Difficulty = getDifficultyByName(difficultyName);
+    const difficulty: Difficulty = getDifficultyByName(difficultyName) ?? EASY_DIFFICULTY;
 
     const gameState: GameState = {
         id: uuidv4(),
