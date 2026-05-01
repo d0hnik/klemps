@@ -45,7 +45,7 @@ export function restartPlayersWithHands(players: Player[], deck: Card[]): Player
 
 export function restartPlayerWithHand(player: Player, deck: Card[]): Player {
     const restartedPlayer: Player = {
-        id: player.name,
+        id: player.id,
         name: player.name,
         drinksGiven: 0,
         drinksTaken: 0,
