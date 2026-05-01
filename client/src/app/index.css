@@ -2,8 +2,13 @@
 
 body {
   font-family: 'Pixelify Sans', sans-serif;
+  background:
+  radial-gradient(circle at center, #0A4650 0%, #062F36 45%, #021C22 100%);
 }
 
-.my-red {
-    background: var(--color-red);
+.game-setup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
 }
