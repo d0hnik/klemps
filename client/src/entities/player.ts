@@ -10,17 +10,17 @@ export type Player = {
     hand: Card[],
 }
 
-export function createPlayersFromNames(playerNames: string[], deck: Card[]): Player[] {
+export function createPlayersWithHand(playerNames: string[], deck: Card[]): Player[] {
     const players: Player[] = [];
 
     for (const playerName of playerNames) {
-        players.push(createPlayerFromName(playerName, deck))
+        players.push(createPlayerFromNameWithHand(playerName, deck))
     }
 
     return players;
 }
 
-export function createPlayerFromName(playerName: string, deck: Card[]): Player {
+export function createPlayerFromNameWithHand(playerName: string, deck: Card[]): Player {
     const newPlayer: Player = {
         id: uuidv4(),
         name: playerName,
@@ -30,4 +30,27 @@ export function createPlayerFromName(playerName: string, deck: Card[]): Player {
     }
 
     return newPlayer;
+}
+
+export function restartPlayersWithHands(players: Player[], deck: Card[]): Player[] {
+    const restartedPlayers = [];
+
+    for (const player of players) {
+        restartedPlayers.push(restartPlayerWithHand(player, deck))
+    }
+
+    return restartedPlayers;
+
+}
+
+export function restartPlayerWithHand(player: Player, deck: Card[]): Player {
+    const restartedPlayer: Player = {
+        id: player.name,
+        name: player.name,
+        drinksGiven: 0,
+        drinksTaken: 0,
+        hand: dealHand(deck)
+    }
+
+    return restartedPlayer;
 }
