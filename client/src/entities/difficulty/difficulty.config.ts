@@ -9,3 +9,8 @@ export const HARD_DIFFICULTY: Difficulty = {
     name: "HARD",
     drinksPerRound: [2, 4, 6, 8]
 }
+
+export const DIFFICULTIES: Difficulty[] = [
+  EASY_DIFFICULTY,
+  HARD_DIFFICULTY,
+];
