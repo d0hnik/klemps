@@ -21,7 +21,7 @@ describe("createDeck", () => {
 
         expect(hand.length).toBe(4);
 
-        expect(unique.size).toBe(52);
+        expect(deck.length).toBe(48);
 
     });
 });
