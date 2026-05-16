@@ -1,0 +1,10 @@
+.main-button {
+  background-color: var(--color-bg);
+  min-width: 72px;
+  width: 100%;
+
+  cursor: pointer;
+
+  font-size: 36px;
+  color: white;
+}

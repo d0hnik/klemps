@@ -35,6 +35,10 @@
   border-right: 2px solid black;
 }
 
+.player-row > *:first-child {
+  border-right: 2px solid black;
+}
+
 .player-row__arrow-button {
   width: 54px;
   min-width: 54px;
@@ -98,17 +102,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   width: 100%;
-}
-
-.players-tab__player-count-button {
-  background-color: var(--color-bg);
-  min-width: 72px;
-  width: 100%;
-
-  cursor: pointer;
-
-  font-size: 36px;
-  color: white;
 }
 
 .players-select-text {

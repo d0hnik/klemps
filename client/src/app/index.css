@@ -12,7 +12,8 @@ body {
 
 .game-setup {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-top: 50px;
+  flex-direction: row;
 }
