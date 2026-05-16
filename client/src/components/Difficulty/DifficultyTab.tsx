@@ -1,12 +1,26 @@
+import type { DifficultyName } from "../../entities/difficulty/difficulty";
+import {
+  EASY_DIFFICULTY,
+  HARD_DIFFICULTY,
+} from "../../entities/difficulty/difficulty.config";
 import { Title } from "../Title/Title";
+import { DifficultyCard } from "./DifficultyCard";
 import "./difficultyTab.css";
 
-export function DifficultyTab() {
+type Props = {
+  selectedDifficulty: DifficultyName;
+  onSelectDifficulty: (difficultyName: DifficultyName) => void;
+};
+
+export function DifficultyTab({
+  selectedDifficulty,
+  onSelectDifficulty,
+}: Props) {
   return (
     <section className="difficulty-tab">
-      <div className="players-tab__title">
-        <Title index={"2"} title={"DIFFICULTY"} />
-      </div>
+      <Title index={"2"} title={"DIFFICULTY"} />
+      <DifficultyCard difficulty={EASY_DIFFICULTY} />
+      <DifficultyCard difficulty={HARD_DIFFICULTY} />
     </section>
   );
 }

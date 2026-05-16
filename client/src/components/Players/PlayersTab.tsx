@@ -6,9 +6,7 @@ import "./players.css";
 export function PlayersTab() {
   return (
     <section className="players-tab">
-      <div className="players-tab__title">
-        <Title index={"1"} title={"PLAYERS"} />
-      </div>
+      <Title index={"1"} title={"PLAYERS"} />
 
       <div className="players-tab__rows">
         <PlayerRow />

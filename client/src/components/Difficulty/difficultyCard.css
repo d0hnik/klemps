@@ -1,0 +1,97 @@
+.difficulty-card {
+  min-width: 100px;
+  width: 100%;
+  border: 5px solid white;
+  border-radius: 12px;
+}
+
+.difficulty-card.active {
+  border: 8px solid #fffbd1;
+  box-shadow:
+    inset 0 0 22px rgba(255, 251, 209, 1),
+    inset 0 0 44px rgba(255, 228, 92, 0.7),
+    0 0 12px #fffbd1,
+    0 0 28px #fff176,
+    0 0 56px #ffe45c,
+    0 0 90px rgba(246, 196, 83, 1),
+    0 0 130px rgba(246, 196, 83, 0.85),
+    0 0 180px rgba(246, 196, 83, 0.6),
+    0 0 240px rgba(246, 196, 83, 0.35),
+    6px 6px 0 var(--color-border);
+}
+
+.difficulty-card.easy {
+  background-color: var(--color-green);
+}
+
+.difficulty-card.hard {
+  background-color: var(--color-red);
+}
+
+.difficulty-card__name {
+  color: white;
+  font-size: 40px;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.difficulty-card__icons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.beer-icon {
+  width: 112px;
+  height: 112px;
+}
+
+.difficulty-card__drinks-tab {
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+}
+
+.difficulty-card__drink-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.difficulty-card__round-number {
+  color: white;
+}
+
+.difficulty-card__round-drink.easy {
+  color: green;
+}
+
+.difficulty-card__round-drink.hard {
+  color: red;
+}
+
+.difficulty-card__footer {
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  color: white;
+  font-size: 24px;
+}
+
+.difficulty-card__footer.easy {
+  color: green;
+}
+
+.difficulty-card__footer.hard {
+  color: red;
+}
+
+.difficulty-card__star {
+  margin-right: 10px;
+}
