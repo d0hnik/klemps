@@ -7,4 +7,19 @@
 
   font-size: 36px;
   color: white;
+
+  transition:
+    transform 120ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+
+.main-button:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.08);
+}
+
+.main-button:active {
+  transform: translateY(1px) scale(0.97);
 }

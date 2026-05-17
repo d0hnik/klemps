@@ -4,12 +4,15 @@ import { PlayersTab } from "../components/Players/PlayersTab";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
 
 function App() {
-  // const [playerNames, setPlayerNames] = useState<string[]>([]);
+  const [playerNames, setPlayerNames] = useState<string[]>([]);
+
+  const [playerCount, setPlayerCount] = useState<number>(2);
+
   const [difficultyName, setDifficultyName] = useState<DifficultyName>("EASY");
 
   return (
     <main className="game-setup">
-      <PlayersTab />
+      <PlayersTab onSetPlayerCount={setPlayerCount} playerCount={playerCount} />
       <DifficultyTab
         selectedDifficulty={difficultyName}
         onSelectDifficulty={setDifficultyName}

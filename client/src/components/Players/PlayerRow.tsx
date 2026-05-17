@@ -5,7 +5,11 @@ import {
 } from "@tabler/icons-react";
 import "./players.css";
 
-export function PlayerRow() {
+type Props = {
+  playerIndex: number;
+};
+
+export function PlayerRow({ playerIndex }: Props) {
   return (
     <div className="player-row pixel-corners">
       <button className="player-row__arrow-button" type="button">
@@ -17,11 +21,11 @@ export function PlayerRow() {
       </div>
 
       <div className="player-row__content">
-        <span className="player-row__index pixel-corners">P1</span>
+        <span className="player-row__index pixel-corners">P{playerIndex}</span>
 
         <input
           type="text"
-          placeholder="PLAYER 1 NAME"
+          placeholder={`PLAYER ${playerIndex} NAME`}
           className="player-row__input"
         />
       </div>

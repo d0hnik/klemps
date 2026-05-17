@@ -8,34 +8,50 @@ import { IconStarFilled } from "@tabler/icons-react";
 type Props = {
   difficulty: Difficulty;
   onSelectDifficulty: (difficultyName: DifficultyName) => void;
+  selectedDifficulty: DifficultyName;
 };
 
-export function DifficultyCard({ difficulty }: Props) {
-  const is_easy: boolean = difficulty.name === "EASY";
+export function DifficultyCard({
+  difficulty,
+  onSelectDifficulty,
+  selectedDifficulty,
+}: Props) {
+  const isEasy = difficulty.name === "EASY";
+
+  const isSelected = difficulty.name === selectedDifficulty;
+
+  const beerIconCount = isEasy ? 1 : 2;
+
+  const difficultyModifier = isEasy ? "easy" : "hard";
+
+  const selectedModifier = isSelected ? "active" : "";
+
   return (
-    <section
-      className={`difficulty-card pixel-corners ${is_easy ? "easy active" : "hard"}`}
+    <button
+      className={`difficulty-card pixel-corners ${difficultyModifier} ${selectedModifier}`}
+      onClick={() => onSelectDifficulty(difficulty.name)}
+      type="button"
     >
       <p className="difficulty-card__name">{difficulty.name}</p>
       <div className="difficulty-card__icons">
-        {is_easy ? (
-          <img src="/icons/beer.svg" alt="Beer icon" className="beer-icon" />
-        ) : (
-          <>
-            <img src="/icons/beer.svg" alt="Beer icon" className="beer-icon" />
-            <img src="/icons/beer.svg" alt="Beer icon" className="beer-icon" />
-          </>
-        )}
+        {Array.from({ length: beerIconCount }).map((_, index) => (
+          <img
+            key={index}
+            src="/icons/beer.svg"
+            alt=""
+            className="difficulty-card__beer-icon"
+          />
+        ))}
       </div>
       <div className="difficulty-card__drinks-tab">
         {difficulty.drinksPerRound.map((drinkCount, index) => (
-          <div className="difficulty-card__drink-row">
+          <div className="difficulty-card__drink-row" key={index}>
             <span className="difficulty-card__round-number">
               ROUND {index + 1}.
             </span>
             <span
               className={`difficulty-card__round-drink ${
-                is_easy ? "easy" : "hard"
+                isEasy ? "easy" : "hard"
               }`}
             >
               {drinkCount} DRINK
@@ -43,12 +59,12 @@ export function DifficultyCard({ difficulty }: Props) {
           </div>
         ))}
       </div>
-      <div className={`difficulty-card__footer ${is_easy ? "easy" : "hard"}`}>
+      <div className={`difficulty-card__footer ${difficultyModifier}`}>
         <p className="difficulty-card__star">
           <IconStarFilled />
         </p>
         {difficulty.name}
       </div>
-    </section>
+    </button>
   );
 }

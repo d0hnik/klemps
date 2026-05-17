@@ -19,8 +19,16 @@ export function DifficultyTab({
   return (
     <section className="difficulty-tab">
       <Title index={"2"} title={"DIFFICULTY"} />
-      <DifficultyCard difficulty={EASY_DIFFICULTY} />
-      <DifficultyCard difficulty={HARD_DIFFICULTY} />
+      <DifficultyCard
+        difficulty={EASY_DIFFICULTY}
+        onSelectDifficulty={onSelectDifficulty}
+        selectedDifficulty={selectedDifficulty}
+      />
+      <DifficultyCard
+        difficulty={HARD_DIFFICULTY}
+        onSelectDifficulty={onSelectDifficulty}
+        selectedDifficulty={selectedDifficulty}
+      />
     </section>
   );
 }
