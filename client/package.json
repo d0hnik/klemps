@@ -14,8 +14,10 @@
     "@fontsource/pixelify-sans": "^5.2.7",
     "@tabler/icons-react": "^3.43.0",
     "@tailwindcss/vite": "^4.2.4",
+    "i18next": "^26.2.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-i18next": "^17.0.8",
     "tailwindcss": "^4.2.4",
     "uuid": "^14.0.0"
   },

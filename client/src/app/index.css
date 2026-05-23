@@ -17,3 +17,10 @@ body {
   margin-top: 50px;
   flex-direction: row;
 }
+
+@media (max-width: 480px) {
+  .game-setup {
+    flex-direction: column;
+    row-gap: 50px;
+  }
+}

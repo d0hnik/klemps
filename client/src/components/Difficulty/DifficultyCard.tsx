@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type {
   Difficulty,
   DifficultyName,
@@ -26,6 +27,8 @@ export function DifficultyCard({
 
   const selectedModifier = isSelected ? "active" : "";
 
+  const { t } = useTranslation();
+
   return (
     <button
       className={`difficulty-card pixel-corners ${difficultyModifier} ${selectedModifier}`}
@@ -47,14 +50,14 @@ export function DifficultyCard({
         {difficulty.drinksPerRound.map((drinkCount, index) => (
           <div className="difficulty-card__drink-row" key={index}>
             <span className="difficulty-card__round-number">
-              ROUND {index + 1}.
+              {t("difficulty.round")} {index + 1}.
             </span>
             <span
               className={`difficulty-card__round-drink ${
                 isEasy ? "easy" : "hard"
               }`}
             >
-              {drinkCount} DRINK
+              {drinkCount} {t("drinks.single")}
             </span>
           </div>
         ))}

@@ -1,12 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import '../styles/tokens.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import "../styles/tokens.css";
 
-import App from './App'
+import App from "./App";
 
-createRoot(document.getElementById('root')!).render(
+import "../i18n/i18n";
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+);

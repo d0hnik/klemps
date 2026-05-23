@@ -8,6 +8,8 @@ type Props = {
   playerCount: number;
 };
 
+const PLAYER_COUNT_OPTIONS = [2, 3, 4, 5, 6, 7];
+
 export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
   return (
     <section className="players-tab">
@@ -15,19 +17,21 @@ export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
 
       <div className="players-tab__rows">
         {Array.from({ length: playerCount }).map((_, index) => (
-          <PlayerRow key={index} playerIndex={index} />
+          <PlayerRow key={index} playerIndex={index + 1} />
         ))}
       </div>
 
       <span className="players-select-text">SELECT PLAYERS: </span>
 
       <div className="players-tab__buttons">
-        <MainButton text={"2"} onClick={() => onSetPlayerCount(2)} />
-        <MainButton text={"3"} onClick={() => onSetPlayerCount(3)} />
-        <MainButton text={"4"} onClick={() => onSetPlayerCount(4)} />
-        <MainButton text={"5"} onClick={() => onSetPlayerCount(5)} />
-        <MainButton text={"6"} onClick={() => onSetPlayerCount(6)} />
-        <MainButton text={"7"} onClick={() => onSetPlayerCount(7)} />
+        {PLAYER_COUNT_OPTIONS.map((count) => (
+          <MainButton
+            key={count}
+            text={String(count)}
+            active={playerCount === count}
+            onClick={() => onSetPlayerCount(count)}
+          />
+        ))}
       </div>
     </section>
   );
