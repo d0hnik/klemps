@@ -75,6 +75,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-inline: 5px;
 }
 
 .player-row__content {

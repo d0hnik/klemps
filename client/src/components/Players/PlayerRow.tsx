@@ -6,6 +6,7 @@ import "./players.css";
 
 type Props = {
   playerIndex: number;
+  avatarSrc: string;
 };
 
 const PLAYER_COLORS = [
@@ -23,7 +24,7 @@ const PLAYER_COLORS = [
   },
 ] as const;
 
-export function PlayerRow({ playerIndex }: Props) {
+export function PlayerRow({ playerIndex, avatarSrc }: Props) {
   const isEasy = playerIndex == 1;
 
   const colorModifier = isEasy ? "red" : "yellow";
@@ -43,11 +44,7 @@ export function PlayerRow({ playerIndex }: Props) {
         <IconArrowBadgeLeftFilled size={50} color="#f6c453" />
       </button>
 
-      <img
-        src="/players/guy2.png"
-        alt="Player icon"
-        className="player-row__avatar"
-      />
+      <img src={avatarSrc} alt="Player icon" className="player-row__avatar" />
 
       <div className="player-row__content">
         <span className={`player-row__index pixel-corners`}>
