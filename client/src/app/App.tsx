@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
-import Logo from "../components/Logo/logo";
+import Logo from "../components/Logo/Logo";
 
 function App() {
   const [playerNames, setPlayerNames] = useState<string[]>([]);
@@ -13,17 +13,19 @@ function App() {
 
   return (
     <main className="game-setup">
-      <div className="left-container">
+      <div className="game-setup__header">
         <Logo />
+      </div>
+      <div className="game-setup__content">
         <PlayersTab
           onSetPlayerCount={setPlayerCount}
           playerCount={playerCount}
         />
+        <DifficultyTab
+          selectedDifficulty={difficultyName}
+          onSelectDifficulty={setDifficultyName}
+        />
       </div>
-      <DifficultyTab
-        selectedDifficulty={difficultyName}
-        onSelectDifficulty={setDifficultyName}
-      />
     </main>
   );
 }

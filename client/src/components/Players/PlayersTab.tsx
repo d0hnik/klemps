@@ -12,46 +12,58 @@ type Props = {
 
 const PLAYER_COUNT_OPTIONS = [2, 3, 4, 5, 6, 7];
 
+function getDefaultAvatarIndex(playerIndex: number) {
+  return playerIndex % PLAYER_AVATARS.length;
+}
+
+function getNextAvatarIndex(avatarIndex: number, direction: "left" | "right") {
+  if (direction === "left") {
+    return avatarIndex === 0 ? PLAYER_AVATARS.length - 1 : avatarIndex - 1;
+  }
+
+  return avatarIndex === PLAYER_AVATARS.length - 1 ? 0 : avatarIndex + 1;
+}
+
 export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
   const [selectedAvatarIndexes, setSelectedAvatarIndexes] = useState<number[]>(
-    Array.from(
-      { length: playerCount },
-      (_, index) => index % PLAYER_AVATARS.length,
-    ),
+    () =>
+      Array.from({ length: playerCount }, (_, index) =>
+        getDefaultAvatarIndex(index),
+      ),
   );
 
   function changePlayerAvatar(
     playerIndex: number,
     direction: "left" | "right",
   ) {
-    setSelectedAvatarIndexes((current) =>
-      current.map((avatarIndex, index) => {
-        if (index !== playerIndex - 1) {
-          return avatarIndex;
-        }
+    const arrayIndex = playerIndex - 1;
 
-        if (direction === "left") {
-          return avatarIndex === 0
-            ? PLAYER_AVATARS.length - 1
-            : avatarIndex - 1;
-        }
+    setSelectedAvatarIndexes((current) => {
+      const next = [...current];
 
-        return avatarIndex === PLAYER_AVATARS.length - 1 ? 0 : avatarIndex + 1;
-      }),
-    );
+      const currentAvatarIndex =
+        next[arrayIndex] ?? getDefaultAvatarIndex(arrayIndex);
+
+      next[arrayIndex] = getNextAvatarIndex(currentAvatarIndex, direction);
+
+      return next;
+    });
   }
 
   return (
     <section className="players-tab">
-      <Title index={"1"} title={"PLAYERS"} />
+      <Title index="1" title="PLAYERS" />
 
       <div className="players-tab__rows">
         {Array.from({ length: playerCount }).map((_, index) => {
           const playerIndex = index + 1;
-          const selectedAvatarIndex = selectedAvatarIndexes[index];
+
+          const selectedAvatarIndex =
+            selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
+
           return (
             <PlayerRow
-              key={index}
+              key={playerIndex}
               playerIndex={playerIndex}
               avatarSrc={PLAYER_AVATARS[selectedAvatarIndex]}
               onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
