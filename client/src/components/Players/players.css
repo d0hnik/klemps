@@ -1,5 +1,5 @@
 .players-tab {
-  width: min(540px, 100%);
+  width: min(510px, 100%);
   padding: 32px 24px 24px;
   border-radius: 12px;
   position: relative;
@@ -23,7 +23,7 @@
 
 .player-row {
   width: 100%;
-  min-height: 76px;
+  min-height: 83px;
   border: 7px solid var(--player-color);
 
   display: flex;
@@ -40,8 +40,7 @@
 }
 
 .player-row__arrow-button {
-  width: 54px;
-  min-width: 54px;
+  width: 48px;
 
   display: flex;
   justify-content: center;
@@ -70,12 +69,11 @@
 }
 
 .player-row__avatar {
-  width: 68px;
+  width: 80px;
   object-fit: contain;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-inline: 5px;
 }
 
 .player-row__content {
@@ -110,6 +108,7 @@
   border-bottom: 1px solid lightgray;
   color: white;
   line-height: 1.2em;
+  font-size: 22px;
 }
 
 .players-tab__buttons {

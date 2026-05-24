@@ -20,18 +20,42 @@ export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
     ),
   );
 
+  function changePlayerAvatar(
+    playerIndex: number,
+    direction: "left" | "right",
+  ) {
+    setSelectedAvatarIndexes((current) =>
+      current.map((avatarIndex, index) => {
+        if (index !== playerIndex - 1) {
+          return avatarIndex;
+        }
+
+        if (direction === "left") {
+          return avatarIndex === 0
+            ? PLAYER_AVATARS.length - 1
+            : avatarIndex - 1;
+        }
+
+        return avatarIndex === PLAYER_AVATARS.length - 1 ? 0 : avatarIndex + 1;
+      }),
+    );
+  }
+
   return (
     <section className="players-tab">
       <Title index={"1"} title={"PLAYERS"} />
 
       <div className="players-tab__rows">
         {Array.from({ length: playerCount }).map((_, index) => {
+          const playerIndex = index + 1;
           const selectedAvatarIndex = selectedAvatarIndexes[index];
           return (
             <PlayerRow
               key={index}
-              playerIndex={index + 1}
+              playerIndex={playerIndex}
               avatarSrc={PLAYER_AVATARS[selectedAvatarIndex]}
+              onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
+              onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
             />
           );
         })}

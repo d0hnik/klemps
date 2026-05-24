@@ -64,10 +64,25 @@ export function restartPlayerWithHand(player: Player, deck: Card[]): Player {
 }
 
 export const PLAYER_AVATARS = [
-  "/players/guy1.png",
-  "/players/guy2.png",
-  "/players/guy3.png",
-  "/players/guy4.png",
+  "/players/avatar1.png",
+  "/players/avatar2.png",
+  "/players/avatar3.png",
+  "/players/avatar4.png",
+] as const;
+
+export const PLAYER_COLORS = [
+  {
+    color: "#e94b5e",
+  },
+  {
+    color: "#ffd91a",
+  },
+  {
+    color: "#44d07b",
+  },
+  {
+    color: "#4da3ff",
+  },
 ] as const;
 
 export type PlayerAvatar = (typeof PLAYER_AVATARS)[number];

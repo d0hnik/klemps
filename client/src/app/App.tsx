@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
+import Logo from "../components/Logo/logo";
 
 function App() {
   const [playerNames, setPlayerNames] = useState<string[]>([]);
@@ -12,7 +13,13 @@ function App() {
 
   return (
     <main className="game-setup">
-      <PlayersTab onSetPlayerCount={setPlayerCount} playerCount={playerCount} />
+      <div className="left-container">
+        <Logo />
+        <PlayersTab
+          onSetPlayerCount={setPlayerCount}
+          playerCount={playerCount}
+        />
+      </div>
       <DifficultyTab
         selectedDifficulty={difficultyName}
         onSelectDifficulty={setDifficultyName}
