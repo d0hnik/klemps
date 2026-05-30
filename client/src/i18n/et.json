@@ -1,21 +1,22 @@
 {
   "game": {
-    "selectPlayers": "Select players",
-    "selectDifficulty": "Select difficulty",
-    "startGame": "Start game"
+    "selectPlayers": "VALI MÄNGIJAD",
+    "selectDifficulty": "Vali raskusaste",
+    "startGame": "ALUSTA MÄNGU",
+    "back": "TAGASI"
   },
   "difficulty": {
-    "easy": "Easy",
-    "hard": "Hard",
-    "round": "Round",
-    "title": "Difficulty"
+    "easy": "LIHTNE",
+    "hard": "RASKE",
+    "round": "VOOR",
+    "title": "RASKUSTASE"
   },
   "players": {
-    "player": "Player",
-    "name": "Name"
+    "player": "MÄNGIJA",
+    "name": "NIMI"
   },
   "drinks": {
-    "single": "Jook",
-    "plural": "Jooki"
+    "single": "JOOK",
+    "plural": "JOOKI"
   }
 }

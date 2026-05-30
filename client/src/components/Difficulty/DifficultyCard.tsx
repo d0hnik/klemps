@@ -57,7 +57,8 @@ export function DifficultyCard({
                 isEasy ? "easy" : "hard"
               }`}
             >
-              {drinkCount} {t("drinks.single")}
+              {drinkCount}{" "}
+              {drinkCount == 1 ? t("drinks.single") : t("drinks.plural")}
             </span>
           </div>
         ))}

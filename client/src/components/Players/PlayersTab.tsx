@@ -9,6 +9,7 @@ import {
   getNextAvatarIndex,
   PLAYER_COUNT_OPTIONS,
 } from "../helpers/players";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onSetPlayerCount: (count: number) => void;
@@ -48,6 +49,8 @@ export function PlayersTab({
     });
   }
 
+  const { t } = useTranslation();
+
   return (
     <section className="players-tab">
       <Title index="1" title="PLAYERS" />
@@ -73,7 +76,7 @@ export function PlayersTab({
         })}
       </div>
 
-      <span className="players-select-text">SELECT PLAYERS: </span>
+      <span className="players-select-text">{t("game.selectPlayers")}: </span>
 
       <div className="players-tab__buttons">
         {PLAYER_COUNT_OPTIONS.map((count) => (

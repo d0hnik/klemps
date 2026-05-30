@@ -1,5 +1,6 @@
 import "./players.css";
 import { PLAYER_COLORS } from "../../entities/player";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   playerIndex: number;
@@ -19,6 +20,11 @@ export function PlayerRow({
   onNextAvatar,
 }: Props) {
   const color = PLAYER_COLORS[(playerIndex - 1) % PLAYER_COLORS.length];
+
+  const { t } = useTranslation();
+
+  const placeholder =
+    t("players.player") + " " + playerIndex + " " + t("players.name");
 
   return (
     <div
@@ -47,7 +53,7 @@ export function PlayerRow({
         <input
           type="text"
           value={playerName}
-          placeholder={`PLAYER ${playerIndex} NAME`}
+          placeholder={placeholder}
           className="player-row__input"
           onChange={(event) => onNameChange(event.target.value)}
         />

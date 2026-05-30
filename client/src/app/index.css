@@ -27,6 +27,12 @@ body {
   justify-content: space-evenly;
 }
 
+.game-setup__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 @media (max-width: 480px) {
   .game-setup__content {
     flex-direction: column;

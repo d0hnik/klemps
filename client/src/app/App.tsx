@@ -6,6 +6,7 @@ import Logo from "../components/Logo/Logo";
 import { MainButton } from "../components/Buttons/MainButton";
 import { createGame, type GameState } from "../entities/gameState";
 import { GamePage } from "../components/GamePage/GamePage";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const [playerNames, setPlayerNames] = useState<string[]>(() =>
@@ -17,6 +18,8 @@ function App() {
   const [difficultyName, setDifficultyName] = useState<DifficultyName>("EASY");
 
   const [gameState, setGameState] = useState<GameState | null>(null);
+
+  const { t } = useTranslation();
 
   function handleSetPlayerCount(count: number) {
     setPlayerCount(count);
@@ -76,7 +79,14 @@ function App() {
       </div>
       <div className="game-setup__buttons">
         <MainButton
-          text={"TEST"}
+          text={t("game.back")}
+          onClick={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+          active={false}
+        />
+        <MainButton
+          text={t("game.startGame")}
           onClick={() => handleStartGame(playerNames, difficultyName)}
           active={false}
         />

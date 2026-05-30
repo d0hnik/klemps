@@ -1,21 +1,22 @@
 {
   "game": {
-    "selectPlayers": "Vali mängijad",
-    "selectDifficulty": "Vali raskusaste",
-    "startGame": "Alusta mängu"
+    "selectPlayers": "SELECT PLAYERS",
+    "selectDifficulty": "Select difficulty",
+    "startGame": "START GAME",
+    "back": "BACK"
   },
   "difficulty": {
-    "easy": "LIHTNE",
-    "hard": "RASKE",
-    "round": "VOOR",
-    "title": "RASKUSTASE"
+    "easy": "Easy",
+    "hard": "Hard",
+    "round": "Round",
+    "title": "Difficulty"
   },
   "players": {
-    "player": "MÄNGIJA",
-    "name": "NIMI"
+    "player": "PLAYER",
+    "name": "NAME"
   },
   "drinks": {
-    "single": "JOOK",
-    "plural": "JOOKI"
+    "single": "DRINK",
+    "plural": "DRINKS"
   }
 }
