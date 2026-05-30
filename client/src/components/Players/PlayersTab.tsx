@@ -4,27 +4,25 @@ import { MainButton } from "../Buttons/MainButton";
 import { Title } from "../Title/Title";
 import { PlayerRow } from "./PlayerRow";
 import "./players.css";
+import {
+  getDefaultAvatarIndex,
+  getNextAvatarIndex,
+  PLAYER_COUNT_OPTIONS,
+} from "../helpers/players";
 
 type Props = {
   onSetPlayerCount: (count: number) => void;
+  onSetPlayerName: (playerIndex: number, name: string) => void;
   playerCount: number;
+  playerNames: string[];
 };
 
-const PLAYER_COUNT_OPTIONS = [2, 3, 4, 5, 6, 7];
-
-function getDefaultAvatarIndex(playerIndex: number) {
-  return playerIndex % PLAYER_AVATARS.length;
-}
-
-function getNextAvatarIndex(avatarIndex: number, direction: "left" | "right") {
-  if (direction === "left") {
-    return avatarIndex === 0 ? PLAYER_AVATARS.length - 1 : avatarIndex - 1;
-  }
-
-  return avatarIndex === PLAYER_AVATARS.length - 1 ? 0 : avatarIndex + 1;
-}
-
-export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
+export function PlayersTab({
+  onSetPlayerCount,
+  onSetPlayerName,
+  playerCount,
+  playerNames,
+}: Props) {
   const [selectedAvatarIndexes, setSelectedAvatarIndexes] = useState<number[]>(
     () =>
       Array.from({ length: playerCount }, (_, index) =>
@@ -65,7 +63,9 @@ export function PlayersTab({ onSetPlayerCount, playerCount }: Props) {
             <PlayerRow
               key={playerIndex}
               playerIndex={playerIndex}
+              playerName={playerNames[index] ?? ""}
               avatarSrc={PLAYER_AVATARS[selectedAvatarIndex]}
+              onNameChange={(name) => onSetPlayerName(playerIndex, name)}
               onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
               onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
             />

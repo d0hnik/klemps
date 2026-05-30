@@ -3,14 +3,18 @@ import { PLAYER_COLORS } from "../../entities/player";
 
 type Props = {
   playerIndex: number;
+  playerName: string;
   avatarSrc: string;
+  onNameChange: (name: string) => void;
   onPreviousAvatar: () => void;
   onNextAvatar: () => void;
 };
 
 export function PlayerRow({
   playerIndex,
+  playerName,
   avatarSrc,
+  onNameChange,
   onPreviousAvatar,
   onNextAvatar,
 }: Props) {
@@ -42,8 +46,10 @@ export function PlayerRow({
 
         <input
           type="text"
+          value={playerName}
           placeholder={`PLAYER ${playerIndex} NAME`}
           className="player-row__input"
+          onChange={(event) => onNameChange(event.target.value)}
         />
       </div>
 
