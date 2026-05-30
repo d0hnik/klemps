@@ -1,0 +1,39 @@
+.main-button {
+  background-color: var(--color-bg);
+  min-width: 72px;
+  width: 100%;
+
+  cursor: pointer;
+
+  font-size: 40px;
+  color: white;
+  filter: brightness(0.85);
+
+  transition:
+    transform 120ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+
+.main-button:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.08);
+}
+
+.main-button:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.main-button--active {
+  color: var(--color-panel);
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 251, 209, 0.8),
+    0 0 12px rgba(246, 196, 83, 0.9),
+    0 0 28px rgba(246, 196, 83, 0.65),
+    0 6px 0 rgba(0, 0, 0, 0.35);
+  filter: brightness(1.05);
+}

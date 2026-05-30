@@ -1,0 +1,14 @@
+.difficulty-tab {
+  width: min(720px, 100%);
+  padding: 32px 24px 24px;
+  border: 5px solid var(--color-panel);
+  border-radius: 12px;
+  position: relative;
+  box-sizing: border-box;
+  height: 475px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 30px;
+}
