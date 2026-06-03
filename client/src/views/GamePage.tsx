@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { getGameState } from "../entities/gameStorage";
+import { Header } from "../components/Header/Header";
 
 export function GameView() {
   const gameState = getGameState();
@@ -8,5 +9,9 @@ export function GameView() {
     return <Navigate to="/" replace />;
   }
 
-  return <section className="difficulty-tab">GAME TIMEEEE</section>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 }
