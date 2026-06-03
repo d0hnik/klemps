@@ -1,0 +1,15 @@
+.back-button {
+  background-color: var(--color-bg);
+  width: 215px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  font-size: 40px;
+  color: white;
+  filter: brightness(0.85);
+}

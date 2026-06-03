@@ -1,0 +1,22 @@
+{
+  "game": {
+    "selectPlayers": "SELECT PLAYERS",
+    "selectDifficulty": "Select difficulty",
+    "startGame": "START GAME",
+    "back": "BACK"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "hard": "Hard",
+    "round": "Round",
+    "title": "Difficulty"
+  },
+  "players": {
+    "player": "PLAYER",
+    "name": "NAME"
+  },
+  "drinks": {
+    "single": "DRINK",
+    "plural": "DRINKS"
+  }
+}
