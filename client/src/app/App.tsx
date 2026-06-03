@@ -3,10 +3,10 @@ import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
 import Logo from "../components/Logo/Logo";
-import { MainButton } from "../components/Buttons/MainButton";
 import { createGame, type GameState } from "../entities/gameState";
 import { GamePage } from "../components/GamePage/GamePage";
-import { useTranslation } from "react-i18next";
+import { BackButton } from "../components/Buttons/backButton/BackButton";
+import { StartButton } from "../components/Buttons/startButton/startButton";
 
 function App() {
   const [playerNames, setPlayerNames] = useState<string[]>(() =>
@@ -18,8 +18,6 @@ function App() {
   const [difficultyName, setDifficultyName] = useState<DifficultyName>("EASY");
 
   const [gameState, setGameState] = useState<GameState | null>(null);
-
-  const { t } = useTranslation();
 
   function handleSetPlayerCount(count: number) {
     setPlayerCount(count);
@@ -61,11 +59,11 @@ function App() {
   }
 
   return (
-    <main className="game-setup">
-      <div className="game-setup__header">
+    <main className="flex flex-col">
+      <div className="flex justify-start mb-10">
         <Logo />
       </div>
-      <div className="game-setup__content">
+      <div className="flex flex-row justify-evenly">
         <PlayersTab
           playerCount={playerCount}
           onSetPlayerCount={handleSetPlayerCount}
@@ -77,18 +75,16 @@ function App() {
           onSelectDifficulty={setDifficultyName}
         />
       </div>
-      <div className="game-setup__buttons">
-        <MainButton
-          text={t("game.back")}
+      <div className="flex flex-row justify-between mt-10">
+        <BackButton
           onClick={function (): void {
             throw new Error("Function not implemented.");
           }}
-          active={false}
+          iconSize={40}
+          additionalStyle={"ml-16"}
         />
-        <MainButton
-          text={t("game.startGame")}
+        <StartButton
           onClick={() => handleStartGame(playerNames, difficultyName)}
-          active={false}
         />
       </div>
     </main>

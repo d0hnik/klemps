@@ -11,7 +11,7 @@ export function MainButton({ text, onClick, active }: Props) {
 
   return (
     <button
-      className={`secondary-pixel-corners main-button ${
+      className={`secondary-pixel-corners main-button button-animation ${
         active ? "main-button--active" : ""
       }`}
       style={

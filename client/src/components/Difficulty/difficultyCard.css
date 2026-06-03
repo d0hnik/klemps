@@ -4,21 +4,7 @@
   border: 5px solid white;
   border-radius: 12px;
   box-sizing: border-box;
-
-  transition:
-    transform 120ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease,
-    filter 180ms ease;
-}
-
-.difficulty-card:hover {
-  transform: translateY(-4px);
-  filter: brightness(1.08);
-}
-
-.difficulty-card:active {
-  transform: translateY(1px) scale(0.97);
+  cursor: pointer;
 }
 
 .difficulty-card.active {
@@ -45,22 +31,6 @@
   background-color: var(--color-red);
 }
 
-.difficulty-card__name {
-  color: white;
-  font-size: 40px;
-  font-weight: 900;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.difficulty-card__icons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
 .difficulty-card__beer-icon {
   width: 112px;
   height: 112px;
@@ -73,31 +43,8 @@
   font-size: 20px;
 }
 
-.difficulty-card__drink-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.difficulty-card__round-number {
-  color: white;
-}
-
-.difficulty-card__round-drink.easy {
-  color: green;
-}
-
-.difficulty-card__round-drink.hard {
-  color: red;
-}
-
 .difficulty-card__footer {
   background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  color: white;
   font-size: 24px;
 }
 
@@ -107,8 +54,4 @@
 
 .difficulty-card__footer.hard {
   color: red;
-}
-
-.difficulty-card__star {
-  margin-right: 10px;
 }

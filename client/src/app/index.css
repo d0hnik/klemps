@@ -10,27 +10,21 @@ body {
   );
 }
 
-.game-setup {
-  display: flex;
-  flex-direction: column;
+.button-animation {
+  transition:
+    transform 120ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
 }
 
-.game-setup__header {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 40px;
+.button-animation:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.08);
 }
 
-.game-setup__content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-.game-setup__buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.button-animation:active {
+  transform: translateY(1px) scale(0.97);
 }
 
 @media (max-width: 480px) {

@@ -52,10 +52,10 @@ export function PlayersTab({
   const { t } = useTranslation();
 
   return (
-    <section className="players-tab">
+    <section className="players-tab relative box-border rounded-xl pt-8 px-6 pb-6 w-full max-w-[510px]">
       <Title index="1" title="PLAYERS" />
 
-      <div className="players-tab__rows">
+      <div className="flex flex-col gap-y-3 mb-4">
         {Array.from({ length: playerCount }).map((_, index) => {
           const playerIndex = index + 1;
 
@@ -76,9 +76,9 @@ export function PlayersTab({
         })}
       </div>
 
-      <span className="players-select-text">{t("game.selectPlayers")}: </span>
+      <span className="text-xl text-white">{t("game.selectPlayers")}: </span>
 
-      <div className="players-tab__buttons">
+      <div className="grid grid-cols-3 gap-3 w-full">
         {PLAYER_COUNT_OPTIONS.map((count) => (
           <MainButton
             key={count}

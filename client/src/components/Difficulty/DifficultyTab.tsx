@@ -17,7 +17,7 @@ export function DifficultyTab({
   onSelectDifficulty,
 }: Props) {
   return (
-    <section className="difficulty-tab">
+    <section className="flex flex-row justify-center gap-x-8 difficulty-tab box-border relative">
       <Title index={"2"} title={"DIFFICULTY"} />
       <DifficultyCard
         difficulty={EASY_DIFFICULTY}

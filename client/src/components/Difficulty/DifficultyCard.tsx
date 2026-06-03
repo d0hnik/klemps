@@ -31,12 +31,14 @@ export function DifficultyCard({
 
   return (
     <button
-      className={`difficulty-card pixel-corners ${difficultyModifier} ${selectedModifier}`}
+      className={`difficulty-card button-animation pixel-corners ${difficultyModifier} ${selectedModifier}`}
       onClick={() => onSelectDifficulty(difficulty.name)}
       type="button"
     >
-      <p className="difficulty-card__name">{difficulty.name}</p>
-      <div className="difficulty-card__icons">
+      <p className="text-5xl text-white flex justify-center items-center">
+        {difficulty.name}
+      </p>
+      <div className="flex flex-row items-center justify-center">
         {Array.from({ length: beerIconCount }).map((_, index) => (
           <img
             key={index}
@@ -48,23 +50,21 @@ export function DifficultyCard({
       </div>
       <div className="difficulty-card__drinks-tab">
         {difficulty.drinksPerRound.map((drinkCount, index) => (
-          <div className="difficulty-card__drink-row" key={index}>
-            <span className="difficulty-card__round-number">
+          <div className="flex flex-row justify-around" key={index}>
+            <span className="text-white">
               {t("difficulty.round")} {index + 1}.
             </span>
-            <span
-              className={`difficulty-card__round-drink ${
-                isEasy ? "easy" : "hard"
-              }`}
-            >
+            <span className={` ${isEasy ? "text-green-600" : "text-red-600"}`}>
               {drinkCount}{" "}
               {drinkCount == 1 ? t("drinks.single") : t("drinks.plural")}
             </span>
           </div>
         ))}
       </div>
-      <div className={`difficulty-card__footer ${difficultyModifier}`}>
-        <p className="difficulty-card__star">
+      <div
+        className={`difficulty-card__footer flex justify-center items-center mt-5 text-white ${difficultyModifier}`}
+      >
+        <p className="mr-3">
           <IconStarFilled />
         </p>
         {difficulty.name}

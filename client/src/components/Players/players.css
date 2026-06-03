@@ -1,24 +1,5 @@
 .players-tab {
-  width: min(510px, 100%);
-  padding: 32px 24px 24px;
-  border-radius: 12px;
-  position: relative;
-  box-sizing: border-box;
   border: 5px solid var(--color-panel);
-}
-
-.players-tab__title {
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.players-tab__rows {
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
-  margin-bottom: 15px;
 }
 
 .player-row {
@@ -51,21 +32,6 @@
   cursor: pointer;
 
   padding: 0;
-
-  transition:
-    transform 120ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease,
-    filter 180ms ease;
-}
-
-.player-row__arrow-button:hover {
-  transform: translateY(-4px);
-  filter: brightness(1.08);
-}
-
-.player-row__arrow-button:active {
-  transform: translateY(1px) scale(0.97);
 }
 
 .player-row__avatar {
@@ -108,18 +74,6 @@
   border-bottom: 1px solid lightgray;
   color: white;
   line-height: 1.2em;
-  font-size: 22px;
-}
-
-.players-tab__buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  width: 100%;
-}
-
-.players-select-text {
-  color: white;
   font-size: 22px;
 }
 

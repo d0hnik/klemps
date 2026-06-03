@@ -36,7 +36,7 @@ export function PlayerRow({
       }
     >
       <button
-        className="player-row__arrow-button"
+        className="player-row__arrow-button button-animation"
         type="button"
         onClick={onPreviousAvatar}
       >
@@ -60,7 +60,7 @@ export function PlayerRow({
       </div>
 
       <button
-        className="player-row__arrow-button"
+        className="player-row__arrow-button button-animation"
         type="button"
         onClick={onNextAvatar}
       >
