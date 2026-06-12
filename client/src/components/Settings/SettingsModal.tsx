@@ -1,3 +1,5 @@
+import { SettingsRow } from "./SettingsRow";
+
 type SettingsModalProps = {
   open: boolean;
   onClose: () => void;
@@ -26,9 +28,9 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
         "
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center ">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center mb-5">
           <div></div>
-          <div className="text-2xl text-bold">SETTINGS</div>
+          <div className="text-3xl text-bold">SETTINGS</div>
           <div className="flex justify-end">
             <button type="button" onClick={onClose} className="cursor-pointer">
               <p
@@ -43,6 +45,18 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
               </p>
             </button>
           </div>
+        </div>
+        <div className="flex flex-col">
+          <SettingsRow
+            label={"Sound"}
+            onClickFirst={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onClickSecond={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+          <div>Music</div>
         </div>
       </div>
     </div>
