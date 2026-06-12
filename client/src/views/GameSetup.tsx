@@ -2,12 +2,12 @@ import { useState } from "react";
 import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
-import Logo from "../components/Logo/Logo";
 import { createGame } from "../entities/gameState";
 import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { StartButton } from "../components/Buttons/startButton/startButton";
 import { useNavigate } from "react-router-dom";
 import { saveGameState } from "../entities/gameStorage";
+import { Header } from "../components/Header/Header";
 
 export function GameSetupView() {
   const navigate = useNavigate();
@@ -59,9 +59,7 @@ export function GameSetupView() {
 
   return (
     <main className="flex flex-col">
-      <div className="flex justify-start mb-10">
-        <Logo />
-      </div>
+      <Header />
       <div className="flex flex-row justify-evenly">
         <PlayersTab
           playerCount={playerCount}
