@@ -8,31 +8,35 @@ export type Player = {
   drinksGiven: number;
   drinksTaken: number;
   hand: Card[];
+  avatarSrc: string;
+};
+
+export type NewPlayerInput = {
+  name: string;
+  avatarSrc: string;
 };
 
 export function createPlayersWithHand(
-  playerNames: string[],
+  players: NewPlayerInput[],
   deck: Card[],
 ): Player[] {
-  const players: Player[] = [];
+  const createdPlayers: Player[] = [];
 
-  for (const playerName of playerNames) {
-    players.push(createPlayerFromNameWithHand(playerName, deck));
+  for (const player of players) {
+    createdPlayers.push(createPlayer(player, deck));
   }
 
-  return players;
+  return createdPlayers;
 }
 
-export function createPlayerFromNameWithHand(
-  playerName: string,
-  deck: Card[],
-): Player {
+export function createPlayer(player: NewPlayerInput, deck: Card[]): Player {
   const newPlayer: Player = {
     id: uuidv4(),
-    name: playerName,
+    name: player.name,
     drinksGiven: 0,
     drinksTaken: 0,
     hand: dealHand(deck),
+    avatarSrc: player.avatarSrc,
   };
 
   return newPlayer;
@@ -58,6 +62,7 @@ export function restartPlayerWithHand(player: Player, deck: Card[]): Player {
     drinksGiven: 0,
     drinksTaken: 0,
     hand: dealHand(deck),
+    avatarSrc: player.avatarSrc,
   };
 
   return restartedPlayer;

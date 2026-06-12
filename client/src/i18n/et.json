@@ -13,6 +13,7 @@
   },
   "players": {
     "player": "MÄNGIJA",
+    "players": "MÄNGIJAD",
     "name": "NIMI"
   },
   "drinks": {

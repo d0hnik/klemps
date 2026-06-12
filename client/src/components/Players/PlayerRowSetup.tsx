@@ -11,7 +11,7 @@ type Props = {
   onNextAvatar: () => void;
 };
 
-export function PlayerRow({
+export function PlayerRowSetup({
   playerIndex,
   playerName,
   avatarSrc,
@@ -28,7 +28,7 @@ export function PlayerRow({
 
   return (
     <div
-      className={`player-row pixel-corners`}
+      className={`pixel-corners w-full flex min-h-[83px] items-stretch player-row`}
       style={
         {
           "--player-color": color.color,
@@ -36,17 +36,23 @@ export function PlayerRow({
       }
     >
       <button
-        className="player-row__arrow-button button-animation"
+        className="w-12 flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation"
         type="button"
         onClick={onPreviousAvatar}
       >
         <img src="/icons/arrowLeft.svg" alt="Previous" />
       </button>
 
-      <img src={avatarSrc} alt="Player icon" className="player-row__avatar" />
+      <img
+        src={avatarSrc}
+        alt="Player icon"
+        className="w-20 object-contain flex justify-center items-center"
+      />
 
-      <div className="player-row__content">
-        <span className={`player-row__index pixel-corners`}>
+      <div className="flex-1 min-w-0 flex flex-col justify-center py-2 px-3">
+        <span
+          className={`player-row__index pixel-corners w-fit mb-1.5 py-0.5 px-2 text-lg font-black leading-none`}
+        >
           P{playerIndex}
         </span>
 
@@ -54,13 +60,13 @@ export function PlayerRow({
           type="text"
           value={playerName}
           placeholder={placeholder}
-          className="player-row__input"
+          className="w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-[22px]"
           onChange={(event) => onNameChange(event.target.value)}
         />
       </div>
 
       <button
-        className="player-row__arrow-button button-animation"
+        className="w-12 flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation"
         type="button"
         onClick={onNextAvatar}
       >

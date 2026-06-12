@@ -13,6 +13,7 @@
   },
   "players": {
     "player": "PLAYER",
+    "players": "PLAYERS",
     "name": "NAME"
   },
   "drinks": {

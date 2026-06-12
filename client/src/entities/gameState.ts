@@ -10,6 +10,7 @@ import { type GameStatus } from "./gameStatus";
 import {
   createPlayersWithHand,
   restartPlayersWithHands,
+  type NewPlayerInput,
   type Player,
 } from "./player";
 import type { RoundType } from "./roundType";
@@ -26,21 +27,21 @@ export type GameState = {
 };
 
 export function createGame(
-  playerNames: string[],
+  players: NewPlayerInput[],
   difficultyName: DifficultyName,
 ): GameState {
   let deck: Card[] = createDeck();
 
   deck = shuffleDeck(deck);
 
-  const players: Player[] = createPlayersWithHand(playerNames, deck);
+  const createdPlayers: Player[] = createPlayersWithHand(players, deck);
 
   const difficulty: Difficulty =
     getDifficultyByName(difficultyName) ?? EASY_DIFFICULTY;
 
   const gameState: GameState = {
     id: uuidv4(),
-    players: players,
+    players: createdPlayers,
     deck: deck,
     gameStatus: "IN_PROGRESS",
     difficulty: difficulty,

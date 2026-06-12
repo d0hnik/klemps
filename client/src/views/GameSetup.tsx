@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
-import { PlayersTab } from "../components/Players/PlayersTab";
+import { PlayersTabSetup } from "../components/Players/PlayersTabSetup";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
 import { createGame } from "../entities/gameState";
 import { BackButton } from "../components/Buttons/backButton/BackButton";
@@ -8,13 +8,24 @@ import { StartButton } from "../components/Buttons/startButton/startButton";
 import { useNavigate } from "react-router-dom";
 import { saveGameState } from "../entities/gameStorage";
 import { Header } from "../components/Header/Header";
+import { PLAYER_AVATARS, type NewPlayerInput } from "../entities/player";
 
 export function GameSetupView() {
   const navigate = useNavigate();
 
-  const [playerNames, setPlayerNames] = useState<string[]>(() =>
-    Array.from({ length: 2 }, () => ""),
+  const [playerInputs, setPlayerInputs] = useState<NewPlayerInput[]>(() =>
+    Array.from({ length: 2 }, () => ({
+      name: "",
+      avatarSrc: PLAYER_AVATARS[0],
+    })),
   );
+
+  function createDefaultPlayerSetup(): NewPlayerInput {
+    return {
+      name: "",
+      avatarSrc: PLAYER_AVATARS[0],
+    };
+  }
 
   const [playerCount, setPlayerCount] = useState<number>(2);
 
@@ -23,36 +34,41 @@ export function GameSetupView() {
   function handleSetPlayerCount(count: number) {
     setPlayerCount(count);
 
-    setPlayerNames((currentNames) =>
-      Array.from({ length: count }, (_, index) => currentNames[index] ?? ""),
+    setPlayerInputs((currentInputs) =>
+      Array.from(
+        { length: count },
+        (_, index) => currentInputs[index] ?? createDefaultPlayerSetup(),
+      ),
     );
   }
 
   function handleSetPlayerName(playerIndex: number, name: string) {
     const arrayIndex = playerIndex - 1;
 
-    setPlayerNames((currentNames) => {
-      const nextNames = [...currentNames];
-      nextNames[arrayIndex] = name;
-      return nextNames;
+    setPlayerInputs((currentInputs) => {
+      const nextInputs = [...currentInputs];
+      nextInputs[arrayIndex].name = name;
+      return nextInputs;
     });
   }
 
   function handleStartGame(
-    playerNames: string[],
+    players: NewPlayerInput[],
     difficultyName: DifficultyName,
   ) {
-    const normalizePlayerNames = playerNames.map((name, index) => {
-      const trimmedName = name.trim();
+    const normalizePlayers = players.map((player, index) => {
+      const trimmedName = player.name.trim();
 
       if (trimmedName != "") {
-        return name;
+        return player;
       }
 
-      return `Player ${index + 1}`;
+      player.name = `Player ${index + 1}`;
+
+      return player;
     });
 
-    saveGameState(createGame(normalizePlayerNames, difficultyName));
+    saveGameState(createGame(normalizePlayers, difficultyName));
 
     navigate("/game");
   }
@@ -61,11 +77,11 @@ export function GameSetupView() {
     <main className="flex flex-col">
       <Header />
       <div className="flex flex-row justify-evenly">
-        <PlayersTab
+        <PlayersTabSetup
           playerCount={playerCount}
           onSetPlayerCount={handleSetPlayerCount}
           onSetPlayerName={handleSetPlayerName}
-          playerNames={playerNames}
+          players={playerInputs}
         />
         <DifficultyTab
           selectedDifficulty={difficultyName}
@@ -79,7 +95,7 @@ export function GameSetupView() {
           additionalStyle={"ml-16"}
         />
         <StartButton
-          onClick={() => handleStartGame(playerNames, difficultyName)}
+          onClick={() => handleStartGame(playerInputs, difficultyName)}
         />
       </div>
     </main>
