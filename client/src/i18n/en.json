@@ -18,6 +18,8 @@
   },
   "drinks": {
     "single": "DRINK",
-    "plural": "DRINKS"
+    "plural": "DRINKS",
+    "taken": "TAKEN",
+    "given": "GIVEN"
   }
 }

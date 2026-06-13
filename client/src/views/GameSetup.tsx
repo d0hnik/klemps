@@ -7,7 +7,6 @@ import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { StartButton } from "../components/Buttons/startButton/startButton";
 import { useNavigate } from "react-router-dom";
 import { saveGameState } from "../entities/gameStorage";
-import { Header } from "../components/Header/Header";
 import { PLAYER_AVATARS, type NewPlayerInput } from "../entities/player";
 
 export function GameSetupView() {
@@ -74,8 +73,7 @@ export function GameSetupView() {
   }
 
   return (
-    <main className="flex flex-col">
-      <Header />
+    <>
       <div className="flex flex-row justify-evenly">
         <PlayersTabSetup
           playerCount={playerCount}
@@ -98,6 +96,6 @@ export function GameSetupView() {
           onClick={() => handleStartGame(playerInputs, difficultyName)}
         />
       </div>
-    </main>
+    </>
   );
 }

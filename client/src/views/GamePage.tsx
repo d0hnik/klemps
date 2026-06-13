@@ -1,6 +1,5 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { getGameState } from "../entities/gameStorage";
-import { Header } from "../components/Header/Header";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import { BackButton } from "../components/Buttons/backButton/BackButton";
 
@@ -16,8 +15,7 @@ export function GameView() {
   }
 
   return (
-    <main className="flex flex-col">
-      <Header />
+    <>
       <div className="flex flex-row justify-evenly">
         <PlayersTab players={gameState.players} />
       </div>
@@ -28,6 +26,6 @@ export function GameView() {
           additionalStyle={"ml-16"}
         />
       </div>
-    </main>
+    </>
   );
 }

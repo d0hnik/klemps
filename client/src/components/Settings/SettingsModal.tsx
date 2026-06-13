@@ -17,6 +17,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
         flex items-center justify-center
         bg-black/60 px-4
       "
+      aria-label="Open settings"
       onClick={onClose}
     >
       <div

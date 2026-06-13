@@ -18,6 +18,8 @@
   },
   "drinks": {
     "single": "JOOK",
-    "plural": "JOOKI"
+    "plural": "JOOKI",
+    "taken": "VÕETUD",
+    "given": "ANTUD"
   }
 }
