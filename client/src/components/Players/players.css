@@ -10,6 +10,42 @@
   background: var(--player-color);
 }
 
+.active-player-arrow {
+  animation: active-player-arrow-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes active-player-arrow-pulse {
+  0% {
+    transform: translateX(0);
+  }
+
+  8% {
+    transform: translateX(7px);
+  }
+
+  16% {
+    transform: translateX(0);
+  }
+
+  24% {
+    transform: translateX(7px);
+  }
+
+  32% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active-player-arrow {
+    animation: none;
+  }
+}
+
 @media (max-width: 480px) {
   .players-tab {
     margin-inline: 10px;

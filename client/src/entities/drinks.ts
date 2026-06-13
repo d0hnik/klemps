@@ -6,7 +6,7 @@ export const DRINK_TYPES = {
     backgroundColor: "#182D50",
   },
   given: {
-    textColor: "#58d68d",
-    backgroundColor: "rgba(88, 214, 141, 0.18)",
+    textColor: "#E76F6D",
+    backgroundColor: "#431714",
   },
 };
