@@ -46,31 +46,6 @@
   }
 }
 
-@media (max-width: 480px) {
-  .players-tab {
-    margin-inline: 10px;
-  }
-
-  .player-row__index {
-    margin-bottom: 5px;
-    padding: 2px 8px;
-    margin-left: 12px;
-
-    font-size: 15px;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  .players-select-text {
-    color: white;
-    font-size: 20px;
-  }
-
-  .player-row__input::placeholder {
-    font-size: 14px;
-  }
-}
-
 .pixel-test,
 .pixel-test--wrapper {
   clip-path: polygon(

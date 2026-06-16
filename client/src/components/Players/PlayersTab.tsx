@@ -15,6 +15,7 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
   const { t } = useTranslation();
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const [arrowTop, setArrowTop] = useState(0);
 
   const currentPlayer = players[currentPlayerIndex];
@@ -32,10 +33,13 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
   }, [currentPlayerIndex, players.length]);
 
   return (
-    <section className="players-tab relative box-border w-full max-w-[510px] rounded-xl px-6 pb-6 pt-8">
-      <Title title={t("players.players")} />
+    <section
+      className="players-tab relative box-border w-full max-w-[510px] rounded-xl px-1 sm:px-6 pb-2 sm:pb-4 pt-8 mx-1"
+      aria-labelledby="players-heading"
+    >
+      <Title id="players-heading" title={t("players.players")} level={2} />
 
-      <div className="relative mb-4 flex flex-col gap-y-3">
+      <ol className="relative mb-4 flex flex-col gap-y-3 items-center">
         {currentPlayer && (
           <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
         )}
@@ -51,7 +55,7 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
             }}
           />
         ))}
-      </div>
+      </ol>
     </section>
   );
 }

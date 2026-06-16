@@ -3,13 +3,15 @@ import "./logo.css";
 
 function Logo() {
   return (
-    <Link to="/" aria-label="Go to main menu" className="logo-link">
+    <Link
+      to="/"
+      aria-label="Go to main menu"
+      className="inline-flex items-center justify-center"
+    >
       <img
-        className="game-logo"
+        className="h-auto w-[300px] sm:w-[300px] md:w-[360px]"
         src="/images/klemps-logo.png"
         alt="KLEMPS"
-        width={220}
-        height={80}
       />
     </Link>
   );

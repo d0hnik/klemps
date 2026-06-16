@@ -15,8 +15,7 @@ export function SettingsButton({ onClick }: SettingsButtonProps) {
       <IconSettings
         stroke={2}
         color="white"
-        size={48}
-        className="hover:scale-110 transition"
+        className="h-8 w-8 sm:h-12 sm:w-12 hover:scale-110 transition"
       />
     </button>
   );

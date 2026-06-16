@@ -15,7 +15,7 @@ export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
   return (
     <div
       ref={rowRef}
-      className={`pixel-corners player-row flex min-h-[83px] w-full items-stretch ${
+      className={`pixel-corners player-row flex w-[96%] sm:w-full items-stretch ${
         isActive ? "player-row--active" : ""
       }`}
       style={
@@ -24,7 +24,7 @@ export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
         } as React.CSSProperties & Record<"--player-color", string>
       }
     >
-      <div className="flex w-20 shrink-0 items-center justify-center">
+      <div className="flex w-16 sm:w-20 shrink-0 items-center justify-center">
         <img
           src={player.avatarSrc}
           alt={`${player.name} avatar`}
