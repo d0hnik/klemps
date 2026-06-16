@@ -5,14 +5,19 @@ import { DrinksCounter } from "./DrinksCounter";
 type Props = {
   playerIndex: number;
   player: Player;
+  isActive: boolean;
+  rowRef?: (node: HTMLDivElement | null) => void;
 };
 
-export function PlayerRow({ playerIndex, player }: Props) {
+export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
   const color = PLAYER_COLORS[(playerIndex - 1) % PLAYER_COLORS.length];
 
   return (
     <div
-      className="pixel-corners w-full flex min-h-[83px] items-stretch player-row"
+      ref={rowRef}
+      className={`pixel-corners player-row flex min-h-[83px] w-full items-stretch ${
+        isActive ? "player-row--active" : ""
+      }`}
       style={
         {
           "--player-color": color.color,
@@ -27,7 +32,7 @@ export function PlayerRow({ playerIndex, player }: Props) {
         />
       </div>
 
-      <div className="flex-1 min-w-0 flex flex-col justify-center py-2 px-3">
+      <div className="flex min-w-0 flex-1 flex-col justify-center px-3 py-2">
         <span className="player-row__index pixel-corners mb-1.5 w-fit px-2 py-0.5 text-lg font-black leading-none">
           P{playerIndex}
         </span>
@@ -36,8 +41,8 @@ export function PlayerRow({ playerIndex, player }: Props) {
       </div>
 
       <div className="ml-auto flex shrink-0 items-center gap-3 pr-4 sm:gap-5">
-        <DrinksCounter type={"taken"} count={player.drinksTaken} />
-        <DrinksCounter type={"given"} count={player.drinksGiven} />
+        <DrinksCounter type="taken" count={player.drinksTaken} />
+        <DrinksCounter type="given" count={player.drinksGiven} />
       </div>
     </div>
   );
