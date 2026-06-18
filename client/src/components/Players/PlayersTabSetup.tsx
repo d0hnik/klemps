@@ -52,7 +52,7 @@ export function PlayersTabSetup({
   const { t } = useTranslation();
 
   return (
-    <section className="players-tab relative box-border rounded-xl pt-8 px-6 pb-6 w-full max-w-[510px]">
+    <section className="container-border relative box-border rounded-xl pt-8 px-6 pb-6 w-full max-w-[510px]">
       <Title index="1" title="PLAYERS" />
 
       <div className="flex flex-col gap-y-3 mb-4">

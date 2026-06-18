@@ -3,7 +3,8 @@
     "selectPlayers": "VALI MÄNGIJAD",
     "selectDifficulty": "Vali raskusaste",
     "startGame": "ALUSTA MÄNGU",
-    "back": "TAGASI"
+    "back": "TAGASI",
+    "currentTurn": "KÄIB"
   },
   "difficulty": {
     "easy": "LIHTNE",

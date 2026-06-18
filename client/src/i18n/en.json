@@ -3,7 +3,8 @@
     "selectPlayers": "SELECT PLAYERS",
     "selectDifficulty": "Select difficulty",
     "startGame": "START GAME",
-    "back": "BACK"
+    "back": "BACK",
+    "currentTurn": "TURN"
   },
   "difficulty": {
     "easy": "Easy",

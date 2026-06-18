@@ -1,20 +1,60 @@
-export const SUITS = ["HEART", "DIAMOND", "SPADE", "CLUB"] as const;
+export const SUITS = ["SPADE", "CLUB", "HEART", "DIAMOND"] as const;
 
-export const RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"] as const;
+export const RANKS = [
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "J",
+  "Q",
+  "K",
+  "A",
+] as const;
 
-export type Suit = typeof SUITS[number];
+export const SPRITE_RANKS = [
+  "A",
+  "K",
+  "Q",
+  "J",
+  "10",
+  "9",
+  "8",
+  "7",
+  "6",
+  "5",
+  "4",
+  "3",
+  "2",
+] as const satisfies readonly Rank[];
 
-export type Rank = typeof RANKS[number];
+export type Suit = (typeof SUITS)[number];
+
+export type Rank = (typeof RANKS)[number];
 
 export type Card = {
-    suit: Suit,
-    rank: Rank
-}
+  suit: Suit;
+  rank: Rank;
+};
 
 export const RED_SUITS: Suit[] = ["HEART", "DIAMOND"];
 
 export const isRed = (suit: Suit) => RED_SUITS.includes(suit);
 
 export const rankValue = (rank: Rank): number => {
-    return RANKS.indexOf(rank);
+  return RANKS.indexOf(rank);
+};
+
+export function getCardImageSrc(card: Card, revealed: boolean) {
+  const basePath = `/cards/`;
+
+  if (!revealed) {
+    return `${basePath}/back.png`;
+  }
+
+  return `${basePath}/${card.rank.toLowerCase()}-${card.suit.toLowerCase()}.png`;
 }

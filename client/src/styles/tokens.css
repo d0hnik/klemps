@@ -28,6 +28,10 @@ input:focus {
   outline: none;
 }
 
+.container-border {
+  border: 5px solid var(--color-panel);
+}
+
 .pixel-corners,
 .pixel-corners--wrapper {
   clip-path: polygon(

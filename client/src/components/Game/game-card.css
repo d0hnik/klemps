@@ -1,0 +1,7 @@
+.game-card {
+  background-repeat: no-repeat;
+  background-size: auto;
+
+  flex-shrink: 0;
+  image-rendering: auto;
+}

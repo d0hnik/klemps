@@ -34,7 +34,7 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
 
   return (
     <section
-      className="players-tab relative box-border w-full max-w-[510px] rounded-xl px-1 sm:px-6 pb-2 sm:pb-4 pt-8 mx-1"
+      className="container-border relative box-border w-full max-w-[510px] rounded-xl px-1 sm:px-6 pb-2 sm:pb-4 pt-8 mx-1"
       aria-labelledby="players-heading"
     >
       <Title id="players-heading" title={t("players.players")} level={2} />
