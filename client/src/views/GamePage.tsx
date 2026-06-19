@@ -57,7 +57,7 @@ export function GameView() {
           </div>
         </div>
 
-        <div className="order-2 flex flex-col lg:order-none">
+        <div className="order-2 flex flex-col lg:order-none items-center">
           <GameField
             gameState={gameState}
             currentPlayerName={

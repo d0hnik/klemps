@@ -15,7 +15,7 @@ export function GameCard({ card, revealed }: Props) {
 
   return (
     <img
-      className="w-32 sm:w-42 md:w-52 lg:w-58 h-auto shrink-0 select-none object-contain"
+      className="w-32 -mx-5 sm:w-40 md:w-52 lg:w-60 h-auto shrink-0 select-none object-contain"
       src={src}
       alt={alt}
       draggable={false}
