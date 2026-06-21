@@ -22,5 +22,26 @@
     "plural": "JOOKI",
     "taken": "VÕETUD",
     "given": "ANTUD"
+  },
+  "guess": {
+    "guess": "ARVA",
+    "title": {
+      "RED_BLACK": "PUNANE VÕI MUST",
+      "HIGH_LOW": "SUUREM VÕI VÄIKSEM",
+      "INSIDE_OUTSIDE": "JÄÄB VAHELE VÕI EI JÄÄ",
+      "SUIT": "MAST"
+    },
+    "value": {
+      "RED": "PUNANE",
+      "BLACK": "MUST",
+      "INSIDE": "JÄÄB",
+      "OUTSIDE": "EI JÄÄ",
+      "HIGHER": "SUUREM",
+      "LOWER": "VÄIKSEM",
+      "HEART": "ÄRTU",
+      "CLUB": "RISTI",
+      "SPADE": "POTI",
+      "DIAMOND": "RUUTU"
+    }
   }
 }

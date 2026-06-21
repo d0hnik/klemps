@@ -1,3 +1,5 @@
+import { ROUND_ORDER, type RoundType } from "./roundType";
+
 export const SUITS = ["SPADE", "CLUB", "HEART", "DIAMOND"] as const;
 
 export const RANKS = [
@@ -43,8 +45,6 @@ export type Card = {
 
 export const RED_SUITS: Suit[] = ["HEART", "DIAMOND"];
 
-export const isRed = (suit: Suit) => RED_SUITS.includes(suit);
-
 export const rankValue = (rank: Rank): number => {
   return RANKS.indexOf(rank);
 };
@@ -57,4 +57,16 @@ export function getCardImageSrc(card: Card, revealed: boolean) {
   }
 
   return `${basePath}/${card.rank.toLowerCase()}-${card.suit.toLowerCase()}.png`;
+}
+
+export function isCardRevealed(currentRoundType: RoundType, cardIndex: number) {
+  const currentRoundIndex = ROUND_ORDER.indexOf(currentRoundType);
+
+  return cardIndex < currentRoundIndex;
+}
+
+export function isCurrentCard(currentRoundType: RoundType, cardIndex: number) {
+  const currentRoundIndex = ROUND_ORDER.indexOf(currentRoundType);
+
+  return cardIndex == currentRoundIndex;
 }

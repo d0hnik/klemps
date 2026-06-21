@@ -4,6 +4,7 @@ import { PlayersTab } from "../components/Players/PlayersTab";
 import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { useState } from "react";
 import { GameField } from "../components/Game/GameField";
+import { GuessField } from "../components/Game/GuessField";
 
 export function GameView() {
   const [gameState, setGameState] = useState(() => getGameState());
@@ -48,7 +49,7 @@ export function GameView() {
             />
           </div>
 
-          <div className="order-3 lg:order-none">
+          <div className="order-4 lg:order-none">
             <BackButton
               onClick={() => navigate("/")}
               iconSize={40}
@@ -57,13 +58,18 @@ export function GameView() {
           </div>
         </div>
 
-        <div className="order-2 flex flex-col lg:order-none items-center">
-          <GameField
-            gameState={gameState}
-            currentPlayerName={
-              gameState.players[gameState.currentPlayerIndex].name
-            }
-          />
+        <div className="contents lg:flex lg:flex-col">
+          <div className="order-2 flex flex-col lg:order-none items-center">
+            <GameField
+              gameState={gameState}
+              currentPlayerName={
+                gameState.players[gameState.currentPlayerIndex].name
+              }
+            />
+          </div>
+          <div className="order-3 lg:order-none">
+            <GuessField roundType={gameState.currentRoundType} />
+          </div>
         </div>
       </div>
 

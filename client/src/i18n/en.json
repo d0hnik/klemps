@@ -22,5 +22,26 @@
     "plural": "DRINKS",
     "taken": "TAKEN",
     "given": "GIVEN"
+  },
+  "guess": {
+    "guess": "GUESS",
+    "title": {
+      "RED_BLACK": "RED OR BLACK",
+      "HIGH_LOW": "HIGHER OR LOWER",
+      "INSIDE_OUTSIDE": "INSIDE OR OUTSIDE",
+      "SUIT": "SUIT"
+    },
+    "value": {
+      "RED": "RED",
+      "BLACK": "BLACK",
+      "INSIDE": "INSIDE",
+      "OUTSIDE": "OUTSIDE",
+      "HIGHER": "HIGHER",
+      "LOWER": "LOWER",
+      "HEART": "HEART",
+      "CLUB": "CLUB",
+      "SPADE": "SPADE",
+      "DIAMOND": "DIAMOND"
+    }
   }
 }

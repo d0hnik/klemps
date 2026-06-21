@@ -2,6 +2,7 @@ import { Title } from "../Title/Title";
 import { useTranslation } from "react-i18next";
 import type { GameState } from "../../entities/gameState";
 import { GameCard } from "./GameCard";
+import { isCardRevealed, isCurrentCard } from "../../entities/card";
 
 type Props = {
   gameState: GameState;
@@ -12,8 +13,6 @@ export function GameField({ gameState, currentPlayerName }: Props) {
   const { t } = useTranslation();
 
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
-
-  console.log(currentPlayer.hand);
 
   return (
     <section
@@ -28,13 +27,19 @@ export function GameField({ gameState, currentPlayerName }: Props) {
       />
 
       <div className="flex flex-row w-full flex-wrap items-center justify-center sm:justify-between">
-        {currentPlayer.hand.map((card) => (
-          <GameCard
-            key={`${card.rank}-${card.suit}`}
-            card={card}
-            revealed={true}
-          />
-        ))}
+        {currentPlayer.hand.map((card, index) => {
+          const revealed = isCardRevealed(gameState.currentRoundType, index);
+
+          const isCurrent = isCurrentCard(gameState.currentRoundType, index);
+          return (
+            <GameCard
+              key={`${card.rank}-${card.suit}`}
+              card={card}
+              revealed={revealed}
+              isCurrent={isCurrent}
+            />
+          );
+        })}
       </div>
     </section>
   );
