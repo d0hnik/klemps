@@ -13,8 +13,8 @@ import {
   type NewPlayerInput,
   type Player,
 } from "./player";
-import type { RoundType } from "./roundType";
 import { v4 as uuidv4 } from "uuid";
+import { ROUND_ORDER, type RoundType } from "./roundType";
 
 export type GameState = {
   id: string;
@@ -66,4 +66,38 @@ export function restartGame(prevGameState: GameState): GameState {
   };
 
   return newGameState;
+}
+
+export function getNextTurn(gameState: GameState): GameState {
+  if (gameState.gameStatus == "FINISHED") {
+    return gameState;
+  }
+
+  const isLastPlayer =
+    gameState.currentPlayerIndex === gameState.players.length - 1;
+
+  const currentRoundIndex = ROUND_ORDER.indexOf(gameState.currentRoundType);
+
+  const isLastRound = currentRoundIndex === ROUND_ORDER.length - 1;
+
+  if (!isLastPlayer) {
+    return {
+      ...gameState,
+      currentPlayerIndex: gameState.currentPlayerIndex + 1,
+    };
+  }
+
+  if (!isLastRound) {
+    return {
+      ...gameState,
+      currentPlayerIndex: 0,
+      currentRoundType: ROUND_ORDER[currentRoundIndex + 1],
+    };
+  }
+
+  return {
+    ...gameState,
+    currentPlayerIndex: 0,
+    gameStatus: "FINISHED",
+  };
 }

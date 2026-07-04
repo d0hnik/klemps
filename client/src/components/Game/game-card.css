@@ -6,6 +6,10 @@
   image-rendering: auto;
 }
 
+.guess-option-button {
+  background-color: var(--guess-button-color);
+}
+
 .active-game-card {
   animation: active-game-card-pulse 5.5s ease-in-out infinite;
 }

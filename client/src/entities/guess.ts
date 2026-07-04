@@ -1,5 +1,6 @@
 import { rankValue, RED_SUITS, type Card } from "./card";
-import type { RoundType } from "./roundType";
+import { getNextTurn, type GameState } from "./gameState";
+import { ROUND_ORDER, type RoundType } from "./roundType";
 
 export const RED_BLACK_GUESSES = ["RED", "BLACK"] as const;
 export const HIGH_LOW_GUESSES = ["HIGHER", "LOWER"] as const;
@@ -39,6 +40,7 @@ type GuessCheckContext = {
 type GuessOption<TValue extends GuessValue> = {
   value: TValue;
   labelKey: string;
+  buttonColor: string;
 };
 
 type RoundConfig<T extends RoundType> = {
@@ -124,10 +126,12 @@ export const ROUND_CONFIG = {
       {
         value: "RED",
         labelKey: "guess.value.RED",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "BLACK",
         labelKey: "guess.value.BLACK",
+        buttonColor: "var(--color-green)",
       },
     ],
     isCorrect: isRedBlackGuessCorrect,
@@ -139,10 +143,12 @@ export const ROUND_CONFIG = {
       {
         value: "HIGHER",
         labelKey: "guess.value.HIGHER",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "LOWER",
         labelKey: "guess.value.LOWER",
+        buttonColor: "var(--color-red)",
       },
     ],
     isCorrect: isHighLowGuessCorrect,
@@ -154,10 +160,12 @@ export const ROUND_CONFIG = {
       {
         value: "INSIDE",
         labelKey: "guess.value.INSIDE",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "OUTSIDE",
         labelKey: "guess.value.OUTSIDE",
+        buttonColor: "var(--color-red)",
       },
     ],
     isCorrect: isInsideOutsideGuessCorrect,
@@ -169,20 +177,64 @@ export const ROUND_CONFIG = {
       {
         value: "HEART",
         labelKey: "guess.value.HEART",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "DIAMOND",
         labelKey: "guess.value.DIAMOND",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "SPADE",
         labelKey: "guess.value.SPADE",
+        buttonColor: "var(--color-red)",
       },
       {
         value: "CLUB",
         labelKey: "guess.value.CLUB",
+        buttonColor: "var(--color-red)",
       },
     ],
     isCorrect: isSuitGuessCorrect,
   },
 } satisfies RoundConfigMap;
+
+export type GuessResult = {
+  gameState: GameState;
+  isCorrect: boolean;
+};
+
+export function handleGuess(guess: Guess, gameState: GameState): GuessResult {
+  const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+  if (!currentPlayer) {
+    return {
+      gameState,
+      isCorrect: false,
+    };
+  }
+
+  const currentCard =
+    currentPlayer.hand[ROUND_ORDER.indexOf(gameState.currentRoundType)];
+
+  if (!currentCard) {
+    return {
+      gameState,
+      isCorrect: false,
+    };
+  }
+
+  const roundProperties = ROUND_CONFIG[guess.roundType];
+
+  const isCorrect = roundProperties.isCorrect(guess as never, {
+    currentCard,
+    playerHand: currentPlayer.hand,
+  });
+
+  const newGameState = getNextTurn(gameState);
+
+  return {
+    isCorrect,
+    gameState: newGameState,
+  };
+}
