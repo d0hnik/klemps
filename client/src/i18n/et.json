@@ -43,5 +43,14 @@
       "SPADE": "POTI",
       "DIAMOND": "RUUTU"
     }
+  },
+  "guessResult": {
+    "correctTitle": "ÕIGE VALIK",
+    "wrongTitle": "VALE VALIK",
+    "correctMessage": "Sinu valik oli õige.",
+    "wrongMessage": "Sinu valik oli vale.",
+    "giveOut": "ANNA",
+    "take": "VÕTA",
+    "drinks": "JOOKI"
   }
 }

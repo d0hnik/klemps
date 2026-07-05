@@ -70,3 +70,7 @@ export function isCurrentCard(currentRoundType: RoundType, cardIndex: number) {
 
   return cardIndex == currentRoundIndex;
 }
+
+export function getCurrentCardIndex(roundType: RoundType): number {
+  return ROUND_ORDER.indexOf(roundType);
+}

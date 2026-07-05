@@ -25,13 +25,6 @@ export type GuessValueByRoundType = {
   SUIT: SuitGuessValue;
 };
 
-export type Guess<T extends RoundType = RoundType> = {
-  [TRound in RoundType]: {
-    roundType: TRound;
-    value: GuessValueByRoundType[TRound];
-  };
-}[T];
-
 type GuessCheckContext = {
   currentCard: Card;
   playerHand: Card[];
@@ -43,7 +36,7 @@ type GuessOption<TValue extends GuessValue> = {
   buttonColor: string;
 };
 
-type RoundConfig<T extends RoundType> = {
+export type RoundConfig<T extends RoundType> = {
   titleKey: string;
   options: readonly GuessOption<GuessValueByRoundType[T]>[];
   isCorrect: (
@@ -131,7 +124,7 @@ export const ROUND_CONFIG = {
       {
         value: "BLACK",
         labelKey: "guess.value.BLACK",
-        buttonColor: "var(--color-green)",
+        buttonColor: "var(--color-dark-bg)",
       },
     ],
     isCorrect: isRedBlackGuessCorrect,
@@ -143,7 +136,7 @@ export const ROUND_CONFIG = {
       {
         value: "HIGHER",
         labelKey: "guess.value.HIGHER",
-        buttonColor: "var(--color-red)",
+        buttonColor: "var(--color-green)",
       },
       {
         value: "LOWER",
@@ -160,7 +153,7 @@ export const ROUND_CONFIG = {
       {
         value: "INSIDE",
         labelKey: "guess.value.INSIDE",
-        buttonColor: "var(--color-red)",
+        buttonColor: "var(--color-green)",
       },
       {
         value: "OUTSIDE",
@@ -187,12 +180,12 @@ export const ROUND_CONFIG = {
       {
         value: "SPADE",
         labelKey: "guess.value.SPADE",
-        buttonColor: "var(--color-red)",
+        buttonColor: "var(--color-dark-bg)",
       },
       {
         value: "CLUB",
         labelKey: "guess.value.CLUB",
-        buttonColor: "var(--color-red)",
+        buttonColor: "var(--color-dark-bg)",
       },
     ],
     isCorrect: isSuitGuessCorrect,
@@ -204,7 +197,10 @@ export type GuessResult = {
   isCorrect: boolean;
 };
 
-export function handleGuess(guess: Guess, gameState: GameState): GuessResult {
+export function handleGuess(
+  guess: GuessValue,
+  gameState: GameState,
+): GuessResult {
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
 
   if (!currentPlayer) {
@@ -224,7 +220,7 @@ export function handleGuess(guess: Guess, gameState: GameState): GuessResult {
     };
   }
 
-  const roundProperties = ROUND_CONFIG[guess.roundType];
+  const roundProperties = ROUND_CONFIG[gameState.currentRoundType];
 
   const isCorrect = roundProperties.isCorrect(guess as never, {
     currentCard,

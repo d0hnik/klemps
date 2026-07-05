@@ -10,7 +10,7 @@ export function ActivePlayerArrow({ top, playerName }: Props) {
     <>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[-15px] sm:left-[-25px] z-1001 -translate-y-1/2 transition-[top] duration-300 ease-out"
+        className="pointer-events-none absolute left-[-15px] sm:left-[-25px] z-49 -translate-y-1/2 transition-[top] duration-300 ease-out"
         style={{
           top: `${top}px`,
         }}

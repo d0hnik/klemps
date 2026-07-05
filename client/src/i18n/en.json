@@ -43,5 +43,14 @@
       "SPADE": "SPADE",
       "DIAMOND": "DIAMOND"
     }
+  },
+  "guessResult": {
+    "correctTitle": "CORRECT GUESS",
+    "wrongTitle": "WRONG GUESS",
+    "correctMessage": "Your guess was right.",
+    "wrongMessage": "Your guess was wrong.",
+    "giveOut": "GIVE OUT",
+    "take": "TAKE",
+    "drinks": "DRINKS"
   }
 }

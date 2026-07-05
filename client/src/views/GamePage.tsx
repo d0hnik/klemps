@@ -5,32 +5,38 @@ import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { useState } from "react";
 import { GameField } from "../components/Game/GameField";
 import { GuessField } from "../components/Game/GuessField";
+import {
+  handleGuess,
+  type GuessResult,
+  type GuessValue,
+} from "../entities/guess";
+import { getCurrentCardIndex } from "../entities/card";
+import { AfterGuessModal } from "./AfterGuessModal";
 
 export function GameView() {
   const [gameState, setGameState] = useState(() => getGameState());
+  const [revealedCardIndex, setRevealedCardIndex] = useState<number | null>(
+    null,
+  );
+  const [pendingGuessResult, setPendingGuessResult] =
+    useState<GuessResult | null>(null);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const [isGuessLocked, setIsGuessLocked] = useState(false);
 
-  function handleNextPlayer() {
-    setGameState((currentGameState) => {
-      if (!currentGameState) {
-        return currentGameState;
-      }
+  const makeAGuess = (guess: GuessValue): void => {
+    if (!gameState || isGuessLocked) {
+      return;
+    }
+    const currentCardIndex = getCurrentCardIndex(gameState.currentRoundType);
 
-      const nextPlayerIndex =
-        currentGameState.currentPlayerIndex ===
-        currentGameState.players.length - 1
-          ? 0
-          : currentGameState.currentPlayerIndex + 1;
+    const result = handleGuess(guess, gameState);
 
-      const updatedGameState = {
-        ...currentGameState,
-        currentPlayerIndex: nextPlayerIndex,
-      };
+    setIsGuessLocked(true);
 
-      saveGameState(updatedGameState);
+    setPendingGuessResult(result);
 
-      return updatedGameState;
-    });
-  }
+    setRevealedCardIndex(currentCardIndex);
+  };
 
   const navigate = useNavigate();
 
@@ -65,21 +71,33 @@ export function GameView() {
               currentPlayerName={
                 gameState.players[gameState.currentPlayerIndex].name
               }
+              revealedCardIndex={revealedCardIndex}
+              onRevealEnd={() => setIsResultModalOpen(true)}
             />
           </div>
           <div className="order-3 lg:order-none">
-            <GuessField roundType={gameState.currentRoundType} />
+            <GuessField
+              roundType={gameState.currentRoundType}
+              onGuess={makeAGuess}
+            />
           </div>
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={handleNextPlayer}
-        className="mr-16 rounded border border-white/30 bg-white/10 px-6 py-3 text-xl text-white hover:bg-white/20"
-      >
-        Next Player
-      </button>
+      {isResultModalOpen && pendingGuessResult && (
+        <AfterGuessModal
+          result={pendingGuessResult}
+          onClose={() => {
+            saveGameState(pendingGuessResult.gameState);
+            setGameState(pendingGuessResult.gameState);
+
+            setIsResultModalOpen(false);
+            setPendingGuessResult(null);
+            setRevealedCardIndex(null);
+            setIsGuessLocked(false);
+          }}
+        />
+      )}
     </>
   );
 }

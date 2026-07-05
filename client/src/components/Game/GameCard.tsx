@@ -1,24 +1,47 @@
 import { getCardImageSrc, type Card } from "../../entities/card";
 import "./game-card.css";
-import "../Players/players.css";
 
 type Props = {
   card: Card;
   revealed: boolean;
   isCurrent: boolean;
+  onRevealEnd?: () => void;
 };
 
-export function GameCard({ card, revealed, isCurrent }: Props) {
-  const src = getCardImageSrc(card, revealed);
-
-  const alt = revealed ? `${card.rank} of ${card.suit}` : "Hidden playing card";
+export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
+  const frontSrc = getCardImageSrc(card, true);
+  const backSrc = getCardImageSrc(card, false);
 
   return (
-    <img
-      className={`w-32 -mx-5 sm:w-40 md:w-52 lg:w-60 h-auto shrink-0 select-none object-contain ${isCurrent ? "active-game-card" : ""}`}
-      src={src}
-      alt={alt}
-      draggable={false}
-    />
+    <div
+      className={`game-card w-32 -mx-5 sm:w-40 md:w-52 lg:w-60 shrink-0 select-none ${
+        isCurrent && !revealed ? "active-game-card" : ""
+      }`}
+    >
+      <div
+        className={`game-card__inner ${
+          revealed ? "game-card__inner--revealed" : ""
+        }`}
+        onTransitionEnd={(event) => {
+          if (event.propertyName === "transform") {
+            onRevealEnd?.();
+          }
+        }}
+      >
+        <img
+          className="game-card__face game-card__face--back"
+          src={backSrc}
+          alt="Hidden playing card"
+          draggable={false}
+        />
+
+        <img
+          className="game-card__face game-card__face--front"
+          src={frontSrc}
+          alt={`${card.rank} of ${card.suit}`}
+          draggable={false}
+        />
+      </div>
+    </div>
   );
 }

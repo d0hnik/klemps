@@ -7,9 +7,16 @@ import { isCardRevealed, isCurrentCard } from "../../entities/card";
 type Props = {
   gameState: GameState;
   currentPlayerName: string;
+  revealedCardIndex: number | null;
+  onRevealEnd: () => void;
 };
 
-export function GameField({ gameState, currentPlayerName }: Props) {
+export function GameField({
+  gameState,
+  currentPlayerName,
+  revealedCardIndex,
+  onRevealEnd,
+}: Props) {
   const { t } = useTranslation();
 
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -28,7 +35,13 @@ export function GameField({ gameState, currentPlayerName }: Props) {
 
       <div className="flex flex-row w-full flex-wrap items-center justify-center sm:justify-between">
         {currentPlayer.hand.map((card, index) => {
-          const revealed = isCardRevealed(gameState.currentRoundType, index);
+          const revealedByRound = isCardRevealed(
+            gameState.currentRoundType,
+            index,
+          );
+          const revealedByCurrentGuess = revealedCardIndex === index;
+
+          const revealed = revealedByRound || revealedByCurrentGuess;
 
           const isCurrent = isCurrentCard(gameState.currentRoundType, index);
           return (
@@ -37,6 +50,7 @@ export function GameField({ gameState, currentPlayerName }: Props) {
               card={card}
               revealed={revealed}
               isCurrent={isCurrent}
+              onRevealEnd={revealedByCurrentGuess ? onRevealEnd : undefined}
             />
           );
         })}

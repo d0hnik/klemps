@@ -1,17 +1,16 @@
 import { useTranslation } from "react-i18next";
 import type { RoundType } from "../../entities/roundType";
-import { ROUND_CONFIG } from "../../entities/guess";
+import { ROUND_CONFIG, type GuessValue } from "../../entities/guess";
 import type { CSSProperties } from "react";
 
 type Props = {
   roundType: RoundType;
+  onGuess: (guess: GuessValue) => void;
 };
 
-export function GuessField({ roundType }: Props) {
+export function GuessField({ roundType, onGuess }: Props) {
   const roundConfig = ROUND_CONFIG[roundType];
   const { t } = useTranslation();
-
-  console.log(roundConfig.options);
 
   return (
     <section
@@ -35,6 +34,7 @@ export function GuessField({ roundType }: Props) {
                     "--guess-button-color": option.buttonColor,
                   } as CSSProperties
                 }
+                onClick={() => onGuess(option.value)}
               >
                 {t(option.labelKey)}
               </button>

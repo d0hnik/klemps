@@ -1,4 +1,39 @@
 .game-card {
+  position: relative;
+  aspect-ratio: 5 / 7;
+  perspective: 1000px;
+}
+
+.game-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 600ms ease;
+}
+
+.game-card__inner--revealed {
+  transform: rotateY(180deg);
+}
+
+.game-card__face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  backface-visibility: hidden;
+}
+
+.game-card__face--back {
+  transform: rotateY(0deg);
+}
+
+.game-card__face--front {
+  transform: rotateY(180deg);
+}
+
+.game-card {
   background-repeat: no-repeat;
   background-size: auto;
 
