@@ -1,8 +1,8 @@
 import { Check, Close } from "@nsmr/pixelart-react";
 import { useTranslation } from "react-i18next";
-import { ROUND_ORDER } from "../entities/roundType";
-import type { GameState } from "../entities/gameState";
-import { PlayerRowDrinksGiver } from "../components/Players/PlayerRowDrinksGiver";
+import { ROUND_ORDER } from "../../entities/roundType";
+import type { GameState } from "../../entities/gameState";
+import { PlayerRowDrinksGiver } from "../Players/PlayerRowDrinksGiver";
 
 type AfterGuessModalProps = {
   isCorrect: boolean;

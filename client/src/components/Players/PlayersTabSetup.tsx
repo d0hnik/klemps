@@ -52,35 +52,37 @@ export function PlayersTabSetup({
   const { t } = useTranslation();
 
   return (
-    <section className="container-border relative box-border rounded-xl pt-8 px-6 pb-6 w-full max-w-[510px]">
+    <section className="container-border relative box-border rounded-xl w-[98%] max-w-[510px] pt-7 pb-6 lg:pt-8 lg:px-6 lg:pb-6 lg:w-full">
       <Title index="1" title="PLAYERS" />
 
-      <div className="flex flex-col gap-y-3 mb-4">
-        {players.map((player, index) => {
-          const playerIndex = index + 1;
+      <div className="h-[255px] overflow-y-auto pr-2 overflow-visible pr-0 sm:max-h-[360px] md:max-h-[360px]">
+        <ol className="relative mb-4 flex flex-col items-center gap-y-3">
+          {players.map((player, index) => {
+            const playerIndex = index + 1;
 
-          const selectedAvatarIndex =
-            selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
+            const selectedAvatarIndex =
+              selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
 
-          player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
+            player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
 
-          return (
-            <PlayerRowSetup
-              key={playerIndex}
-              playerIndex={playerIndex}
-              playerName={player.name}
-              avatarSrc={player.avatarSrc}
-              onNameChange={(name) => onSetPlayerName(playerIndex, name)}
-              onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
-              onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
-            />
-          );
-        })}
+            return (
+              <PlayerRowSetup
+                key={playerIndex}
+                playerIndex={playerIndex}
+                playerName={player.name}
+                avatarSrc={player.avatarSrc}
+                onNameChange={(name) => onSetPlayerName(playerIndex, name)}
+                onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
+                onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
+              />
+            );
+          })}
+        </ol>
       </div>
 
       <span className="text-xl text-white">{t("game.selectPlayers")}: </span>
 
-      <div className="grid grid-cols-3 gap-3 w-full">
+      <div className="flex grid grid-cols-3 gap-3 w-[96%] pl-2 lg:w-full">
         {PLAYER_COUNT_OPTIONS.map((count) => (
           <MainButton
             key={count}

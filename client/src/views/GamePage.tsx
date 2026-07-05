@@ -11,7 +11,7 @@ import {
   type GuessValue,
 } from "../entities/guess";
 import { getCurrentCardIndex } from "../entities/card";
-import { AfterGuessModal } from "./AfterGuessModal";
+import { AfterGuessModal } from "../components/Modals/AfterGuessModal";
 import { getNextTurn } from "../entities/gameState";
 
 export function GameView() {

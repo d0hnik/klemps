@@ -74,7 +74,7 @@ export function GameSetupView() {
 
   return (
     <>
-      <div className="flex flex-row justify-evenly">
+      <div className="flex flex-col items-center lg:flex-row lg:justify-evenly">
         <PlayersTabSetup
           playerCount={playerCount}
           onSetPlayerCount={handleSetPlayerCount}
@@ -86,12 +86,7 @@ export function GameSetupView() {
           onSelectDifficulty={setDifficultyName}
         />
       </div>
-      <div className="flex flex-row justify-between mt-10">
-        <BackButton
-          onClick={() => navigate("/")}
-          iconSize={40}
-          additionalStyle={"ml-16"}
-        />
+      <div className="flex flex-col lg:flex-row justify-between mt-10">
         <StartButton
           onClick={() => handleStartGame(playerInputs, difficultyName)}
         />
