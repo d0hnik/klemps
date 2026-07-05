@@ -1,10 +1,12 @@
 import { Check, Close } from "@nsmr/pixelart-react";
-import type { GuessResult } from "../entities/guess";
 import { useTranslation } from "react-i18next";
 import { ROUND_ORDER } from "../entities/roundType";
+import type { GameState } from "../entities/gameState";
+import { PlayerRowDrinksGiver } from "../components/Players/PlayerRowDrinksGiver";
 
 type AfterGuessModalProps = {
-  result: GuessResult;
+  isCorrect: boolean;
+  gameState: GameState;
   onClose: () => void;
 };
 
@@ -37,17 +39,19 @@ const AFTER_GUESS_MODAL_CONFIG = {
   },
 } as const;
 
-export function AfterGuessModal({ result, onClose }: AfterGuessModalProps) {
+export function AfterGuessModal({
+  isCorrect,
+  gameState,
+  onClose,
+}: AfterGuessModalProps) {
   const { t } = useTranslation();
 
   const drinksAmount =
-    result.gameState.difficulty.drinksPerRound[
-      ROUND_ORDER.indexOf(result.gameState.currentRoundType)
+    gameState.difficulty.drinksPerRound[
+      ROUND_ORDER.indexOf(gameState.currentRoundType)
     ];
 
-  console.log(result.gameState.currentRoundType);
-
-  const variant = result.isCorrect ? "correct" : "wrong";
+  const variant = isCorrect ? "correct" : "wrong";
 
   const config = AFTER_GUESS_MODAL_CONFIG[variant];
 
@@ -111,7 +115,7 @@ export function AfterGuessModal({ result, onClose }: AfterGuessModalProps) {
           <div className="flex mt-2 flex-col justify-center items-center gap-2">
             <p>{t(config.messageKey)}</p>
             <p
-              className="text-3xl text-[var(--result-color)]"
+              className="text-3xl tracking-wider text-[var(--result-color)]"
               style={
                 {
                   "--result-color": config.borderColor,
@@ -121,6 +125,14 @@ export function AfterGuessModal({ result, onClose }: AfterGuessModalProps) {
               {t(config.giveTake)} {drinksAmount} {t(config.drinks)}
             </p>
           </div>
+          {isCorrect &&
+            gameState.players.map((player, index) => (
+              <PlayerRowDrinksGiver
+                key={index}
+                playerIndex={index + 1}
+                player={player}
+              />
+            ))}
           <div className="flex justify-center items-center mt-4">
             <button
               type="button"

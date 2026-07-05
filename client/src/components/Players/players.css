@@ -2,6 +2,10 @@
   border: 7px solid var(--player-color);
 }
 
+.player-row-thin-border {
+  border: 3px solid gray;
+}
+
 .player-row__index {
   background: var(--player-color);
 }

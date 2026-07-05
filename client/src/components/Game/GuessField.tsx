@@ -18,8 +18,8 @@ export function GuessField({ roundType, onGuess }: Props) {
       aria-labelledby="game-field-heading"
     >
       <div className="flex flex-col w-full">
-        <span className="flex items-center justify-center w-full text-white text-3xl tracking-wider">
-          <p className="pr-5">{t("guess.guess")}: </p>
+        <span className="flex items-center justify-center w-full text-white text-2xl tracking-wider">
+          <p className="pr-2">{t("guess.guess")}: </p>
           {t(roundConfig.titleKey)}
         </span>
         <div className="flex flex-row flex-wrap justify-center gap-3 pt-5 pb-5">

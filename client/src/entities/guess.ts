@@ -1,5 +1,5 @@
 import { rankValue, RED_SUITS, type Card } from "./card";
-import { getNextTurn, type GameState } from "./gameState";
+import { type GameState } from "./gameState";
 import { ROUND_ORDER, type RoundType } from "./roundType";
 
 export const RED_BLACK_GUESSES = ["RED", "BLACK"] as const;
@@ -193,7 +193,6 @@ export const ROUND_CONFIG = {
 } satisfies RoundConfigMap;
 
 export type GuessResult = {
-  gameState: GameState;
   isCorrect: boolean;
 };
 
@@ -205,7 +204,6 @@ export function handleGuess(
 
   if (!currentPlayer) {
     return {
-      gameState,
       isCorrect: false,
     };
   }
@@ -215,7 +213,6 @@ export function handleGuess(
 
   if (!currentCard) {
     return {
-      gameState,
       isCorrect: false,
     };
   }
@@ -227,10 +224,7 @@ export function handleGuess(
     playerHand: currentPlayer.hand,
   });
 
-  const newGameState = getNextTurn(gameState);
-
   return {
     isCorrect,
-    gameState: newGameState,
   };
 }

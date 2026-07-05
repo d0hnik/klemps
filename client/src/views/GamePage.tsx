@@ -12,6 +12,7 @@ import {
 } from "../entities/guess";
 import { getCurrentCardIndex } from "../entities/card";
 import { AfterGuessModal } from "./AfterGuessModal";
+import { getNextTurn } from "../entities/gameState";
 
 export function GameView() {
   const [gameState, setGameState] = useState(() => getGameState());
@@ -86,16 +87,19 @@ export function GameView() {
 
       {isResultModalOpen && pendingGuessResult && (
         <AfterGuessModal
-          result={pendingGuessResult}
           onClose={() => {
-            saveGameState(pendingGuessResult.gameState);
-            setGameState(pendingGuessResult.gameState);
+            const newGameState = getNextTurn(gameState);
+
+            saveGameState(newGameState);
+            setGameState(newGameState);
 
             setIsResultModalOpen(false);
             setPendingGuessResult(null);
             setRevealedCardIndex(null);
             setIsGuessLocked(false);
           }}
+          isCorrect={pendingGuessResult.isCorrect}
+          gameState={gameState}
         />
       )}
     </>
