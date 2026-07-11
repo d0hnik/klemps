@@ -3,7 +3,6 @@ import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTabSetup } from "../components/Players/PlayersTabSetup";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
 import { createGame } from "../entities/gameState";
-import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { StartButton } from "../components/Buttons/startButton/startButton";
 import { useNavigate } from "react-router-dom";
 import { saveGameState } from "../entities/gameStorage";
