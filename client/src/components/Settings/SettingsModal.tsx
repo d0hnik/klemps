@@ -47,7 +47,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
             </button>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-5">
           <SettingsRow
             label={"Sound"}
             onClickFirst={function (): void {
@@ -57,7 +57,26 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
               throw new Error("Function not implemented.");
             }}
           />
-          <div>Music</div>
+          <SettingsRow
+            label={"Music"}
+            onClickFirst={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onClickSecond={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+          <SettingsRow
+            label={"Language"}
+            onClickFirst={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onClickSecond={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            firstButtonLabel="Eesti"
+            secondButtonLabel="English"
+          />
         </div>
       </div>
     </div>
