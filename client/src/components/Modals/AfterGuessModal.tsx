@@ -1,43 +1,14 @@
-import { Check, Close } from "@nsmr/pixelart-react";
 import { useTranslation } from "react-i18next";
 import { ROUND_ORDER } from "../../entities/roundType";
 import type { GameState } from "../../entities/gameState";
-import { PlayerRowDrinksGiver } from "../Players/PlayerRowDrinksGiver";
+import { PlayerRowGivingOutDrinks } from "../Players/PlayerRowDrinksGiver";
+import { AFTER_GUESS_MODAL_CONFIG } from "./constants";
 
 type AfterGuessModalProps = {
   isCorrect: boolean;
   gameState: GameState;
   onClose: () => void;
 };
-
-const AFTER_GUESS_MODAL_CONFIG = {
-  correct: {
-    titleKey: "guessResult.correctTitle",
-    messageKey: "guessResult.correctMessage",
-    borderColor: "var(--color-green)",
-    titleColor: "text-green-400",
-    buttonColor: "bg-green-600 hover:bg-green-500",
-    giveTake: "guessResult.giveOut",
-    drinks: "guessResult.drinks",
-    icon: (
-      <Check
-        size={58}
-        color="green"
-        className=" [filter:drop-shadow(1px_0_0_currentColor)_drop-shadow(-1px_0_0_currentColor)_drop-shadow(0_1px_0_currentColor)_drop-shadow(0_-1px_0_currentColor)]"
-      />
-    ),
-  },
-  wrong: {
-    titleKey: "guessResult.wrongTitle",
-    messageKey: "guessResult.wrongMessage",
-    borderColor: "var(--color-red)",
-    titleColor: "text-red-400",
-    buttonColor: "bg-red-600 hover:bg-red-500",
-    giveTake: "guessResult.take",
-    drinks: "guessResult.drinks",
-    icon: <Close size={52} color="red" />,
-  },
-} as const;
 
 export function AfterGuessModal({
   isCorrect,
@@ -127,7 +98,7 @@ export function AfterGuessModal({
           </div>
           {isCorrect &&
             gameState.players.map((player, index) => (
-              <PlayerRowDrinksGiver
+              <PlayerRowGivingOutDrinks
                 key={index}
                 playerIndex={index + 1}
                 player={player}

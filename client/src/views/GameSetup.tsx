@@ -3,10 +3,10 @@ import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTabSetup } from "../components/Players/PlayersTabSetup";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
 import { createGame } from "../entities/gameState";
-import { StartButton } from "../components/Buttons/startButton/startButton";
 import { useNavigate } from "react-router-dom";
 import { saveGameState } from "../entities/gameStorage";
 import { PLAYER_AVATARS, type NewPlayerInput } from "../entities/player";
+import { StartButton } from "../components/Buttons/startButton";
 
 export function GameSetupView() {
   const navigate = useNavigate();

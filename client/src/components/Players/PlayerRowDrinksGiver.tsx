@@ -6,7 +6,7 @@ type Props = {
   player: Player;
 };
 
-export function PlayerRowDrinksGiver({ playerIndex, player }: Props) {
+export function PlayerRowGivingOutDrinks({ playerIndex, player }: Props) {
   const color = PLAYER_COLORS[(playerIndex - 1) % PLAYER_COLORS.length];
 
   return (
