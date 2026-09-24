@@ -16,11 +16,15 @@ body {
     box-shadow 180ms ease,
     border-color 180ms ease,
     filter 180ms ease;
+
+  transform: translateY(0) scale(1);
 }
 
-.button-animation:hover {
-  transform: translateY(-4px);
-  filter: brightness(1.08);
+@media (hover: hover) and (pointer: fine) {
+  .button-animation:hover {
+    transform: translateY(-4px);
+    filter: brightness(1.08);
+  }
 }
 
 .button-animation:active {

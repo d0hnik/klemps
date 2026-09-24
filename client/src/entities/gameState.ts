@@ -101,3 +101,37 @@ export function getNextTurn(gameState: GameState): GameState {
     gameStatus: "FINISHED",
   };
 }
+
+export function createFakeGame(): GameState {
+  let deck: Card[] = createDeck();
+
+  deck = shuffleDeck(deck);
+
+  const player1: NewPlayerInput = {
+    name: "PLAYER 1",
+    avatarSrc: "/players/avatar1.png",
+  };
+  const player2: NewPlayerInput = {
+    name: "PLAYER 2",
+    avatarSrc: "/players/avatar3.png",
+  };
+
+  const createdPlayers: Player[] = createPlayersWithHand(
+    [player1, player2],
+    deck,
+  );
+
+  const difficulty: Difficulty = EASY_DIFFICULTY;
+
+  const gameState: GameState = {
+    id: uuidv4(),
+    players: createdPlayers,
+    deck: deck,
+    gameStatus: "IN_PROGRESS",
+    difficulty: difficulty,
+    currentPlayerIndex: 0,
+    currentRoundType: "RED_BLACK",
+  };
+
+  return gameState;
+}

@@ -1,24 +1,31 @@
-import { IconArrowNarrowLeft } from "@tabler/icons-react";
+import type { PlayerDrinksButtonType } from "../../entities/constants";
+import { PLAYER_DRINKS_BUTTON_CONFIG } from "../helpers/constants";
 
 type Props = {
   onClick: () => void;
-  additionalStyle: string | undefined;
-  iconSize: number;
+  type: PlayerDrinksButtonType;
 };
 
-export function BackButton({ onClick, additionalStyle, iconSize }: Props) {
+export function PlayerDrinksButton({ onClick, type }: Props) {
+  const config = PLAYER_DRINKS_BUTTON_CONFIG[type];
+
   return (
     <button
-      className={`secondary-pixel-corners button-animation ${additionalStyle}`}
-      style={
-        {
-          "--border-color": "#00fbff",
-        } as React.CSSProperties
-      }
+      className={`
+    secondary-pixel-corners
+    button-animation
+    w-10
+    h-10
+    flex
+    justify-center
+    items-center
+    cursor-pointer
+    ${config.borderColor}
+  `}
       type="button"
       onClick={onClick}
     >
-      <IconArrowNarrowLeft stroke={2} size={iconSize} /> BACK
+      {config.icon}
     </button>
   );
 }

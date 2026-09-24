@@ -1,4 +1,4 @@
-import { Check, Close } from "@nsmr/pixelart-react";
+import { Check, Close, Minus, Plus } from "@nsmr/pixelart-react";
 
 export const AFTER_GUESS_MODAL_CONFIG = {
   correct: {
@@ -26,5 +26,17 @@ export const AFTER_GUESS_MODAL_CONFIG = {
     giveTake: "guessResult.take",
     drinks: "guessResult.drinks",
     icon: <Close size={52} color="red" />,
+  },
+} as const;
+
+export const PLAYER_DRINKS_BUTTON_CONFIG = {
+  increment: {
+    borderColor: "[--border-color:var(--color-green)]",
+    icon: <Plus size={24} color="green" />,
+  },
+
+  decrement: {
+    borderColor: "[--border-color:var(--color-red)]",
+    icon: <Minus size={24} color="red" />,
   },
 } as const;

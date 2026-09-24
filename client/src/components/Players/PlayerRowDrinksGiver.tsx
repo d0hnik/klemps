@@ -1,5 +1,6 @@
 import "./players.css";
 import { PLAYER_COLORS, type Player } from "../../entities/player";
+import { PlayerDrinksButton } from "../Buttons/playerDrinksButton";
 
 type Props = {
   playerIndex: number;
@@ -32,6 +33,23 @@ export function PlayerRowGivingOutDrinks({ playerIndex, player }: Props) {
         </span>
 
         <p className="m-0 truncate text-xl text-white">{player.name}</p>
+      </div>
+
+      <div className="flex">
+        <div className="flex justify-center items-center">
+          <PlayerDrinksButton
+            onClick={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            type={"decrement"}
+          />
+          <PlayerDrinksButton
+            onClick={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            type={"increment"}
+          />
+        </div>
       </div>
     </div>
   );

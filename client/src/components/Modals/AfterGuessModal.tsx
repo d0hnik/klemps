@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ROUND_ORDER } from "../../entities/roundType";
 import type { GameState } from "../../entities/gameState";
 import { PlayerRowGivingOutDrinks } from "../Players/PlayerRowDrinksGiver";
-import { AFTER_GUESS_MODAL_CONFIG } from "./constants";
+import { AFTER_GUESS_MODAL_CONFIG } from "../helpers/constants";
 
 type AfterGuessModalProps = {
   isCorrect: boolean;
@@ -25,6 +25,12 @@ export function AfterGuessModal({
   const variant = isCorrect ? "correct" : "wrong";
 
   const config = AFTER_GUESS_MODAL_CONFIG[variant];
+
+  const roundIndex = ROUND_ORDER.indexOf(gameState.currentRoundType);
+
+  const maxDrinks = gameState.difficulty.drinksPerRound[roundIndex];
+
+  console.log(maxDrinks);
 
   return (
     <div
