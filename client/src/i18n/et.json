@@ -3,7 +3,8 @@
     "selectPlayers": "VALI MÄNGIJAD",
     "selectDifficulty": "Vali raskusaste",
     "startGame": "ALUSTA MÄNGU",
-    "back": "TAGASI"
+    "back": "TAGASI",
+    "currentTurn": "KÄIB"
   },
   "difficulty": {
     "easy": "LIHTNE",
@@ -13,10 +14,43 @@
   },
   "players": {
     "player": "MÄNGIJA",
+    "players": "MÄNGIJAD",
     "name": "NIMI"
   },
   "drinks": {
     "single": "JOOK",
-    "plural": "JOOKI"
+    "plural": "JOOKI",
+    "taken": "VÕETUD",
+    "given": "ANTUD"
+  },
+  "guess": {
+    "guess": "ARVA",
+    "title": {
+      "RED_BLACK": "PUNANE VÕI MUST",
+      "HIGH_LOW": "SUUREM VÕI VÄIKSEM",
+      "INSIDE_OUTSIDE": "JÄÄB VAHELE VÕI EI JÄÄ",
+      "SUIT": "MAST"
+    },
+    "value": {
+      "RED": "PUNANE",
+      "BLACK": "MUST",
+      "INSIDE": "JÄÄB",
+      "OUTSIDE": "EI JÄÄ",
+      "HIGHER": "SUUREM",
+      "LOWER": "VÄIKSEM",
+      "HEART": "ÄRTU",
+      "CLUB": "RISTI",
+      "SPADE": "POTI",
+      "DIAMOND": "RUUTU"
+    }
+  },
+  "guessResult": {
+    "correctTitle": "ÕIGE VALIK",
+    "wrongTitle": "VALE VALIK",
+    "correctMessage": "Sinu valik oli õige.",
+    "wrongMessage": "Sinu valik oli vale.",
+    "giveOut": "ANNA",
+    "take": "VÕTA",
+    "drinks": "JOOKI"
   }
 }

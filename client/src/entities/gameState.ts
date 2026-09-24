@@ -10,10 +10,11 @@ import { type GameStatus } from "./gameStatus";
 import {
   createPlayersWithHand,
   restartPlayersWithHands,
+  type NewPlayerInput,
   type Player,
 } from "./player";
-import type { RoundType } from "./roundType";
 import { v4 as uuidv4 } from "uuid";
+import { ROUND_ORDER, type RoundType } from "./roundType";
 
 export type GameState = {
   id: string;
@@ -26,21 +27,21 @@ export type GameState = {
 };
 
 export function createGame(
-  playerNames: string[],
+  players: NewPlayerInput[],
   difficultyName: DifficultyName,
 ): GameState {
   let deck: Card[] = createDeck();
 
   deck = shuffleDeck(deck);
 
-  const players: Player[] = createPlayersWithHand(playerNames, deck);
+  const createdPlayers: Player[] = createPlayersWithHand(players, deck);
 
   const difficulty: Difficulty =
     getDifficultyByName(difficultyName) ?? EASY_DIFFICULTY;
 
   const gameState: GameState = {
     id: uuidv4(),
-    players: players,
+    players: createdPlayers,
     deck: deck,
     gameStatus: "IN_PROGRESS",
     difficulty: difficulty,
@@ -65,4 +66,38 @@ export function restartGame(prevGameState: GameState): GameState {
   };
 
   return newGameState;
+}
+
+export function getNextTurn(gameState: GameState): GameState {
+  if (gameState.gameStatus == "FINISHED") {
+    return gameState;
+  }
+
+  const isLastPlayer =
+    gameState.currentPlayerIndex === gameState.players.length - 1;
+
+  const currentRoundIndex = ROUND_ORDER.indexOf(gameState.currentRoundType);
+
+  const isLastRound = currentRoundIndex === ROUND_ORDER.length - 1;
+
+  if (!isLastPlayer) {
+    return {
+      ...gameState,
+      currentPlayerIndex: gameState.currentPlayerIndex + 1,
+    };
+  }
+
+  if (!isLastRound) {
+    return {
+      ...gameState,
+      currentPlayerIndex: 0,
+      currentRoundType: ROUND_ORDER[currentRoundIndex + 1],
+    };
+  }
+
+  return {
+    ...gameState,
+    currentPlayerIndex: 0,
+    gameStatus: "FINISHED",
+  };
 }

@@ -1,92 +1,67 @@
-import { useState } from "react";
-import { PLAYER_AVATARS } from "../../entities/player";
-import { MainButton } from "../Buttons/MainButton";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Title } from "../Title/Title";
-import { PlayerRow } from "./PlayerRow";
 import "./players.css";
-import {
-  getDefaultAvatarIndex,
-  getNextAvatarIndex,
-  PLAYER_COUNT_OPTIONS,
-} from "../helpers/players";
 import { useTranslation } from "react-i18next";
+import type { Player } from "../../entities/player";
+import { ActivePlayerArrow } from "./ActivePlayerArrow";
+import { PlayerRow } from "./PlayerRow";
 
 type Props = {
-  onSetPlayerCount: (count: number) => void;
-  onSetPlayerName: (playerIndex: number, name: string) => void;
-  playerCount: number;
-  playerNames: string[];
+  players: Player[];
+  currentPlayerIndex: number;
 };
 
-export function PlayersTab({
-  onSetPlayerCount,
-  onSetPlayerName,
-  playerCount,
-  playerNames,
-}: Props) {
-  const [selectedAvatarIndexes, setSelectedAvatarIndexes] = useState<number[]>(
-    () =>
-      Array.from({ length: playerCount }, (_, index) =>
-        getDefaultAvatarIndex(index),
-      ),
-  );
-
-  function changePlayerAvatar(
-    playerIndex: number,
-    direction: "left" | "right",
-  ) {
-    const arrayIndex = playerIndex - 1;
-
-    setSelectedAvatarIndexes((current) => {
-      const next = [...current];
-
-      const currentAvatarIndex =
-        next[arrayIndex] ?? getDefaultAvatarIndex(arrayIndex);
-
-      next[arrayIndex] = getNextAvatarIndex(currentAvatarIndex, direction);
-
-      return next;
-    });
-  }
-
+export function PlayersTab({ players, currentPlayerIndex }: Props) {
   const { t } = useTranslation();
 
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [arrowTop, setArrowTop] = useState(0);
+
+  const currentPlayer = players[currentPlayerIndex];
+
+  useLayoutEffect(() => {
+    const activeRow = rowRefs.current[currentPlayerIndex];
+
+    if (!activeRow) {
+      return;
+    }
+
+    const rowMiddle = activeRow.offsetTop + activeRow.offsetHeight / 2;
+
+    setArrowTop(rowMiddle);
+
+    activeRow.scrollIntoView({
+      block: "nearest",
+      behavior: "smooth",
+    });
+  }, [currentPlayerIndex, players.length]);
+
   return (
-    <section className="players-tab relative box-border rounded-xl pt-8 px-6 pb-6 w-full max-w-[510px]">
-      <Title index="1" title="PLAYERS" />
+    <section
+      className="container-border relative box-border mb-3 mx-1 w-[98%] max-w-[510px] rounded-xl px-1 pb-2 pt-8 sm:w-full sm:px-6 sm:pb-4"
+      aria-labelledby="players-heading"
+    >
+      <Title id="players-heading" title={t("players.players")} level={2} />
 
-      <div className="flex flex-col gap-y-3 mb-4">
-        {Array.from({ length: playerCount }).map((_, index) => {
-          const playerIndex = index + 1;
+      <div className="max-h-[260px] overflow-y-auto pr-2 overflow-visible pr-0 sm:max-h-[360px] md:max-h-[360px]">
+        <ol className="relative mb-4 flex flex-col items-center gap-y-3">
+          {currentPlayer && (
+            <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
+          )}
 
-          const selectedAvatarIndex =
-            selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
-
-          return (
+          {players.map((player, index) => (
             <PlayerRow
-              key={playerIndex}
-              playerIndex={playerIndex}
-              playerName={playerNames[index] ?? ""}
-              avatarSrc={PLAYER_AVATARS[selectedAvatarIndex]}
-              onNameChange={(name) => onSetPlayerName(playerIndex, name)}
-              onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
-              onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
+              key={index}
+              playerIndex={index + 1}
+              player={player}
+              isActive={index === currentPlayerIndex}
+              rowRef={(node) => {
+                rowRefs.current[index] = node;
+              }}
             />
-          );
-        })}
-      </div>
-
-      <span className="text-xl text-white">{t("game.selectPlayers")}: </span>
-
-      <div className="grid grid-cols-3 gap-3 w-full">
-        {PLAYER_COUNT_OPTIONS.map((count) => (
-          <MainButton
-            key={count}
-            text={String(count)}
-            active={playerCount === count}
-            onClick={() => onSetPlayerCount(count)}
-          />
-        ))}
+          ))}
+        </ol>
       </div>
     </section>
   );

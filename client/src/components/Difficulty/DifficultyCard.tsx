@@ -23,7 +23,9 @@ export function DifficultyCard({
 
   const beerIconCount = isEasy ? 1 : 2;
 
-  const difficultyModifier = isEasy ? "easy" : "hard";
+  const backgroundColor = isEasy
+    ? "bg-[var(--color-green)]"
+    : "bg-[var(--color-red)]";
 
   const selectedModifier = isSelected ? "active" : "";
 
@@ -31,7 +33,7 @@ export function DifficultyCard({
 
   return (
     <button
-      className={`difficulty-card button-animation pixel-corners ${difficultyModifier} ${selectedModifier}`}
+      className={`difficulty-card button-animation pixel-corners ${backgroundColor} ${selectedModifier}`}
       onClick={() => onSelectDifficulty(difficulty.name)}
       type="button"
     >
@@ -62,7 +64,7 @@ export function DifficultyCard({
         ))}
       </div>
       <div
-        className={`difficulty-card__footer flex justify-center items-center mt-5 text-white ${difficultyModifier}`}
+        className={`difficulty-card__footer flex justify-center items-center mt-5 text-white ${backgroundColor}`}
       >
         <p className="mr-3">
           <IconStarFilled />

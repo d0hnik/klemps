@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/pixelify-sans": "^5.2.7",
+    "@nsmr/pixelart-react": "^2.0.0",
     "@tabler/icons-react": "^3.43.0",
     "@tailwindcss/vite": "^4.2.4",
     "i18next": "^26.2.0",

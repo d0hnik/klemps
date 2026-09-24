@@ -2,17 +2,23 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { MainMenuView } from "../views/MainMenu";
 import { GameSetupView } from "../views/GameSetup";
 import { GameView } from "../views/GamePage";
+import { Footer } from "./AppLayout/Footer";
+import { Header } from "./AppLayout/Header";
 
-function App() {
+export function App() {
   return (
-    <Routes>
-      <Route path="/" element={<MainMenuView />} />
-      <Route path="/setup" element={<GameSetupView />} />
-      <Route path="/game" element={<GameView />} />
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<MainMenuView />} />
+          <Route path="/setup" element={<GameSetupView />} />
+          <Route path="/game" element={<GameView />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      <Footer />
+    </div>
   );
 }
-
-export default App;

@@ -1,23 +1,19 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./logo.css";
-import { clearGameState } from "../../entities/gameStorage";
 
 function Logo() {
-  const navigate = useNavigate();
-
-  function clearGameStateAndRedirectHome() {
-    clearGameState();
-    navigate("/");
-  }
   return (
-    <button type="button" onClick={clearGameStateAndRedirectHome}>
-      {" "}
+    <Link
+      to="/"
+      aria-label="Go to main menu"
+      className="inline-flex items-center justify-center"
+    >
       <img
-        className="game-logo"
+        className="h-auto w-[300px] sm:w-[300px] md:w-[360px]"
         src="/images/klemps-logo.png"
-        alt="KLEMPS logo"
+        alt="KLEMPS"
       />
-    </button>
+    </Link>
   );
 }
 

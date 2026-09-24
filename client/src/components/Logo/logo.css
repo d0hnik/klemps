@@ -1,6 +1,12 @@
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .game-logo {
-  display: flex;
-  width: 525px;
+  width: clamp(180px, 28vw, 320px);
   height: auto;
-  margin: 0 auto;
+  display: block;
 }

@@ -1,104 +1,48 @@
-.players-tab {
-  border: 5px solid var(--color-panel);
-}
-
 .player-row {
-  width: 100%;
-  min-height: 83px;
   border: 7px solid var(--player-color);
-
-  display: flex;
-  align-items: stretch;
 }
 
-.player-row > :nth-child(2) {
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-}
-
-.player-row > :nth-child(3) {
-  border-right: 2px solid black;
-}
-
-.player-row__arrow-button {
-  width: 48px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: none;
-  background: transparent;
-  cursor: pointer;
-
-  padding: 0;
-}
-
-.player-row__avatar {
-  width: 80px;
-  object-fit: contain;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.player-row__content {
-  flex: 1;
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  padding: 8px 12px;
+.player-row-thin-border {
+  border: 3px solid gray;
 }
 
 .player-row__index {
-  width: fit-content;
-
-  margin-bottom: 6px;
-  padding: 2px 8px;
-
   background: var(--player-color);
-
-  font-size: 18px;
-  font-weight: 900;
-  line-height: 1;
 }
 
-.player-row__input {
-  width: 100%;
-  min-width: 0;
-
-  padding: 6px 8px;
-  border-bottom: 1px solid lightgray;
-  color: white;
-  line-height: 1.2em;
-  font-size: 22px;
+.active-player-arrow {
+  animation: active-player-arrow-pulse 2.8s ease-in-out infinite;
 }
 
-@media (max-width: 480px) {
-  .players-tab {
-    margin-inline: 10px;
+@keyframes active-player-arrow-pulse {
+  0% {
+    transform: translateX(0);
   }
 
-  .player-row__index {
-    margin-bottom: 5px;
-    padding: 2px 8px;
-    margin-left: 12px;
-
-    font-size: 15px;
-    font-weight: 900;
-    line-height: 1;
+  8% {
+    transform: translateX(7px);
   }
 
-  .players-select-text {
-    color: white;
-    font-size: 20px;
+  16% {
+    transform: translateX(0);
   }
 
-  .player-row__input::placeholder {
-    font-size: 14px;
+  24% {
+    transform: translateX(7px);
+  }
+
+  32% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active-player-arrow {
+    animation: none;
   }
 }
 
