@@ -32,11 +32,13 @@ export const AFTER_GUESS_MODAL_CONFIG = {
 export const PLAYER_DRINKS_BUTTON_CONFIG = {
   increment: {
     borderColor: "[--border-color:var(--color-green)]",
-    icon: <Plus size={24} color="green" />,
+    iconColor: "green",
+    Icon: Plus,
   },
 
   decrement: {
     borderColor: "[--border-color:var(--color-red)]",
-    icon: <Minus size={24} color="red" />,
+    iconColor: "red",
+    Icon: Minus,
   },
 } as const;

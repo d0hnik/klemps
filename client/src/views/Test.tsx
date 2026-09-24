@@ -10,7 +10,7 @@ export function TestView() {
           isCorrect={true}
           gameState={game}
           onClose={function (): void {
-            throw new Error("Function not implemented.");
+            console.log("ONCLOSE");
           }}
         />
       </div>

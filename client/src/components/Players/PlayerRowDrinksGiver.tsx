@@ -1,13 +1,25 @@
 import "./players.css";
 import { PLAYER_COLORS, type Player } from "../../entities/player";
 import { PlayerDrinksButton } from "../Buttons/playerDrinksButton";
+import { PlayerAssignedDrinksCounter } from "../Counters/PlayerAssignedDrinksCounter";
 
 type Props = {
   playerIndex: number;
   player: Player;
+  assignedDrinks: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  incrementionDisabled: boolean;
 };
 
-export function PlayerRowGivingOutDrinks({ playerIndex, player }: Props) {
+export function PlayerRowGivingOutDrinks({
+  playerIndex,
+  player,
+  assignedDrinks,
+  onIncrement,
+  onDecrement,
+  incrementionDisabled,
+}: Props) {
   const color = PLAYER_COLORS[(playerIndex - 1) % PLAYER_COLORS.length];
 
   return (
@@ -36,18 +48,17 @@ export function PlayerRowGivingOutDrinks({ playerIndex, player }: Props) {
       </div>
 
       <div className="flex">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center gap-2 mr-4">
           <PlayerDrinksButton
-            onClick={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onClick={onDecrement}
             type={"decrement"}
+            disabled={assignedDrinks == 0}
           />
+          <PlayerAssignedDrinksCounter number={assignedDrinks} />
           <PlayerDrinksButton
-            onClick={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            onClick={onIncrement}
             type={"increment"}
+            disabled={incrementionDisabled}
           />
         </div>
       </div>
