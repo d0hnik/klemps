@@ -1,43 +1,16 @@
-import { Check, Close } from "@nsmr/pixelart-react";
 import { useTranslation } from "react-i18next";
 import { ROUND_ORDER } from "../../entities/roundType";
 import type { GameState } from "../../entities/gameState";
-import { PlayerRowDrinksGiver } from "../Players/PlayerRowDrinksGiver";
+import { PlayerRowGivingOutDrinks } from "../Players/PlayerRowDrinksGiver";
+import { AFTER_GUESS_MODAL_CONFIG } from "../helpers/constants";
+import { useState } from "react";
+import { ContinueButton } from "../Buttons/ContinueButton";
 
 type AfterGuessModalProps = {
   isCorrect: boolean;
   gameState: GameState;
   onClose: () => void;
 };
-
-const AFTER_GUESS_MODAL_CONFIG = {
-  correct: {
-    titleKey: "guessResult.correctTitle",
-    messageKey: "guessResult.correctMessage",
-    borderColor: "var(--color-green)",
-    titleColor: "text-green-400",
-    buttonColor: "bg-green-600 hover:bg-green-500",
-    giveTake: "guessResult.giveOut",
-    drinks: "guessResult.drinks",
-    icon: (
-      <Check
-        size={58}
-        color="green"
-        className=" [filter:drop-shadow(1px_0_0_currentColor)_drop-shadow(-1px_0_0_currentColor)_drop-shadow(0_1px_0_currentColor)_drop-shadow(0_-1px_0_currentColor)]"
-      />
-    ),
-  },
-  wrong: {
-    titleKey: "guessResult.wrongTitle",
-    messageKey: "guessResult.wrongMessage",
-    borderColor: "var(--color-red)",
-    titleColor: "text-red-400",
-    buttonColor: "bg-red-600 hover:bg-red-500",
-    giveTake: "guessResult.take",
-    drinks: "guessResult.drinks",
-    icon: <Close size={52} color="red" />,
-  },
-} as const;
 
 export function AfterGuessModal({
   isCorrect,
@@ -54,6 +27,49 @@ export function AfterGuessModal({
   const variant = isCorrect ? "correct" : "wrong";
 
   const config = AFTER_GUESS_MODAL_CONFIG[variant];
+
+  const roundIndex = ROUND_ORDER.indexOf(gameState.currentRoundType);
+
+  const maxDrinks = gameState.difficulty.drinksPerRound[roundIndex];
+
+  const [assignedDrinks, setAssignedDrinks] = useState<number[]>(() =>
+    Array(gameState.players.length).fill(0),
+  );
+
+  const totalAssignedDrinks = assignedDrinks.reduce(
+    (total, drinks) => total + drinks,
+    0,
+  );
+
+  const allDrinksAssigned = totalAssignedDrinks === maxDrinks;
+
+  const incrementDrinks = (playerIndex: number): void => {
+    if (totalAssignedDrinks >= maxDrinks) {
+      return;
+    }
+
+    setAssignedDrinks((previous) => {
+      const next = [...previous];
+
+      next[playerIndex] += 1;
+
+      return next;
+    });
+  };
+
+  const decrementDrinks = (playerIndex: number): void => {
+    setAssignedDrinks((previous) => {
+      if (previous[playerIndex] === 0) {
+        return previous;
+      }
+
+      const next = [...previous];
+
+      next[playerIndex] -= 1;
+
+      return next;
+    });
+  };
 
   return (
     <div
@@ -126,21 +142,24 @@ export function AfterGuessModal({
             </p>
           </div>
           {isCorrect &&
-            gameState.players.map((player, index) => (
-              <PlayerRowDrinksGiver
-                key={index}
-                playerIndex={index + 1}
-                player={player}
-              />
-            ))}
+            gameState.players.map((player, index) => {
+              if (index == gameState.currentPlayerIndex) {
+                return null;
+              }
+              return (
+                <PlayerRowGivingOutDrinks
+                  key={index}
+                  playerIndex={index + 1}
+                  player={player}
+                  assignedDrinks={assignedDrinks[index]}
+                  onIncrement={() => incrementDrinks(index)}
+                  onDecrement={() => decrementDrinks(index)}
+                  incrementionDisabled={allDrinksAssigned}
+                />
+              );
+            })}
           <div className="flex justify-center items-center mt-4">
-            <button
-              type="button"
-              className="flex justify-center button-animation items-center text-2xl text-white pixel-corners min-h-[50px] min-w-[140px] w-80 bg-[var(--color-bg)]"
-              onClick={() => onClose()}
-            >
-              CONTINUE
-            </button>
+            <ContinueButton onClick={onClose} disabled={!allDrinksAssigned} />
           </div>
         </div>
       </div>

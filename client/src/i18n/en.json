@@ -4,7 +4,8 @@
     "selectDifficulty": "Select difficulty",
     "startGame": "START GAME",
     "back": "BACK",
-    "currentTurn": "TURN"
+    "currentTurn": "TURN",
+    "continue": "CONTINUE"
   },
   "difficulty": {
     "easy": "Easy",
