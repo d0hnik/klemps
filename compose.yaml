@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: ./api
+      target: development
+    init: true
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./api:/app
+      - cargo-registry:/usr/local/cargo/registry
+      - cargo-git:/usr/local/cargo/git
+      - api-target:/app/target
+
+volumes:
+  cargo-registry:
+  cargo-git:
+  api-target:

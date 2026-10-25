@@ -54,9 +54,12 @@ Thumbs.db
 # =========================
 # Docker (future safe)
 # =========================
-.dockerignore
+# Keep Docker build-context rules in Git.
 
 # =========================
 # Misc
 # =========================
 *.local
+
+# Rust
+target/
