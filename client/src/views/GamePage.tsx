@@ -1,7 +1,7 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { getGameState, saveGameState } from "../entities/gameStorage";
 import { PlayersTab } from "../components/Players/PlayersTab";
-import { BackButton } from "../components/Buttons/backButton/BackButton";
+import { BackButton } from "../components/Buttons/BackButton";
 import { useState } from "react";
 import { GameField } from "../components/Game/GameField";
 import { GuessField } from "../components/Game/GuessField";
@@ -21,7 +21,9 @@ export function GameView() {
   );
   const [pendingGuessResult, setPendingGuessResult] =
     useState<GuessResult | null>(null);
+
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+
   const [isGuessLocked, setIsGuessLocked] = useState(false);
 
   const makeAGuess = (guess: GuessValue): void => {
@@ -87,7 +89,9 @@ export function GameView() {
 
       {isResultModalOpen && pendingGuessResult && (
         <AfterGuessModal
-          onClose={() => {
+          onContinue={(assignedDrinks) => {
+            console.log(assignedDrinks);
+
             const newGameState = getNextTurn(gameState);
 
             saveGameState(newGameState);
