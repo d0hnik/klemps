@@ -21,7 +21,9 @@ export function GameView() {
   );
   const [pendingGuessResult, setPendingGuessResult] =
     useState<GuessResult | null>(null);
+
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+
   const [isGuessLocked, setIsGuessLocked] = useState(false);
 
   const makeAGuess = (guess: GuessValue): void => {
@@ -87,7 +89,9 @@ export function GameView() {
 
       {isResultModalOpen && pendingGuessResult && (
         <AfterGuessModal
-          onClose={() => {
+          onContinue={(assignedDrinks) => {
+            console.log(assignedDrinks);
+
             const newGameState = getNextTurn(gameState);
 
             saveGameState(newGameState);

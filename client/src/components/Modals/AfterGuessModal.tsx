@@ -9,13 +9,13 @@ import { ContinueButton } from "../Buttons/ContinueButton";
 type AfterGuessModalProps = {
   isCorrect: boolean;
   gameState: GameState;
-  onClose: () => void;
+  onContinue: (assignedDrinks: number[]) => void;
 };
 
 export function AfterGuessModal({
   isCorrect,
   gameState,
-  onClose,
+  onContinue,
 }: AfterGuessModalProps) {
   const { t } = useTranslation();
 
@@ -159,7 +159,10 @@ export function AfterGuessModal({
               );
             })}
           <div className="flex justify-center items-center mt-4">
-            <ContinueButton onClick={onClose} disabled={!allDrinksAssigned} />
+            <ContinueButton
+              onClick={() => onContinue(assignedDrinks)}
+              disabled={!allDrinksAssigned}
+            />
           </div>
         </div>
       </div>
