@@ -12,6 +12,21 @@ repository is not needed for separate deployment.
 Requires Docker Engine with Docker Compose v2, Make, and Node.js 24 with npm.
 Rust runs inside Docker, so a host Rust installation is optional.
 
+### VS Code Dev Containers / GitHub Codespaces
+
+The `.devcontainer/` configuration provides Node.js 24, npm, Make, and a
+Docker daemon inside the development container. The Docker-in-Docker feature
+uses a privileged development container; Docker must be available on the
+host (Docker Desktop on macOS/Windows), or supplied by Codespaces.
+
+After pulling these files, run **Dev Containers: Rebuild Container** in VS
+Code, or rebuild the Codespace. Simply reopening the terminal does not install
+the missing tools. Frontend dependencies are installed automatically after
+creation. Then run `make run-api` and `make run-frontend` in separate terminals.
+Ports 3000 and 5173 are forwarded to your machine.
+
+### Without a devcontainer
+
 Install the frontend dependencies once from the repository root:
 
 ```sh
