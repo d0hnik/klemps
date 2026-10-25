@@ -1,13 +1,7 @@
-.PHONY: run-api run-frontend stop-api test-api
+.PHONY: run-api run-frontend
 
 run-api:
-	docker compose up --build api
+	cargo run --manifest-path api/Cargo.toml --locked
 
 run-frontend:
-	npm --prefix client run dev -- --host 127.0.0.1 --port 5173 --strictPort
-
-stop-api:
-	docker compose stop api
-
-test-api:
-	docker compose run --rm --no-deps api cargo test --locked
+	npm --prefix client run dev -- --host 0.0.0.0 --port 5173 --strictPort

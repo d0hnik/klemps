@@ -1,0 +1,8 @@
+{
+  "name": "Klemps",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [5173],
+  "postCreateCommand": "npm ci && npm --prefix client ci && cargo build --manifest-path api/Cargo.toml --locked"
+}
