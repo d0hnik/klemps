@@ -1,87 +1,34 @@
 # Klemps
 
-Irish Poker game with a React/TypeScript frontend and a Rust/Axum API.
+React/TypeScript frontend in `client/` and a Rust starter in `api/`, kept in
+one repository so they can be developed together.
 
-Both live in this repository: `client/` contains the frontend and `api/`
-contains the backend. This keeps changes to the game and its API together.
-They can still be built and hosted as separate services; a separate Git
-repository is not needed for separate deployment.
+## Development container
 
-## Development
+Open this repository in VS Code and run **Dev Containers: Rebuild and Reopen
+in Container** (or rebuild your Codespace). Docker must be running on your
+host machine when using local VS Code.
 
-Requires Docker Engine with Docker Compose v2, Make, and Node.js 24 with npm.
-Rust runs inside Docker, so a host Rust installation is optional.
+The container includes Node.js 24, npm, Rust 1.90, Cargo, Make, and the C/C++
+build tools provided by the Rust image. Frontend dependencies are installed
+and the Rust project is built automatically after the container is created.
 
-### VS Code Dev Containers / GitHub Codespaces
-
-The `.devcontainer/` configuration provides Node.js 24, npm, Make, and a
-Docker daemon inside the development container. The Docker-in-Docker feature
-uses a privileged development container; Docker must be available on the
-host (Docker Desktop on macOS/Windows), or supplied by Codespaces.
-
-After pulling these files, run **Dev Containers: Rebuild Container** in VS
-Code, or rebuild the Codespace. Simply reopening the terminal does not install
-the missing tools. Frontend dependencies are installed automatically after
-creation. Then run `make run-api` and `make run-frontend` in separate terminals.
-Ports 3000 and 5173 are forwarded to your machine.
-
-### Without a devcontainer
-
-Install the frontend dependencies once from the repository root:
-
-```sh
-npm ci
-npm --prefix client ci
-```
-
-Run these in separate terminals from the repository root:
-
-```sh
-make run-api
-```
+Inside the container, from the repository root:
 
 ```sh
 make run-frontend
 ```
 
-The API listens on port 3000; Vite listens on port 5173. Both are bound to
-localhost for development. Check the API with:
+Vite serves the frontend on port 5173, which VS Code forwards automatically.
 
 ```sh
-curl --fail http://127.0.0.1:3000/api/health
-# {"status":"ok"}
+make run-api
 ```
 
-`make run-api` builds the development image and compiles the mounted Rust
-source. Cargo downloads and build outputs are cached in Docker volumes.
-After changing Rust code, restart with `docker compose restart api` to
-recompile; automatic file watching is not enabled. Stop the API with Ctrl+C
-or `make stop-api`. `docker compose down` removes the development container
-and network while retaining the caches.
+The Rust starter prints `Klemps backend` and exits. `api/src/main.rs` is the
+entry point. `api/build.rs` is an empty Cargo build script ready for future
+build steps. No HTTP server, database, or game logic is implemented yet.
 
-## Checks
-
-```sh
-make test-api
-npm --prefix client test -- --run
-npm --prefix client run build
-npm --prefix client run lint
-```
-
-The frontend currently has existing build/lint errors in
-`client/src/entities/newGuess.ts` (an incomplete, unused guess-function map).
-
-## Backend deployment image
-
-The Dockerfile also provides a release build with a small, non-root runtime
-image, separate from the development container:
-
-```sh
-docker build --target runtime -t klemps-api ./api
-docker run --rm -p 127.0.0.1:3000:3000 klemps-api
-```
-
-Frontend production assets are built separately with
-`npm --prefix client run build` once the existing TypeScript errors are fixed.
-Hosting, domains, TLS, and frontend-to-API integration can be configured when
-the application is ready for deployment.
+Both commands run directly inside the development container. Docker is used
+by the host to build and run the development container; it is not needed
+inside that container.
