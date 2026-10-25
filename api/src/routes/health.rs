@@ -6,5 +6,5 @@ pub fn router() -> Router<AppState> {
 }
 
 async fn get_health(State(state): State<AppState>) -> Json<HealthResponse> {
-    Json(state.health_service.check().into())
+    Json(state.services.health_service.check().into())
 }

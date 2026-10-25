@@ -1,4 +1,10 @@
-use crate::{app, apply_middleware, config::Config, http::json::ApiJson};
+use crate::{
+    app as build_app, apply_middleware,
+    config::Config,
+    http::json::ApiJson,
+    services::{Services, health_service::HealthService},
+    state::AppState,
+};
 use axum::{
     Router,
     body::{Body, to_bytes},
@@ -11,6 +17,10 @@ use tower::ServiceExt;
 
 fn config() -> Config {
     Config::from_lookup(|_| None).unwrap()
+}
+
+fn app(config: &Config) -> Router {
+    build_app(config, AppState::new(Services::new(HealthService)))
 }
 
 async fn json_response(router: Router, request: Request<Body>, status: StatusCode) -> Value {

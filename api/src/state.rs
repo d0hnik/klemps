@@ -1,6 +1,12 @@
-use crate::services::health_service::HealthService;
+use crate::services::Services;
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct AppState {
-    pub health_service: HealthService,
+    pub services: Services,
+}
+
+impl AppState {
+    pub fn new(services: Services) -> Self {
+        Self { services }
+    }
 }

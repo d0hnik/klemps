@@ -16,8 +16,8 @@ use axum::{
 };
 use tower_http::{cors::CorsLayer, limit::RequestBodyLimitLayer, trace::TraceLayer};
 
-pub fn app(config: &Config) -> Router {
-    apply_middleware(routes::router().with_state(AppState::default()), config)
+pub fn app(config: &Config, state: AppState) -> Router {
+    apply_middleware(routes::router().with_state(state), config)
 }
 
 fn apply_middleware(router: Router, config: &Config) -> Router {

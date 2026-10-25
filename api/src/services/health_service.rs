@@ -1,6 +1,5 @@
 use crate::domain::Health;
 
-#[derive(Clone, Default)]
 pub struct HealthService;
 
 impl HealthService {

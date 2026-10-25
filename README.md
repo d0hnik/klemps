@@ -90,3 +90,32 @@ The optional formatter/linter require `rustup component add rustfmt clippy`
 once inside the devcontainer. The timeout bounds handler work until a response
 is produced; streaming responses and independent background jobs need their
 own limits when added.
+
+### Registering and accessing services
+
+`main.rs` is the composition root: create service dependencies there, register
+services once, and pass application state into the router:
+
+```rust
+let services = Services::new(HealthService);
+let state = AppState::new(services);
+let router = app(&config, state);
+```
+
+`services/mod.rs` defines the typed `Services` registry. Each field is an
+`Arc<Service>`; cloning `AppState` clones these handles and shares the same
+instances. Route handlers access them through Axum state:
+
+```rust
+async fn get_health(State(state): State<AppState>) -> Json<HealthResponse> {
+    Json(state.services.health_service.check().into())
+}
+```
+
+When adding `GameService` or `UserService`, construct it with its required
+repositories/dependencies at startup and add its typed `Arc` field to the
+registry. Tests can supply their own registry to `app`. Avoid a global mutable
+registry or a single mutex around all services: `Arc` provides shared ownership,
+not synchronization. Add synchronization only to the particular mutable state
+that requires it. Clonable connection pools can be injected directly into
+services; they do not require an additional `Arc` just for sharing connections.
