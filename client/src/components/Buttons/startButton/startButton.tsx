@@ -9,7 +9,7 @@ export function StartButton({ onClick }: Props) {
 
   return (
     <button
-      className="secondary-pixel-corners w-[98%] lg:w-xl bg-green-600 text-white text-5xl border-8 border-red-700 button-animation mr-10"
+      className="secondary-pixel-corners w-full max-w-xl bg-green-600 text-white text-3xl sm:text-5xl border-8 border-red-700 button-animation min-h-14"
       type="button"
       style={
         {

@@ -46,7 +46,7 @@ export function DifficultyCard({
             key={index}
             src="/icons/beer.svg"
             alt=""
-            className="difficulty-card__beer-icon"
+            className="difficulty-card__beer-icon max-w-[40%] object-contain"
           />
         ))}
       </div>

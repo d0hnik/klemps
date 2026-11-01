@@ -76,5 +76,10 @@
       "note": "Mängige sõbralikult. Alkohol pole kohustuslik.",
       "done": "Selge"
     }
+  },
+  "setupSeo": {
+    "heading": "Klempsi mängu seadistamine",
+    "title": "Mängu seadistamine — Klemps",
+    "description": "Seadista Klempsi kaardimäng 2–7 mängijale. Lisa mängijad, vali avatarid ja raskusaste ning alusta sõpradega mängimist."
   }
 }

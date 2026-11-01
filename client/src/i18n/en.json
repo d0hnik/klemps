@@ -76,5 +76,10 @@
       "note": "Keep it friendly. Alcohol is optional.",
       "done": "Got it"
     }
+  },
+  "setupSeo": {
+    "heading": "Klemps game setup",
+    "title": "Game Setup — Klemps Party Card Game",
+    "description": "Set up a Klemps card game for 2–7 players. Add your players, choose avatars and difficulty, then start playing with friends."
   }
 }
