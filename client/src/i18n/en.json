@@ -78,12 +78,9 @@
     }
   },
   "setup": {
-    "title": "Set up your game",
     "playerName": "Player {{number}} name",
     "previousAvatar": "Previous avatar for player {{number}}",
     "nextAvatar": "Next avatar for player {{number}}",
-    "selected": "Selected",
-    "select": "Select",
     "saveError": "Could not save the game. Check that browser storage is available and try again."
   }
 }

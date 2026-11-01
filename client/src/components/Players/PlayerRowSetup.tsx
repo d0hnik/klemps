@@ -1,7 +1,6 @@
-import type { CSSProperties } from "react";
-import { useTranslation } from "react-i18next";
-import { PLAYER_COLORS } from "../../entities/player";
 import "./players.css";
+import { PLAYER_COLORS } from "../../entities/player";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   playerIndex: number;
@@ -12,35 +11,71 @@ type Props = {
   onNextAvatar: () => void;
 };
 
-export function PlayerRowSetup({ playerIndex, playerName, avatarSrc, onNameChange, onPreviousAvatar, onNextAvatar }: Props) {
-  const { t } = useTranslation();
+export function PlayerRowSetup({
+  playerIndex,
+  playerName,
+  avatarSrc,
+  onNameChange,
+  onPreviousAvatar,
+  onNextAvatar,
+}: Props) {
   const color = PLAYER_COLORS[(playerIndex - 1) % PLAYER_COLORS.length];
-  const nameLabel = t("setup.playerName", { number: playerIndex });
+
+  const { t } = useTranslation();
+
+  const placeholder =
+    t("players.player") + " " + playerIndex + " " + t("players.name");
 
   return (
-    <li className="player-row flex items-center rounded-lg" style={{ "--player-color": color.color } as CSSProperties}>
-      <button type="button" onClick={onPreviousAvatar} aria-label={t("setup.previousAvatar", { number: playerIndex })} className="flex h-12 w-10 shrink-0 cursor-pointer items-center justify-center">
-        <img src="/icons/arrowLeft.svg" alt="" className="w-5" />
+    <li
+      className="pixel-corners player-row flex min-h-14 w-[96%] shrink-0 lg:w-full"
+      style={
+        {
+          "--player-color": color.color,
+        } as React.CSSProperties
+      }
+    >
+      <button
+        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-8 shrink-0 lg:w-12"
+        type="button"
+        aria-label={t("setup.previousAvatar", { number: playerIndex })}
+        onClick={onPreviousAvatar}
+      >
+        <img src="/icons/arrowLeft.svg" alt="" />
       </button>
-      <img src={avatarSrc} alt="" className="h-14 w-12 shrink-0 object-contain" />
-      <div className="min-w-0 flex-1 px-2 py-2">
-        <label htmlFor={`player-name-${playerIndex}`} className="player-row__index mb-1 block w-fit rounded px-2 text-sm font-bold">
-          P{playerIndex}<span className="sr-only"> {nameLabel}</span>
-        </label>
+
+      <img
+        src={avatarSrc}
+        alt=""
+        className="object-contain flex justify-center items-center w-16 shrink-0 lg:w-20"
+      />
+
+      <div className="flex-1 min-w-0 flex flex-col justify-center py-2 px-1 sm:px-3">
+        <span
+          className={`player-row__index pixel-corners w-fit mb-1.5 py-0.5 px-2 text-lg font-black leading-none`}
+        >
+          P{playerIndex}
+        </span>
+
         <input
-          id={`player-name-${playerIndex}`}
           type="text"
-          aria-label={nameLabel}
-          value={playerName}
-          placeholder={nameLabel}
+          aria-label={t("setup.playerName", { number: playerIndex })}
           maxLength={30}
           autoComplete="off"
-          className="w-full border-b border-gray-400 bg-transparent py-1 text-lg text-white focus:border-amber-300"
+          value={playerName}
+          placeholder={placeholder}
+          className="w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-[22px] truncate"
           onChange={(event) => onNameChange(event.target.value)}
         />
       </div>
-      <button type="button" onClick={onNextAvatar} aria-label={t("setup.nextAvatar", { number: playerIndex })} className="flex h-12 w-10 shrink-0 cursor-pointer items-center justify-center">
-        <img src="/icons/arrowRight.svg" alt="" className="w-5" />
+
+      <button
+        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-8 shrink-0 lg:w-12"
+        type="button"
+        aria-label={t("setup.nextAvatar", { number: playerIndex })}
+        onClick={onNextAvatar}
+      >
+        <img src="/icons/arrowRight.svg" alt="" />
       </button>
     </li>
   );

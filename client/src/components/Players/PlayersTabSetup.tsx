@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { NewPlayerInput } from "../../entities/player";
 import { PLAYER_COUNT_OPTIONS } from "../helpers/players";
+import { MainButton } from "../Buttons/MainButton";
 import { Title } from "../Title/Title";
 import { PlayerRowSetup } from "./PlayerRowSetup";
 import "./players.css";
@@ -16,9 +17,9 @@ export function PlayersTabSetup({ players, onSetPlayerCount, onSetPlayerName, on
   const { t } = useTranslation();
 
   return (
-    <section aria-labelledby="setup-players" className="container-border relative min-w-0 rounded-xl px-3 pt-8 pb-5 sm:px-5">
+    <section aria-labelledby="setup-players" className="container-border relative w-full max-w-[510px] min-w-0 rounded-xl pt-7 pb-6 lg:flex-1 lg:px-6 lg:pt-8">
       <Title id="setup-players" index="1" title={t("players.players")} />
-      <ol className="mb-6 flex max-h-96 flex-col gap-3 overflow-y-auto p-1">
+      <ol className="mb-4 flex h-64 flex-col items-center gap-3 overflow-y-auto">
         {players.map((player, index) => (
           <PlayerRowSetup
             key={index}
@@ -31,19 +32,16 @@ export function PlayersTabSetup({ players, onSetPlayerCount, onSetPlayerName, on
           />
         ))}
       </ol>
-      <fieldset>
-        <legend className="mb-3 text-lg text-white">{t("game.selectPlayers")}</legend>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 lg:grid-cols-3 xl:grid-cols-6">
+      <fieldset className="px-2 lg:px-0">
+        <legend className="text-xl text-white">{t("game.selectPlayers")}</legend>
+        <div className="grid grid-cols-3 gap-3">
           {PLAYER_COUNT_OPTIONS.map((count) => (
-            <button
+            <MainButton
               key={count}
-              type="button"
-              aria-pressed={players.length === count}
+              text={String(count)}
+              active={players.length === count}
               onClick={() => onSetPlayerCount(count)}
-              className={`cursor-pointer rounded border-2 py-2 text-2xl ${players.length === count ? "border-amber-300 bg-amber-300 text-teal-950" : "border-cyan-400 bg-cyan-950 text-white hover:bg-cyan-900"}`}
-            >
-              {count}
-            </button>
+            />
           ))}
         </div>
       </fieldset>

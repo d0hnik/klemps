@@ -9,9 +9,14 @@ export function StartButton({ onClick }: Props) {
 
   return (
     <button
+      className="secondary-pixel-corners w-full max-w-xl bg-green-600 text-white border-8 border-red-700 button-animation text-4xl sm:text-5xl"
       type="button"
+      style={
+        {
+          "--border-color": "lime",
+        } as React.CSSProperties
+      }
       onClick={onClick}
-      className="w-full cursor-pointer rounded border-2 border-amber-200 bg-amber-300 px-8 py-3 text-2xl text-teal-950 hover:bg-amber-200 sm:w-auto"
     >
       {t("game.startGame")}
     </button>

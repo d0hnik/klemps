@@ -13,9 +13,9 @@ export function DifficultyTab({ selectedDifficulty, onSelectDifficulty }: Props)
   const { t } = useTranslation();
 
   return (
-    <section aria-labelledby="setup-difficulty" className="container-border relative min-w-0 rounded-xl px-3 pt-8 pb-5 sm:px-5">
+    <section aria-labelledby="setup-difficulty" className="container-border relative w-full min-w-0 rounded-xl px-6 pt-8 pb-6 lg:max-w-[720px] lg:flex-1">
       <Title id="setup-difficulty" index="2" title={t("difficulty.title")} />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2 lg:gap-8">
         {DIFFICULTIES.map((difficulty) => (
           <DifficultyCard key={difficulty.name} difficulty={difficulty} onSelectDifficulty={onSelectDifficulty} selectedDifficulty={selectedDifficulty} />
         ))}

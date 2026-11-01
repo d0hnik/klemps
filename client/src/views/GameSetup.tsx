@@ -56,9 +56,8 @@ export function GameSetupView() {
   }
 
   return (
-    <section className="mx-auto mb-10 max-w-6xl px-4">
-      <h1 className="mb-10 text-center text-3xl text-amber-300">{t("setup.title")}</h1>
-      <div className="grid items-start gap-10 lg:grid-cols-2">
+    <>
+      <div className="flex flex-col items-center gap-10 px-2 lg:flex-row lg:justify-evenly lg:gap-6 lg:px-4">
         <PlayersTabSetup
           players={players}
           onSetPlayerCount={handleSetPlayerCount}
@@ -68,12 +67,9 @@ export function GameSetupView() {
         <DifficultyTab selectedDifficulty={difficultyName} onSelectDifficulty={setDifficultyName} />
       </div>
       {error && <p role="alert" className="mt-6 text-center text-red-300">{error}</p>}
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <button type="button" onClick={() => navigate("/")} className="cursor-pointer px-4 py-3 text-xl text-cyan-200 hover:text-white">
-          ← {t("game.back")}
-        </button>
+      <div className="mt-10 mb-6 px-2">
         <StartButton onClick={handleStartGame} />
       </div>
-    </section>
+    </>
   );
 }

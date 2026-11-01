@@ -26,10 +26,3 @@ body {
 .button-animation:active {
   transform: translateY(1px) scale(0.97);
 }
-
-@media (max-width: 480px) {
-  .game-setup__content {
-    flex-direction: column;
-    row-gap: 50px;
-  }
-}
