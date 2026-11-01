@@ -76,5 +76,14 @@
       "note": "Mängige sõbralikult. Alkohol pole kohustuslik.",
       "done": "Selge"
     }
+  },
+  "setup": {
+    "title": "Seadista mäng",
+    "playerName": "Mängija {{number}} nimi",
+    "previousAvatar": "Mängija {{number}} eelmine avatar",
+    "nextAvatar": "Mängija {{number}} järgmine avatar",
+    "selected": "Valitud",
+    "select": "Vali",
+    "saveError": "Mängu salvestamine ebaõnnestus. Kontrolli, et brauseri salvestusruum oleks saadaval, ja proovi uuesti."
   }
 }

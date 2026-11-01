@@ -1,10 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type {
-  Difficulty,
-  DifficultyName,
-} from "../../entities/difficulty/difficulty";
-import "./difficultyCard.css";
-import { IconStarFilled } from "@tabler/icons-react";
+import type { Difficulty, DifficultyName } from "../../entities/difficulty/difficulty";
 
 type Props = {
   difficulty: Difficulty;
@@ -12,65 +7,33 @@ type Props = {
   selectedDifficulty: DifficultyName;
 };
 
-export function DifficultyCard({
-  difficulty,
-  onSelectDifficulty,
-  selectedDifficulty,
-}: Props) {
-  const isEasy = difficulty.name === "EASY";
-
-  const isSelected = difficulty.name === selectedDifficulty;
-
-  const beerIconCount = isEasy ? 1 : 2;
-
-  const backgroundColor = isEasy
-    ? "bg-[var(--color-green)]"
-    : "bg-[var(--color-red)]";
-
-  const selectedModifier = isSelected ? "active" : "";
-
+export function DifficultyCard({ difficulty, onSelectDifficulty, selectedDifficulty }: Props) {
   const { t } = useTranslation();
+  const isEasy = difficulty.name === "EASY";
+  const isSelected = difficulty.name === selectedDifficulty;
+  const name = t(isEasy ? "difficulty.easy" : "difficulty.hard");
 
   return (
     <button
-      className={`difficulty-card button-animation pixel-corners ${backgroundColor} ${selectedModifier}`}
-      onClick={() => onSelectDifficulty(difficulty.name)}
       type="button"
+      aria-pressed={isSelected}
+      onClick={() => onSelectDifficulty(difficulty.name)}
+      className={`min-w-0 cursor-pointer rounded-lg border-4 p-3 text-white ${isEasy ? "bg-green-800 hover:bg-green-700" : "bg-red-800 hover:bg-red-700"} ${isSelected ? "border-amber-300" : "border-transparent"}`}
     >
-      <p className="text-5xl text-white flex justify-center items-center">
-        {difficulty.name}
-      </p>
-      <div className="flex flex-row items-center justify-center">
-        {Array.from({ length: beerIconCount }).map((_, index) => (
-          <img
-            key={index}
-            src="/icons/beer.svg"
-            alt=""
-            className="difficulty-card__beer-icon"
-          />
-        ))}
-      </div>
-      <div className="difficulty-card__drinks-tab">
+      <span className="block text-3xl uppercase">{name}</span>
+      <span aria-hidden="true" className="my-3 flex justify-center">
+        <img src="/icons/beer.svg" alt="" className="size-16" />
+        {!isEasy && <img src="/icons/beer.svg" alt="" className="size-16" />}
+      </span>
+      <span className="block rounded bg-black/40 p-2">
         {difficulty.drinksPerRound.map((drinkCount, index) => (
-          <div className="flex flex-row justify-around" key={index}>
-            <span className="text-white">
-              {t("difficulty.round")} {index + 1}.
-            </span>
-            <span className={` ${isEasy ? "text-green-600" : "text-red-600"}`}>
-              {drinkCount}{" "}
-              {drinkCount == 1 ? t("drinks.single") : t("drinks.plural")}
-            </span>
-          </div>
+          <span key={index} className="flex justify-between gap-2 py-1 text-sm sm:text-base">
+            <span>{t("difficulty.round")} {index + 1}</span>
+            <span>{drinkCount} {t(drinkCount === 1 ? "drinks.single" : "drinks.plural")}</span>
+          </span>
         ))}
-      </div>
-      <div
-        className={`difficulty-card__footer flex justify-center items-center mt-5 text-white ${backgroundColor}`}
-      >
-        <p className="mr-3">
-          <IconStarFilled />
-        </p>
-        {difficulty.name}
-      </div>
+      </span>
+      <span className="mt-3 block text-sm">{t(isSelected ? "setup.selected" : "setup.select")}</span>
     </button>
   );
 }
