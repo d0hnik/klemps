@@ -36,7 +36,7 @@ export function PlayerRowSetup({
       }
     >
       <button
-        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-8 shrink-0 lg:w-12"
+        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-11 shrink-0 lg:w-12"
         type="button"
         aria-label={t("setup.previousAvatar", { number: playerIndex })}
         onClick={onPreviousAvatar}
@@ -47,7 +47,7 @@ export function PlayerRowSetup({
       <img
         src={avatarSrc}
         alt=""
-        className="object-contain flex justify-center items-center w-16 shrink-0 lg:w-20"
+        className="object-contain flex justify-center items-center size-12 shrink-0 sm:size-16 lg:size-20"
       />
 
       <div className="flex-1 min-w-0 flex flex-col justify-center py-2 px-1 sm:px-3">
@@ -64,13 +64,13 @@ export function PlayerRowSetup({
           autoComplete="off"
           value={playerName}
           placeholder={placeholder}
-          className="w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-[22px] truncate"
+          className="min-h-11 w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-base sm:text-[22px]"
           onChange={(event) => onNameChange(event.target.value)}
         />
       </div>
 
       <button
-        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-8 shrink-0 lg:w-12"
+        className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-11 shrink-0 lg:w-12"
         type="button"
         aria-label={t("setup.nextAvatar", { number: playerIndex })}
         onClick={onNextAvatar}

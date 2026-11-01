@@ -8,12 +8,12 @@ export function Header() {
 
   return (
     <>
-      <header className="mb-10 grid grid-cols-[1fr_auto_1fr] items-center px-4 py-3">
-        <div aria-hidden="true" />
+      <header className="mb-10 flex items-center justify-between gap-3 px-4 py-3 sm:grid sm:grid-cols-[1fr_auto_1fr]">
+        <div aria-hidden="true" className="hidden sm:block" />
 
         <Logo />
 
-        <div className="flex justify-end">
+        <div className="flex shrink-0 justify-end">
           <SettingsButton onClick={() => setSettingsOpen(true)} />
         </div>
       </header>

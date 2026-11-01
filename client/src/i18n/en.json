@@ -54,6 +54,8 @@
     "drinks": "DRINKS"
   },
   "home": {
+    "seoTitle": "Klemps — Party Card Game",
+    "seoDescription": "Play Klemps, a party card game with four rounds of guesses: red or black, higher or lower, inside or outside, and suit. Gather your friends and play.",
     "tableCaption": "One deck. Four guesses.",
     "eyebrow": "The next card is anyone’s guess",
     "title": "Good friends.",
@@ -78,6 +80,9 @@
     }
   },
   "setup": {
+    "title": "Set up your Klemps game",
+    "seoTitle": "Game Setup — Klemps Party Card Game",
+    "seoDescription": "Set up a Klemps card game for 2–7 players. Choose your names, avatars, and difficulty, then take turns guessing the cards with your friends.",
     "playerName": "Player {{number}} name",
     "previousAvatar": "Previous avatar for player {{number}}",
     "nextAvatar": "Next avatar for player {{number}}",

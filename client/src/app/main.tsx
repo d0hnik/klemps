@@ -1,3 +1,5 @@
+import "@fontsource/pixelify-sans/400.css";
+import "@fontsource/pixelify-sans/700.css";
 import "./index.css";
 import "../styles/tokens.css";
 import "../i18n/i18n";

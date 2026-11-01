@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { HowToPlayModal } from "../components/Modals/HowToPlayModal";
-import "@fontsource/pixelify-sans/400.css";
-import "@fontsource/pixelify-sans/700.css";
 
 export function MainMenuView() {
   const { t } = useTranslation();

@@ -34,7 +34,7 @@ export function PlayersTabSetup({ players, onSetPlayerCount, onSetPlayerName, on
       </ol>
       <fieldset className="px-2 lg:px-0">
         <legend className="text-xl text-white">{t("game.selectPlayers")}</legend>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {PLAYER_COUNT_OPTIONS.map((count) => (
             <MainButton
               key={count}

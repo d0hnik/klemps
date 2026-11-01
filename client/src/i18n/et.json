@@ -54,6 +54,8 @@
     "drinks": "JOOKI"
   },
   "home": {
+    "seoTitle": "Klemps — Seltskondlik kaardimäng",
+    "seoDescription": "Mängi sõpradega Klempsi! Neli vooru kaartide arvamist: punane või must, suurem või väiksem, vahel või väljas ja mast. Kutsu sõbrad kokku ja proovi õnne.",
     "tableCaption": "Üks kaardipakk. Neli arvamist.",
     "eyebrow": "Kes teab, mis kaart järgmisena tuleb?",
     "title": "Head sõbrad.",
@@ -78,6 +80,9 @@
     }
   },
   "setup": {
+    "title": "Seadista oma Klempsi mäng",
+    "seoTitle": "Mängu seadistamine — Klemps",
+    "seoDescription": "Seadista Klempsi kaardimäng 2–7 mängijale. Vali nimed, avatarid ja raskusaste ning arva sõpradega kordamööda kaarte.",
     "playerName": "Mängija {{number}} nimi",
     "previousAvatar": "Mängija {{number}} eelmine avatar",
     "nextAvatar": "Mängija {{number}} järgmine avatar",

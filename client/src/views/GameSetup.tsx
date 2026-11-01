@@ -56,7 +56,8 @@ export function GameSetupView() {
   }
 
   return (
-    <>
+    <section className="mx-auto max-w-7xl">
+      <h1 className="sr-only">{t("setup.title")}</h1>
       <div className="flex flex-col items-center gap-10 px-2 lg:flex-row lg:justify-evenly lg:gap-6 lg:px-4">
         <PlayersTabSetup
           players={players}
@@ -70,6 +71,6 @@ export function GameSetupView() {
       <div className="mt-10 mb-6 px-2">
         <StartButton onClick={handleStartGame} />
       </div>
-    </>
+    </section>
   );
 }

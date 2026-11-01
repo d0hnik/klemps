@@ -4,10 +4,12 @@ import { GameSetupView } from "../views/GameSetup";
 import { GameView } from "../views/GamePage";
 import { Footer } from "./AppLayout/Footer";
 import { Header } from "./AppLayout/Header";
+import { PageMetadata } from "./PageMetadata";
 
 export function App() {
   return (
     <div className="flex min-h-screen flex-col">
+      <PageMetadata />
       <Header />
       <main className="flex-1">
         <Routes>
