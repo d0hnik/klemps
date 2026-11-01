@@ -16,14 +16,14 @@ export function DrinksCounter({ type, count }: Props) {
 
   return (
     <div
-      className="flex h-[60px] w-[60px] shrink-0 flex-col overflow-hidden rounded border"
+      className="flex size-12 shrink-0 sm:size-15 flex-col overflow-hidden rounded border"
       aria-label={`${label}: ${count}`}
       style={{
         backgroundColor: drinkType.backgroundColor,
       }}
     >
       <span
-        className="flex h-[20px] w-full items-center justify-center bg-black/35 text-[16px] leading-none"
+        className="flex h-[20px] w-full items-center justify-center bg-black/35 text-xs leading-none sm:text-base"
         style={{
           color: drinkType.textColor,
         }}
@@ -31,7 +31,7 @@ export function DrinksCounter({ type, count }: Props) {
         {label}
       </span>
 
-      <span className="flex flex-1 items-center justify-center text-3xl leading-none text-white tabular-nums">
+      <span className="flex flex-1 items-center justify-center text-2xl leading-none sm:text-3xl text-white tabular-nums">
         {count}
       </span>
     </div>

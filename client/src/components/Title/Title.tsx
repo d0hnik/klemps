@@ -28,7 +28,7 @@ export function Title({
       className={`tab__title tab__title--${variant} pixel-corners ${className}`}
     >
       {index !== undefined && <span>{index}. </span>}
-      {title}
+      <span className="min-w-0 truncate">{title}</span>
     </HeadingTag>
   );
 }

@@ -9,6 +9,9 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+}
+
+.game-card__inner--animated {
   transition: transform 600ms ease;
 }
 

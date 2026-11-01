@@ -10,7 +10,7 @@ export function ActivePlayerArrow({ top, playerName }: Props) {
     <>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[-15px] sm:left-[-25px] z-49 -translate-y-1/2 transition-[top] duration-300 ease-out"
+        className="pointer-events-none absolute -left-3 sm:-left-5 z-49 -translate-y-1/2 transition-[top] duration-300 ease-out"
         style={{
           top: `${top}px`,
         }}
@@ -18,7 +18,7 @@ export function ActivePlayerArrow({ top, playerName }: Props) {
         <img
           src="/icons/arrowRight.svg"
           alt=""
-          className="active-player-arrow h-11 w-11 object-contain"
+          className="active-player-arrow size-8 sm:size-11 object-contain"
         />
       </div>
 

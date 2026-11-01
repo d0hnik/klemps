@@ -4,24 +4,25 @@ import "./game-card.css";
 type Props = {
   card: Card;
   revealed: boolean;
+  animateReveal: boolean;
   isCurrent: boolean;
   onRevealEnd?: () => void;
 };
 
-export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
+export function GameCard({ card, revealed, animateReveal, isCurrent, onRevealEnd }: Props) {
   const frontSrc = getCardImageSrc(card, true);
   const backSrc = getCardImageSrc(card, false);
 
   return (
     <div
-      className={`game-card w-32 -mx-5 sm:w-40 md:w-52 lg:w-60 shrink-0 select-none ${
+      className={`game-card w-full min-w-0 select-none ${
         isCurrent && !revealed ? "active-game-card" : ""
       }`}
     >
       <div
         className={`game-card__inner ${
           revealed ? "game-card__inner--revealed" : ""
-        }`}
+        } ${animateReveal ? "game-card__inner--animated" : ""}`}
         onTransitionEnd={(event) => {
           if (event.propertyName === "transform") {
             onRevealEnd?.();
@@ -29,14 +30,14 @@ export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
         }}
       >
         <img
-          className="game-card__face game-card__face--back"
+          className="game-card__face game-card__face--back scale-150"
           src={backSrc}
           alt="Hidden playing card"
           draggable={false}
         />
 
         <img
-          className="game-card__face game-card__face--front"
+          className="game-card__face game-card__face--front scale-150"
           src={frontSrc}
           alt={`${card.rank} of ${card.suit}`}
           draggable={false}

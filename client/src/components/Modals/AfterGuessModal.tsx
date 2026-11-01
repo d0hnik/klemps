@@ -60,13 +60,15 @@ export function AfterGuessModal({
       className="
         fixed inset-0 z-50
         flex items-center justify-center
-        bg-black/60 px-4
+        bg-black/60 p-4
       "
-      aria-label="Guess result"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="guess-result-title"
     >
       <div
         className="
-          w-full max-w-md
+          w-full max-w-md max-h-[90dvh] overflow-y-auto
           rounded-2xl border-5 border-[var(--result-color)]
           bg-[var(--color-dark-bg)] p-6 text-white
           shadow-2xl
@@ -79,9 +81,9 @@ export function AfterGuessModal({
       >
         <div className="flex flex-col items-center">
           {config.icon}
-          <p className="text-center text-4xl tracking-wider text-white">
+          <h2 id="guess-result-title" className="text-center text-3xl tracking-wider text-white sm:text-4xl">
             {t(config.titleKey)}
-          </p>
+          </h2>
 
           <div className="mt-3 flex w-full max-w-[320px] items-center justify-center">
             <div
@@ -133,10 +135,10 @@ export function AfterGuessModal({
                 player={player}
               />
             ))}
-          <div className="flex justify-center items-center mt-4">
+          <div className="mt-4 flex w-full justify-center">
             <button
               type="button"
-              className="flex justify-center button-animation items-center text-2xl text-white pixel-corners min-h-[50px] min-w-[140px] w-80 bg-[var(--color-bg)]"
+              className="flex justify-center button-animation items-center text-2xl text-white pixel-corners min-h-[50px] min-w-[140px] w-full max-w-80 bg-[var(--color-bg)]"
               onClick={() => onClose()}
             >
               CONTINUE

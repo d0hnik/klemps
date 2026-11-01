@@ -11,32 +11,16 @@
 }
 
 .active-player-arrow {
-  animation: active-player-arrow-pulse 2.8s ease-in-out infinite;
+  animation: active-player-arrow-bounce 1.4s ease-in-out infinite;
 }
 
-@keyframes active-player-arrow-pulse {
-  0% {
+@keyframes active-player-arrow-bounce {
+  0%, 100% {
     transform: translateX(0);
   }
 
-  8% {
-    transform: translateX(7px);
-  }
-
-  16% {
-    transform: translateX(0);
-  }
-
-  24% {
-    transform: translateX(7px);
-  }
-
-  32% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(0);
+  50% {
+    transform: translateX(8px);
   }
 }
 
@@ -246,10 +230,12 @@
   margin: -4px;
 }
 
-.setup-player-list {
+.setup-player-list,
+.game-player-list {
   scrollbar-width: none;
 }
 
-.setup-player-list::-webkit-scrollbar {
+.setup-player-list::-webkit-scrollbar,
+.game-player-list::-webkit-scrollbar {
   display: none;
 }
