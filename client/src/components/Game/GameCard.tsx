@@ -29,14 +29,14 @@ export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
         }}
       >
         <img
-          className="game-card__face game-card__face--back"
+          className="game-card__face game-card__face--back scale-150"
           src={backSrc}
           alt="Hidden playing card"
           draggable={false}
         />
 
         <img
-          className="game-card__face game-card__face--front"
+          className="game-card__face game-card__face--front scale-150"
           src={frontSrc}
           alt={`${card.rank} of ${card.suit}`}
           draggable={false}

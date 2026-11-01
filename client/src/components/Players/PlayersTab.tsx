@@ -45,29 +45,32 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
 
   return (
     <section
-      className="container-border relative mx-auto w-full min-w-0 max-w-[510px] rounded-xl px-1 pt-8 pb-2 sm:px-3 sm:pb-4"
+      className="relative mx-auto w-full min-w-0 max-w-[510px]"
       aria-labelledby="players-heading"
     >
-      <Title id="players-heading" title={t("players.players")} level={2} />
+      <Title id="players-heading" title={t("players.players")} level={2} className="z-10" />
 
-      <div ref={listRef} className="game-player-list max-h-76 overflow-y-auto pr-1 pl-3 sm:pl-5">
-        <ol className="relative flex flex-col gap-2">
-          {currentPlayer && (
-            <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
-          )}
+      <div className="secondary-pixel-corners bg-black/15 px-1 pt-8 pb-3 sm:px-3">
 
-          {players.map((player, index) => (
-            <PlayerRow
-              key={index}
-              playerIndex={index + 1}
-              player={player}
-              isActive={index === currentPlayerIndex}
-              rowRef={(node) => {
-                rowRefs.current[index] = node;
-              }}
-            />
-          ))}
-        </ol>
+        <div ref={listRef} className="game-player-list max-h-76 overflow-y-auto pr-1 pl-3 sm:pl-5">
+          <ol className="relative flex flex-col gap-2">
+            {currentPlayer && (
+              <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
+            )}
+
+            {players.map((player, index) => (
+              <PlayerRow
+                key={index}
+                playerIndex={index + 1}
+                player={player}
+                isActive={index === currentPlayerIndex}
+                rowRef={(node) => {
+                  rowRefs.current[index] = node;
+                }}
+              />
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
