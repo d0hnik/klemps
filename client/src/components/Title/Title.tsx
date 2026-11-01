@@ -5,6 +5,7 @@ type TitleVariant = "default" | "special";
 
 type Props = {
   id?: string;
+  className?: string;
   index?: string | number;
   title: string;
   level?: HeadingLevel;
@@ -13,6 +14,7 @@ type Props = {
 
 export function Title({
   id,
+  className = "",
   index,
   title,
   level = 2,
@@ -23,7 +25,7 @@ export function Title({
   return (
     <HeadingTag
       id={id}
-      className={`tab__title tab__title--${variant} pixel-corners`}
+      className={`tab__title tab__title--${variant} pixel-corners ${className}`}
     >
       {index !== undefined && <span>{index}. </span>}
       {title}

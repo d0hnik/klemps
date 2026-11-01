@@ -245,3 +245,11 @@
 .pixel-test::after {
   margin: -4px;
 }
+
+.setup-player-list {
+  scrollbar-width: none;
+}
+
+.setup-player-list::-webkit-scrollbar {
+  display: none;
+}
