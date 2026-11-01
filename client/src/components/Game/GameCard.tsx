@@ -14,7 +14,7 @@ export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
 
   return (
     <div
-      className={`game-card w-32 -mx-5 sm:w-40 md:w-52 lg:w-60 shrink-0 select-none ${
+      className={`game-card w-full min-w-0 select-none ${
         isCurrent && !revealed ? "active-game-card" : ""
       }`}
     >

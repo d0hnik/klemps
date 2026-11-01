@@ -15,7 +15,7 @@ export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
   return (
     <div
       ref={rowRef}
-      className={`pixel-corners player-row flex w-[96%] sm:w-full items-stretch ${
+      className={`pixel-corners player-row flex h-24 w-full shrink-0 items-stretch ${
         isActive ? "player-row--active" : ""
       }`}
       style={
@@ -24,7 +24,7 @@ export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
         } as React.CSSProperties & Record<"--player-color", string>
       }
     >
-      <div className="flex w-16 sm:w-20 shrink-0 items-center justify-center">
+      <div className="flex w-12 sm:w-16 shrink-0 items-center justify-center">
         <img
           src={player.avatarSrc}
           alt={`${player.name} avatar`}
@@ -32,15 +32,15 @@ export function PlayerRow({ playerIndex, player, isActive, rowRef }: Props) {
         />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center px-3 py-2">
+      <div className="flex min-w-0 flex-1 flex-col justify-center px-1 py-2 sm:px-2">
         <span className="player-row__index pixel-corners mb-1.5 w-fit px-2 py-0.5 text-lg font-black leading-none">
           P{playerIndex}
         </span>
 
-        <p className="m-0 truncate text-2xl text-white">{player.name}</p>
+        <p title={player.name} className="m-0 truncate text-xl text-white sm:text-2xl">{player.name}</p>
       </div>
 
-      <div className="ml-auto flex shrink-0 items-center gap-3 pr-4 sm:gap-5">
+      <div className="ml-auto flex shrink-0 items-center gap-1 pr-1 sm:gap-2 sm:pr-2">
         <DrinksCounter type="taken" count={player.drinksTaken} />
         <DrinksCounter type="given" count={player.drinksGiven} />
       </div>

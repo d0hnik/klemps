@@ -246,10 +246,12 @@
   margin: -4px;
 }
 
-.setup-player-list {
+.setup-player-list,
+.game-player-list {
   scrollbar-width: none;
 }
 
-.setup-player-list::-webkit-scrollbar {
+.setup-player-list::-webkit-scrollbar,
+.game-player-list::-webkit-scrollbar {
   display: none;
 }

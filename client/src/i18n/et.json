@@ -90,5 +90,10 @@
     "nextAvatar": "Mängija {{number}} järgmine avatar",
     "selected": "Valitud",
     "select": "Vali"
+  },
+  "gameSeo": {
+    "heading": "Klempsi kaardimäng",
+    "title": "Mängi Klempsi — Kaardimäng",
+    "description": "Arva Klempsi mängus kordamööda kaarte. Jälgi, kelle kord on, ava kaardid ning vaata mängijate tulemusi."
   }
 }

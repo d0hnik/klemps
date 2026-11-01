@@ -3,6 +3,7 @@ import { getGameState, saveGameState } from "../entities/gameStorage";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import { BackButton } from "../components/Buttons/backButton/BackButton";
 import { useState } from "react";
+import { GameSeo } from "../components/SEO/GameSeo";
 import { GameField } from "../components/Game/GameField";
 import { GuessField } from "../components/Game/GuessField";
 import {
@@ -47,8 +48,9 @@ export function GameView() {
 
   return (
     <>
-      <div className="flex flex-col gap-4 lg:w-fit lg:flex-row lg:items-center">
-        <div className="contents lg:flex lg:flex-col">
+      <GameSeo />
+      <div className="mx-auto mb-6 flex max-w-7xl flex-col gap-8 px-3 lg:flex-row lg:items-start">
+        <div className="contents lg:flex lg:w-1/3 lg:shrink-0 lg:flex-col lg:gap-6">
           <div className="order-1 lg:order-none">
             <PlayersTab
               players={gameState.players}
@@ -60,13 +62,13 @@ export function GameView() {
             <BackButton
               onClick={() => navigate("/")}
               iconSize={40}
-              additionalStyle="lg:ml-16"
+              additionalStyle="max-w-full"
             />
           </div>
         </div>
 
-        <div className="contents lg:flex lg:flex-col">
-          <div className="order-2 flex flex-col lg:order-none items-center">
+        <div className="contents lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:gap-8">
+          <div className="order-2 min-w-0 lg:order-none">
             <GameField
               gameState={gameState}
               currentPlayerName={

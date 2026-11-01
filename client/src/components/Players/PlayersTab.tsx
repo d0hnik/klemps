@@ -17,6 +17,7 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [arrowTop, setArrowTop] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const currentPlayer = players[currentPlayerIndex];
 
@@ -31,21 +32,26 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
 
     setArrowTop(rowMiddle);
 
-    activeRow.scrollIntoView({
-      block: "nearest",
-      behavior: "smooth",
-    });
+    const list = listRef.current;
+    if (!list) return;
+
+    const rowBottom = activeRow.offsetTop + activeRow.offsetHeight;
+    if (activeRow.offsetTop < list.scrollTop) {
+      list.scrollTo({ top: activeRow.offsetTop, behavior: "smooth" });
+    } else if (rowBottom > list.scrollTop + list.clientHeight) {
+      list.scrollTo({ top: rowBottom - list.clientHeight, behavior: "smooth" });
+    }
   }, [currentPlayerIndex, players.length]);
 
   return (
     <section
-      className="container-border relative box-border mb-3 mx-1 w-[98%] max-w-[510px] rounded-xl px-1 pb-2 pt-8 sm:w-full sm:px-6 sm:pb-4"
+      className="container-border relative mx-auto w-full min-w-0 max-w-[510px] rounded-xl px-1 pt-8 pb-2 sm:px-3 sm:pb-4"
       aria-labelledby="players-heading"
     >
       <Title id="players-heading" title={t("players.players")} level={2} />
 
-      <div className="max-h-[260px] overflow-y-auto pr-2 overflow-visible pr-0 sm:max-h-[360px] md:max-h-[360px]">
-        <ol className="relative mb-4 flex flex-col items-center gap-y-3">
+      <div ref={listRef} className="game-player-list max-h-76 overflow-y-auto pr-1 pl-3 sm:pl-5">
+        <ol className="relative flex flex-col gap-2">
           {currentPlayer && (
             <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
           )}

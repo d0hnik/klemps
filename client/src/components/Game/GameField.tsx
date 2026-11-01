@@ -23,17 +23,18 @@ export function GameField({
 
   return (
     <section
-      className="container-border relative box-border w-[98%] sm:w-full min-h-fit rounded-xl pb-4 pt-10 sm:px-6 sm:pb-6 sm:pt-12"
+      className="container-border relative w-full min-w-0 rounded-xl px-3 pt-10 pb-4 sm:px-6 sm:pt-12 sm:pb-6"
       aria-labelledby="game-field-heading"
     >
       <Title
         id="game-field-heading"
+        className="max-w-full"
         title={`${currentPlayerName.toUpperCase()} ${t("game.currentTurn")}`}
         level={2}
         variant="special"
       />
 
-      <div className="flex flex-row w-full flex-wrap items-center justify-center sm:justify-between">
+      <div className="grid grid-cols-2 items-center gap-2 sm:grid-cols-4">
         {currentPlayer.hand.map((card, index) => {
           const revealedByRound = isCardRevealed(
             gameState.currentRoundType,

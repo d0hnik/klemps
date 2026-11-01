@@ -90,5 +90,10 @@
     "nextAvatar": "Next avatar for player {{number}}",
     "selected": "Selected",
     "select": "Select"
+  },
+  "gameSeo": {
+    "heading": "Klemps card game",
+    "title": "Play Klemps — Card Game",
+    "description": "Take turns guessing the cards in your Klemps game. Follow the current player, reveal each card, and track the scores."
   }
 }
