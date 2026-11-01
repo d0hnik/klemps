@@ -4,7 +4,6 @@ pub mod domain;
 pub mod dto;
 pub mod error;
 pub mod middleware;
-pub mod response;
 pub mod routes;
 pub mod services;
 pub mod state;

@@ -1,4 +1,8 @@
-use std::{env, fmt, net::IpAddr};
+use std::{
+    env::{VarError, var},
+    fmt,
+    net::IpAddr,
+};
 
 use url::Url;
 
@@ -27,7 +31,6 @@ pub enum ConfigError {
 
 impl fmt::Display for ConfigError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // Never repeat untrusted environment values or credentials.
         let message = match self {
             Self::InvalidHost => "HOST must be a valid IPv4 or IPv6 address",
             Self::InvalidPort => "PORT must be an integer from 1 to 65535",
@@ -63,7 +66,6 @@ impl Config {
         Self::parse_all(&host, &port, &origins, &requests, &window)
     }
 
-    /// Useful for tests and tools that only need to set the bind address.
     pub fn parse(host: &str, port: &str) -> Result<Self, ConfigError> {
         Self::parse_all(host, port, "http://localhost:5173", "120", "60")
     }
@@ -116,10 +118,10 @@ impl Config {
 }
 
 fn read_var(name: &str, default: &str, error: ConfigError) -> Result<String, ConfigError> {
-    match env::var(name) {
+    match var(name) {
         Ok(value) => Ok(value),
-        Err(env::VarError::NotPresent) => Ok(default.to_owned()),
-        Err(env::VarError::NotUnicode(_)) => Err(error),
+        Err(VarError::NotPresent) => Ok(default.to_owned()),
+        Err(VarError::NotUnicode(_)) => Err(error),
     }
 }
 
