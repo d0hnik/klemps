@@ -58,7 +58,7 @@ export function PlayersTabSetup({
       <div className="secondary-pixel-corners bg-black/15 px-2 pt-8 pb-5 sm:px-5">
         <p className="mb-4 text-sm text-cyan-100">{t("setupUi.playersHint")}</p>
 
-        <div className="setup-player-list max-h-72 overflow-y-auto pr-2">
+        <div className="setup-player-list h-80 overflow-y-auto pr-2">
           <ol className="relative mb-4 flex flex-col gap-3">
             {players.map((player, index) => {
               const playerIndex = index + 1;
