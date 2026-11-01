@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { getGameState, saveGameState } from "../entities/gameStorage";
 import { PlayersTab } from "../components/Players/PlayersTab";
 import { useState, type CSSProperties } from "react";
@@ -12,9 +12,12 @@ import {
 } from "../entities/guess";
 import { getCurrentCardIndex } from "../entities/card";
 import { AfterGuessModal } from "../components/Modals/AfterGuessModal";
-import { getNextTurn } from "../entities/gameState";
+import { createGame } from "../entities/gameState";
+import { completeTurn, type DrinkAllocation } from "../entities/turn";
+import { GameOverModal } from "../components/Modals/GameOverModal";
 
 export function GameView() {
+  const navigate = useNavigate();
   const [gameState, setGameState] = useState(() => getGameState());
   const [revealedCardIndex, setRevealedCardIndex] = useState<number | null>(
     null,
@@ -23,9 +26,44 @@ export function GameView() {
     useState<GuessResult | null>(null);
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [isGuessLocked, setIsGuessLocked] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+
+  function handleContinue(allocation: DrinkAllocation) {
+    if (!gameState || !pendingGuessResult || !isResultModalOpen) return;
+    try {
+      const nextState = completeTurn(gameState, pendingGuessResult.isCorrect, allocation);
+      saveGameState(nextState);
+      setGameState(nextState);
+    } catch {
+      setSaveError(true);
+      return;
+    }
+    setSaveError(false);
+    setIsResultModalOpen(false);
+    setPendingGuessResult(null);
+    setRevealedCardIndex(null);
+    setIsGuessLocked(false);
+  }
+
+  function handlePlayAgain() {
+    if (!gameState) return;
+    const nextState = createGame(gameState.players.map(({ name, avatarSrc }) => ({ name, avatarSrc })), gameState.difficulty.name);
+    try {
+      saveGameState(nextState);
+      setGameState(nextState);
+    } catch {
+      setSaveError(true);
+      return;
+    }
+    setSaveError(false);
+    setIsGuessLocked(false);
+    setRevealedCardIndex(null);
+    setPendingGuessResult(null);
+    setIsResultModalOpen(false);
+  }
 
   const makeAGuess = (guess: GuessValue): void => {
-    if (!gameState || isGuessLocked) {
+    if (!gameState || isGuessLocked || gameState.gameStatus !== "IN_PROGRESS") {
       return;
     }
     const currentCardIndex = getCurrentCardIndex(gameState.currentRoundType);
@@ -64,19 +102,18 @@ export function GameView() {
 
       {isResultModalOpen && pendingGuessResult && (
         <AfterGuessModal
-          onClose={() => {
-            const newGameState = getNextTurn(gameState);
-
-            saveGameState(newGameState);
-            setGameState(newGameState);
-
-            setIsResultModalOpen(false);
-            setPendingGuessResult(null);
-            setRevealedCardIndex(null);
-            setIsGuessLocked(false);
-          }}
+          onContinue={handleContinue}
+          saveError={saveError}
           isCorrect={pendingGuessResult.isCorrect}
           gameState={gameState}
+        />
+      )}
+      {gameState.gameStatus === "FINISHED" && (
+        <GameOverModal
+          gameState={gameState}
+          saveError={saveError}
+          onPlayAgain={handlePlayAgain}
+          onMainMenu={() => navigate("/")}
         />
       )}
     </>

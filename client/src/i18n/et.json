@@ -95,5 +95,24 @@
     "heading": "Klempsi kaardimäng",
     "title": "Mängi Klempsi — Kaardimäng",
     "description": "Arva Klempsi mängus kordamööda kaarte. Jälgi, kelle kord on, ava kaardid ning vaata mängijate tulemusi."
+  },
+  "drinkAllocation": {
+    "add": "Anna mängijale {{name}} üks jook",
+    "remove": "Võta mängijalt {{name}} üks jook tagasi",
+    "assigned": "Mängijale {{name}} määratud joogid",
+    "remaining_one": "{{count}} jook on veel jagada",
+    "remaining_other": "{{count}} jooki on veel jagada",
+    "complete": "Kõik joogid on jagatud. Võid jätkata!",
+    "continue": "Jätka",
+    "saveError": "Mängu salvestamine ebaõnnestus. Muudatused on alles. Proovi uuesti."
+  },
+  "gameOver": {
+    "title": "Mäng läbi",
+    "summary_one": "Neli vooru läbi. {{count}} mängija, üks kaardipakk.",
+    "summary_other": "Neli vooru läbi. {{count}} mängijat, üks kaardipakk.",
+    "statistics": "Mängijate lõplikud tulemused",
+    "joke": "Kaartidel pole mälu. Sõpradel võib olla.",
+    "playAgain": "Mängi uuesti",
+    "mainMenu": "Peamenüü"
   }
 }
