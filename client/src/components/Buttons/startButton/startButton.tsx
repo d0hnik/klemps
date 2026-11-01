@@ -9,11 +9,11 @@ export function StartButton({ onClick }: Props) {
 
   return (
     <button
-      className="secondary-pixel-corners w-full max-w-xl bg-green-600 text-white text-3xl sm:text-5xl border-8 border-red-700 button-animation min-h-14"
+      className="secondary-pixel-corners w-full max-w-sm bg-green-700 px-6 py-3 text-2xl text-white button-animation min-h-14 sm:text-3xl"
       type="button"
       style={
         {
-          "--border-color": "lime",
+          "--border-color": "var(--color-panel)",
         } as React.CSSProperties
       }
       onClick={onClick}

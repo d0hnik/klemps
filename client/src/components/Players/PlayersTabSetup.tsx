@@ -52,45 +52,49 @@ export function PlayersTabSetup({
   const { t } = useTranslation();
 
   return (
-    <section className="container-border relative w-full min-w-0 max-w-[510px] rounded-xl pt-7 pb-6 xl:px-6 xl:pt-8">
-      <Title index="1" title="PLAYERS" />
+    <section className="relative w-full min-w-0 max-w-[510px]">
+      <Title index="1" title={t("players.players")} className="z-10" />
 
-      <div className="h-64 overflow-y-auto">
-        <ol className="relative mb-4 flex flex-col items-center gap-y-3">
-          {players.map((player, index) => {
-            const playerIndex = index + 1;
+      <div className="secondary-pixel-corners bg-black/15 px-2 pt-8 pb-5 sm:px-5">
+        <p className="mb-4 text-sm text-cyan-100">{t("setupUi.playersHint")}</p>
 
-            const selectedAvatarIndex =
-              selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
+        <div className="max-h-72 overflow-y-auto">
+          <ol className="relative mb-4 flex flex-col gap-3">
+            {players.map((player, index) => {
+              const playerIndex = index + 1;
 
-            player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
+              const selectedAvatarIndex =
+                selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
 
-            return (
-              <PlayerRowSetup
-                key={playerIndex}
-                playerIndex={playerIndex}
-                playerName={player.name}
-                avatarSrc={player.avatarSrc}
-                onNameChange={(name) => onSetPlayerName(playerIndex, name)}
-                onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
-                onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
-              />
-            );
-          })}
-        </ol>
-      </div>
+              player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
 
-      <span className="text-xl text-white">{t("game.selectPlayers")}: </span>
+              return (
+                <PlayerRowSetup
+                  key={playerIndex}
+                  playerIndex={playerIndex}
+                  playerName={player.name}
+                  avatarSrc={player.avatarSrc}
+                  onNameChange={(name) => onSetPlayerName(playerIndex, name)}
+                  onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
+                  onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
+                />
+              );
+            })}
+          </ol>
+        </div>
 
-      <div className="grid w-[96%] grid-cols-3 gap-2 pl-2 sm:gap-3 xl:w-full">
-        {PLAYER_COUNT_OPTIONS.map((count) => (
-          <MainButton
-            key={count}
-            text={String(count)}
-            active={playerCount === count}
-            onClick={() => onSetPlayerCount(count)}
-          />
-        ))}
+        <span className="mb-2 block text-lg text-white">{t("game.selectPlayers")}: </span>
+
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          {PLAYER_COUNT_OPTIONS.map((count) => (
+            <MainButton
+              key={count}
+              text={String(count)}
+              active={playerCount === count}
+              onClick={() => onSetPlayerCount(count)}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,10 +1,7 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import type {
-  Difficulty,
-  DifficultyName,
-} from "../../entities/difficulty/difficulty";
-import "./difficultyCard.css";
 import { IconStarFilled } from "@tabler/icons-react";
+import type { Difficulty, DifficultyName } from "../../entities/difficulty/difficulty";
 
 type Props = {
   difficulty: Difficulty;
@@ -12,65 +9,40 @@ type Props = {
   selectedDifficulty: DifficultyName;
 };
 
-export function DifficultyCard({
-  difficulty,
-  onSelectDifficulty,
-  selectedDifficulty,
-}: Props) {
-  const isEasy = difficulty.name === "EASY";
-
-  const isSelected = difficulty.name === selectedDifficulty;
-
-  const beerIconCount = isEasy ? 1 : 2;
-
-  const backgroundColor = isEasy
-    ? "bg-[var(--color-green)]"
-    : "bg-[var(--color-red)]";
-
-  const selectedModifier = isSelected ? "active" : "";
-
+export function DifficultyCard({ difficulty, onSelectDifficulty, selectedDifficulty }: Props) {
   const { t } = useTranslation();
+  const isEasy = difficulty.name === "EASY";
+  const isSelected = difficulty.name === selectedDifficulty;
+  const name = t(isEasy ? "difficulty.easy" : "difficulty.hard");
 
   return (
     <button
-      className={`difficulty-card button-animation pixel-corners ${backgroundColor} ${selectedModifier}`}
-      onClick={() => onSelectDifficulty(difficulty.name)}
       type="button"
+      aria-label={name}
+      aria-pressed={isSelected}
+      onClick={() => onSelectDifficulty(difficulty.name)}
+      className={`secondary-pixel-corners button-animation min-w-0 cursor-pointer pt-4 text-white ${isEasy ? "bg-green-800" : "bg-red-800"}`}
+      style={{ "--border-color": isSelected ? "var(--color-panel)" : "#83a5a8" } as CSSProperties}
     >
-      <p className="text-5xl text-white flex justify-center items-center">
-        {difficulty.name}
-      </p>
-      <div className="flex flex-row items-center justify-center">
-        {Array.from({ length: beerIconCount }).map((_, index) => (
-          <img
-            key={index}
-            src="/icons/beer.svg"
-            alt=""
-            className="difficulty-card__beer-icon max-w-[40%] object-contain"
-          />
-        ))}
-      </div>
-      <div className="difficulty-card__drinks-tab">
+      <span className="block text-4xl uppercase">{name}</span>
+      <span aria-hidden="true" className="my-4 flex justify-center">
+        <img src="/icons/beer.svg" alt="" width={80} height={80} className="size-20" />
+        {!isEasy && <img src="/icons/beer.svg" alt="" width={80} height={80} className="size-20" />}
+      </span>
+      <span className="block bg-black/40 px-3 py-2">
         {difficulty.drinksPerRound.map((drinkCount, index) => (
-          <div className="flex flex-row justify-around" key={index}>
-            <span className="text-white">
-              {t("difficulty.round")} {index + 1}.
+          <span key={index} className="flex justify-between gap-2 py-1 text-base">
+            <span>{t("difficulty.round")} {index + 1}</span>
+            <span className={isEasy ? "text-green-200" : "text-red-200"}>
+              {drinkCount} {t(drinkCount === 1 ? "drinks.single" : "drinks.plural")}
             </span>
-            <span className={` ${isEasy ? "text-green-600" : "text-red-600"}`}>
-              {drinkCount}{" "}
-              {drinkCount == 1 ? t("drinks.single") : t("drinks.plural")}
-            </span>
-          </div>
+          </span>
         ))}
-      </div>
-      <div
-        className={`difficulty-card__footer flex justify-center items-center mt-5 text-white ${backgroundColor}`}
-      >
-        <p className="mr-3">
-          <IconStarFilled />
-        </p>
-        {difficulty.name}
-      </div>
+      </span>
+      <span className={`flex items-center justify-center gap-2 py-3 text-lg ${isSelected ? "bg-black/30 text-amber-200" : "bg-black/10"}`}>
+        <IconStarFilled size={20} aria-hidden="true" />
+        {t(isSelected ? "setupUi.selected" : "setupUi.select")}
+      </span>
     </button>
   );
 }

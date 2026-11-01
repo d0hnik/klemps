@@ -28,25 +28,27 @@ export function PlayerRowSetup({
 
   return (
     <div
-      className={`pixel-corners flex w-[96%] min-h-[53px] player-row xl:w-full`}
+      className="secondary-pixel-corners flex min-h-20 w-full bg-black/20"
       style={
         {
           "--player-color": color.color,
+          "--border-color": color.color,
         } as React.CSSProperties
       }
     >
       <button
         className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-11 shrink-0 xl:w-12"
         type="button"
+        aria-label={t("setupUi.previousAvatar", { number: playerIndex })}
         onClick={onPreviousAvatar}
       >
-        <img src="/icons/arrowLeft.svg" alt="Previous" />
+        <img src="/icons/arrowLeft.svg" alt="" />
       </button>
 
       <img
         src={avatarSrc}
-        alt="Player icon"
-        className="object-contain flex justify-center items-center w-12 shrink-0 sm:w-16 xl:w-20"
+        alt=""
+        className="object-contain flex justify-center items-center w-12 shrink-0 sm:w-16"
       />
 
       <div className="flex-1 min-w-0 flex flex-col justify-center py-2 px-1 sm:px-3">
@@ -58,9 +60,10 @@ export function PlayerRowSetup({
 
         <input
           type="text"
+          aria-label={placeholder}
           value={playerName}
           placeholder={placeholder}
-          className="w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-base sm:text-[22px]"
+          className="w-full min-w-0 bg-transparent outline-none py-1.5 px-2 border-b border-b-[lightgray] text-white leading-[1.2em] text-base sm:text-xl focus:border-cyan-300"
           onChange={(event) => onNameChange(event.target.value)}
         />
       </div>
@@ -68,9 +71,10 @@ export function PlayerRowSetup({
       <button
         className="flex justify-center items-center border-0 bg-transparent cursor-pointer p-0 button-animation min-h-11 w-11 shrink-0 xl:w-12"
         type="button"
+        aria-label={t("setupUi.nextAvatar", { number: playerIndex })}
         onClick={onNextAvatar}
       >
-        <img src="/icons/arrowRight.svg" alt="Next" />
+        <img src="/icons/arrowRight.svg" alt="" />
       </button>
     </div>
   );
