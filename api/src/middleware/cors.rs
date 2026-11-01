@@ -3,6 +3,7 @@ use actix_web::http::{Method, header};
 
 pub fn cors(allowed_origins: &[String]) -> Cors {
     let mut cors = Cors::default()
+        .block_on_origin_mismatch(true)
         .allowed_methods([
             Method::GET,
             Method::POST,

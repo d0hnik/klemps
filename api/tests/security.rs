@@ -1,57 +1,72 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
 use actix_web::{
-    http::{header, StatusCode},
-    test, web, App,
+    App,
+    http::{StatusCode, header},
+    test, web,
 };
 use klemps_api::{app, config::Config, middleware, state::Services};
 
 #[actix_web::test]
 async fn allowed_origin_receives_cors_headers() {
-    let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173", "10", "60"
-    ).unwrap();
+    let config =
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "10", "60").unwrap();
     let app = test::init_service(
         App::new()
             .app_data(web::Data::new(Services::new()))
             .wrap(middleware::cors::cors(&config.cors_allowed_origins))
             .wrap(middleware::errors::errors())
-            .configure(|cfg| app::configure_routes(cfg, middleware::rate_limit::new_store(), &config.rate_limit))
-    ).await;
+            .configure(|cfg| {
+                app::configure_routes(cfg, middleware::rate_limit::new_store(), &config.rate_limit)
+            }),
+    )
+    .await;
     let response = test::call_service(
         &app,
         test::TestRequest::get()
             .uri("/api/health")
             .insert_header((header::ORIGIN, "http://localhost:5173"))
             .to_request(),
-    ).await;
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::OK);
     assert_eq!(
-        response.headers().get(header::ACCESS_CONTROL_ALLOW_ORIGIN).unwrap(),
+        response
+            .headers()
+            .get(header::ACCESS_CONTROL_ALLOW_ORIGIN)
+            .unwrap(),
         "http://localhost:5173"
     );
 }
 
 #[actix_web::test]
 async fn disallowed_origin_does_not_receive_cors_access() {
-    let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173", "10", "60"
-    ).unwrap();
+    let config =
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "10", "60").unwrap();
     let app = test::init_service(
         App::new()
             .app_data(web::Data::new(Services::new()))
             .wrap(middleware::cors::cors(&config.cors_allowed_origins))
             .wrap(middleware::errors::errors())
-            .configure(|cfg| app::configure_routes(cfg, middleware::rate_limit::new_store(), &config.rate_limit))
-    ).await;
+            .configure(|cfg| {
+                app::configure_routes(cfg, middleware::rate_limit::new_store(), &config.rate_limit)
+            }),
+    )
+    .await;
     let response = test::call_service(
         &app,
         test::TestRequest::get()
             .uri("/api/health")
             .insert_header((header::ORIGIN, "https://not-allowed.example"))
             .to_request(),
-    ).await;
-    assert!(response.headers().get(header::ACCESS_CONTROL_ALLOW_ORIGIN).is_none());
+    )
+    .await;
+    assert!(
+        response
+            .headers()
+            .get(header::ACCESS_CONTROL_ALLOW_ORIGIN)
+            .is_none()
+    );
     assert_eq!(response.status(), StatusCode::BAD_REQUEST);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "INVALID_REQUEST");
@@ -59,9 +74,8 @@ async fn disallowed_origin_does_not_receive_cors_access() {
 
 #[actix_web::test]
 async fn api_v1_requests_are_limited_but_health_is_not() {
-    let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173", "2", "60"
-    ).unwrap();
+    let config =
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "2", "60").unwrap();
     let store = middleware::rate_limit::new_store();
     let app = test::init_service(
         App::new()
@@ -69,7 +83,8 @@ async fn api_v1_requests_are_limited_but_health_is_not() {
             .wrap(middleware::errors::errors())
             .configure(|cfg| app::configure_routes(cfg, store, &config.rate_limit))
             .default_service(web::to(app::not_found)),
-    ).await;
+    )
+    .await;
     let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 45000);
 
     for _ in 0..2 {
@@ -79,7 +94,8 @@ async fn api_v1_requests_are_limited_but_health_is_not() {
                 .uri("/api/v1/missing")
                 .peer_addr(address)
                 .to_request(),
-        ).await;
+        )
+        .await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
     }
     let response = test::call_service(
@@ -88,7 +104,8 @@ async fn api_v1_requests_are_limited_but_health_is_not() {
             .uri("/api/v1/missing")
             .peer_addr(address)
             .to_request(),
-    ).await;
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::TOO_MANY_REQUESTS);
     assert!(response.headers().contains_key(header::RETRY_AFTER));
     let body: serde_json::Value = test::read_body_json(response).await;
@@ -102,22 +119,23 @@ async fn api_v1_requests_are_limited_but_health_is_not() {
                 .uri("/api/health")
                 .peer_addr(address)
                 .to_request(),
-        ).await;
+        )
+        .await;
         assert_eq!(response.status(), StatusCode::OK);
     }
 }
 
 #[actix_web::test]
 async fn forwarded_for_does_not_override_peer_ip() {
-    let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173", "1", "60"
-    ).unwrap();
+    let config =
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "1", "60").unwrap();
     let store = middleware::rate_limit::new_store();
     let app = test::init_service(
         App::new()
             .wrap(middleware::errors::errors())
             .configure(|cfg| app::configure_routes(cfg, store, &config.rate_limit)),
-    ).await;
+    )
+    .await;
     let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 45000);
     let call = |forwarded: &'static str| {
         test::TestRequest::get()
@@ -134,25 +152,19 @@ async fn forwarded_for_does_not_override_peer_ip() {
 
 #[actix_web::test]
 async fn distinct_app_instances_share_the_same_rate_limit_store() {
-    let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173", "1", "60",
-    )
-    .unwrap();
+    let config =
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "1", "60").unwrap();
     let store = middleware::rate_limit::new_store();
     let first_app = test::init_service(
         App::new()
             .wrap(middleware::errors::errors())
-            .configure(|cfg| {
-                app::configure_routes(cfg, store.clone(), &config.rate_limit)
-            }),
+            .configure(|cfg| app::configure_routes(cfg, store.clone(), &config.rate_limit)),
     )
     .await;
     let second_app = test::init_service(
         App::new()
             .wrap(middleware::errors::errors())
-            .configure(|cfg| {
-                app::configure_routes(cfg, store.clone(), &config.rate_limit)
-            }),
+            .configure(|cfg| app::configure_routes(cfg, store.clone(), &config.rate_limit)),
     )
     .await;
 

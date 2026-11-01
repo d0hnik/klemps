@@ -1,5 +1,6 @@
 use crate::{domain::health::HealthStatus, dto::health::HealthResponse};
 
+#[derive(Default)]
 pub struct HealthService;
 
 impl HealthService {

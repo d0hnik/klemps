@@ -49,19 +49,16 @@ fn invalid_configuration_prevents_server_startup_without_leaking_values() {
 #[test]
 fn security_configuration_is_validated_without_leaking_values() {
     let bad_origin = "https://password@host.example";
-    let err = Config::parse_all("127.0.0.1", "3000", bad_origin, "120", "60")
-        .unwrap_err();
+    let err = Config::parse_all("127.0.0.1", "3000", bad_origin, "120", "60").unwrap_err();
     assert_eq!(err, ConfigError::InvalidCorsOrigins);
     assert!(!err.to_string().contains("password"));
 
     assert_eq!(
-        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "0", "60")
-            .unwrap_err(),
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "0", "60").unwrap_err(),
         ConfigError::InvalidRateLimitRequests,
     );
     assert_eq!(
-        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "120", "0")
-            .unwrap_err(),
+        Config::parse_all("127.0.0.1", "3000", "http://localhost:5173", "120", "0").unwrap_err(),
         ConfigError::InvalidRateLimitWindow,
     );
 }
@@ -69,8 +66,13 @@ fn security_configuration_is_validated_without_leaking_values() {
 #[test]
 fn multiple_cors_origins_are_supported() {
     let config = Config::parse_all(
-        "127.0.0.1", "3000", "http://localhost:5173,https://klemps.example", "120", "60"
-    ).unwrap();
+        "127.0.0.1",
+        "3000",
+        "http://localhost:5173,https://klemps.example",
+        "120",
+        "60",
+    )
+    .unwrap();
     assert_eq!(config.cors_allowed_origins.len(), 2);
     assert_eq!(config.rate_limit.requests_per_window, 120);
 }

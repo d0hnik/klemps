@@ -1,4 +1,4 @@
-use actix_web::{http::StatusCode, test, web, App};
+use actix_web::{App, http::StatusCode, test, web};
 use klemps_api::{app, config::Config, middleware, state::Services};
 
 #[actix_web::test]

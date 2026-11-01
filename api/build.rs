@@ -2,8 +2,7 @@ use std::{env, fs, path::PathBuf, process::Command};
 
 fn main() {
     // Regenerate when a shared Rust type is added, removed, or changed.
-    println!("cargo:rerun-if-changed=src/dto");
-    println!("cargo:rerun-if-changed=src/domain");
+    println!("cargo:rerun-if-changed=src");
     println!("cargo:rerun-if-env-changed=KLEMPS_FRONTEND_DIR");
     println!("cargo:rerun-if-env-changed=KLEMPS_SKIP_TS_GENERATION");
 
@@ -42,8 +41,13 @@ fn main() {
         .arg("--output-file")
         .arg(&output)
         .status()
-        .expect("`typeshare` not installed. Run: cargo install typeshare-cli --locked");
+        .expect(
+            "`typeshare` not installed. Run: cargo install typeshare-cli --version 1.13.4 --locked",
+        );
 
     assert!(status.success(), "TypeScript generation failed");
-    println!("cargo:warning=Rust API types generated at {}", output.display());
+    println!(
+        "cargo:warning=Rust API types generated at {}",
+        output.display()
+    );
 }

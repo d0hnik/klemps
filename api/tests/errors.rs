@@ -1,14 +1,10 @@
 use actix_web::{
-    http::{header, StatusCode},
-    test, web, App, HttpResponse,
+    App, HttpResponse,
+    http::{StatusCode, header},
+    test, web,
 };
 use klemps_api::{
-    app,
-    config::Config,
-    dto::error::ErrorCode,
-    error::ApiError,
-    middleware,
-    state::Services,
+    app, config::Config, dto::error::ErrorCode, error::ApiError, middleware, state::Services,
 };
 use serde::Deserialize;
 
@@ -39,12 +35,16 @@ async fn missing_route_returns_json_404() {
             .wrap(middleware::errors::errors())
             .configure(|cfg| app::configure_routes(cfg, store, &config.rate_limit))
             .default_service(web::to(app::not_found)),
-    ).await;
+    )
+    .await;
 
     let response = test::call_service(
         &app,
-        test::TestRequest::get().uri("/api/does-not-exist").to_request(),
-    ).await;
+        test::TestRequest::get()
+            .uri("/api/does-not-exist")
+            .to_request(),
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::NOT_FOUND);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "NOT_FOUND");
@@ -60,12 +60,14 @@ async fn unsupported_method_returns_json_405() {
             .wrap(middleware::errors::errors())
             .configure(|cfg| app::configure_routes(cfg, store, &config.rate_limit))
             .default_service(web::to(app::not_found)),
-    ).await;
+    )
+    .await;
 
     let response = test::call_service(
         &app,
         test::TestRequest::post().uri("/api/health").to_request(),
-    ).await;
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::METHOD_NOT_ALLOWED);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "METHOD_NOT_ALLOWED");
@@ -78,7 +80,8 @@ async fn malformed_json_returns_consistent_error() {
             .app_data(app::json_config())
             .wrap(middleware::errors::errors())
             .service(web::resource("/__test/parse").route(web::post().to(require_json))),
-    ).await;
+    )
+    .await;
 
     let response = test::call_service(
         &app,
@@ -87,7 +90,8 @@ async fn malformed_json_returns_consistent_error() {
             .insert_header((header::CONTENT_TYPE, "application/json"))
             .set_payload("{invalid json")
             .to_request(),
-    ).await;
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::BAD_REQUEST);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "INVALID_REQUEST");
@@ -100,7 +104,8 @@ async fn oversized_json_returns_413_envelope() {
             .app_data(app::json_config())
             .wrap(middleware::errors::errors())
             .service(web::resource("/__test/parse").route(web::post().to(require_json))),
-    ).await;
+    )
+    .await;
     let big_json = format!(r#"{{"data":"{}"}}"#, "a".repeat(app::MAX_JSON_BYTES));
     let response = test::call_service(
         &app,
@@ -109,7 +114,8 @@ async fn oversized_json_returns_413_envelope() {
             .insert_header((header::CONTENT_TYPE, "application/json"))
             .set_payload(big_json)
             .to_request(),
-    ).await;
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::PAYLOAD_TOO_LARGE);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "PAYLOAD_TOO_LARGE");
@@ -121,11 +127,15 @@ async fn application_conflict_returns_stable_envelope() {
         App::new()
             .wrap(middleware::errors::errors())
             .service(web::resource("/__test/conflict").route(web::get().to(fail_with_conflict))),
-    ).await;
+    )
+    .await;
     let response = test::call_service(
         &app,
-        test::TestRequest::get().uri("/__test/conflict").to_request(),
-    ).await;
+        test::TestRequest::get()
+            .uri("/__test/conflict")
+            .to_request(),
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::CONFLICT);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "CONFLICT");
@@ -137,11 +147,15 @@ async fn internal_error_does_not_expose_details() {
         App::new()
             .wrap(middleware::errors::errors())
             .service(web::resource("/__test/internal").route(web::get().to(fail_internally))),
-    ).await;
+    )
+    .await;
     let response = test::call_service(
         &app,
-        test::TestRequest::get().uri("/__test/internal").to_request(),
-    ).await;
+        test::TestRequest::get()
+            .uri("/__test/internal")
+            .to_request(),
+    )
+    .await;
     assert_eq!(response.status(), StatusCode::INTERNAL_SERVER_ERROR);
     let body: serde_json::Value = test::read_body_json(response).await;
     assert_eq!(body["error"]["code"], "INTERNAL_ERROR");

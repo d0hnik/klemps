@@ -1,18 +1,47 @@
+use std::{io, net::TcpListener};
+
 use actix_web::{
-    HttpResponse, ResponseError,
+    App, HttpResponse, HttpServer, ResponseError,
+    dev::Server,
     error::JsonPayloadError,
-    web::{JsonConfig, PathConfig, QueryConfig, ServiceConfig, scope, to},
+    web::{Data, JsonConfig, PathConfig, QueryConfig, ServiceConfig, scope, to},
 };
 
 use crate::{
-    config::RateLimitSettings,
+    config::{Config, RateLimitSettings},
     dto::error::ErrorCode,
     error::ApiError,
-    middleware::rate_limit::{SharedStore, rate_limit},
+    middleware::{
+        cors::cors,
+        errors::errors,
+        logger,
+        rate_limit::{SharedStore, new_store, rate_limit},
+    },
     routes::health::health_routes,
+    state::Services,
 };
 
 pub const MAX_JSON_BYTES: usize = 64 * 1024;
+
+pub fn create_server(listener: TcpListener, config: Config) -> io::Result<Server> {
+    let services = Data::new(Services::new());
+    let limiter_store = new_store();
+
+    Ok(HttpServer::new(move || {
+        App::new()
+            .app_data(services.clone())
+            .app_data(json_config())
+            .app_data(query_config())
+            .app_data(path_config())
+            .wrap(cors(&config.cors_allowed_origins))
+            .wrap(errors())
+            .wrap(logger())
+            .configure(|cfg| configure_routes(cfg, limiter_store.clone(), &config.rate_limit))
+            .default_service(to(not_found))
+    })
+    .listen(listener)?
+    .run())
+}
 
 pub fn configure_routes(
     cfg: &mut ServiceConfig,
