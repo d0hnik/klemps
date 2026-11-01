@@ -2,18 +2,15 @@ use std::{sync::Arc, time::Instant};
 
 use actix_web::{dev::ServiceRequest, http::header};
 use actix_web_ratelimit::{
+    RateLimit,
     config::RateLimitConfig,
     store::{MemoryStore, RateLimitStore},
-    RateLimit,
 };
 
 use crate::{config::RateLimitSettings, dto::error::ErrorCode, error::ApiError};
 
 pub type SharedStore = Arc<dyn RateLimitStore>;
 
-/// The upstream MemoryStore currently checks `len() > max_requests`, allowing
-/// an extra request. This wrapper enforces the configured limit exactly.
-/// It reuses the dependency's thread-safe DashMap so all workers share state.
 #[derive(Default)]
 struct ExactMemoryStore(MemoryStore);
 
@@ -42,7 +39,10 @@ pub fn rate_limit(settings: &RateLimitSettings, store: SharedStore) -> RateLimit
         .id(client_ip)
         .exceeded(|_client_id, config, _request| {
             actix_web::HttpResponse::TooManyRequests()
-                .insert_header((header::RETRY_AFTER, config.window_secs.as_secs().to_string()))
+                .insert_header((
+                    header::RETRY_AFTER,
+                    config.window_secs.as_secs().to_string(),
+                ))
                 .json(ApiError::new(ErrorCode::RateLimited).to_response())
         });
 
@@ -50,7 +50,6 @@ pub fn rate_limit(settings: &RateLimitSettings, store: SharedStore) -> RateLimit
 }
 
 fn client_ip(request: &ServiceRequest) -> String {
-    // Forwarded headers are untrusted unless the proxy trust boundary is configured.
     request
         .peer_addr()
         .map(|address| address.ip().to_string())
