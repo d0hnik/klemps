@@ -245,3 +245,22 @@
 .pixel-test::after {
   margin: -4px;
 }
+
+.setup-player-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-secondary) transparent;
+  scrollbar-gutter: stable;
+}
+
+.setup-player-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.setup-player-list::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 2px;
+}
+
+.setup-player-list::-webkit-scrollbar-track {
+  background: transparent;
+}

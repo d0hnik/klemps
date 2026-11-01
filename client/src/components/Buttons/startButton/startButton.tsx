@@ -1,3 +1,4 @@
+import { IconPlayerPlayFilled } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -9,15 +10,16 @@ export function StartButton({ onClick }: Props) {
 
   return (
     <button
-      className="secondary-pixel-corners w-full max-w-sm bg-green-700 px-6 py-3 text-2xl text-white button-animation min-h-14 sm:text-3xl"
+      className="secondary-pixel-corners button-animation flex min-h-14 cursor-pointer w-full max-w-sm items-center justify-center gap-3 bg-blue-950 px-6 py-3 text-2xl text-cyan-100 hover:bg-blue-900 focus-visible:brightness-125 sm:text-3xl"
       type="button"
       style={
         {
-          "--border-color": "var(--color-panel)",
+          "--border-color": "var(--color-secondary)",
         } as React.CSSProperties
       }
       onClick={onClick}
     >
+      <IconPlayerPlayFilled size={24} aria-hidden="true" />
       {t("game.startGame")}
     </button>
   );
