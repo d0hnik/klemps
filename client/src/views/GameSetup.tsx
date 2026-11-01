@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
+import { SetupSeo } from "../components/SEO/SetupSeo";
 import { DifficultyTab } from "../components/Difficulty/DifficultyTab";
 import { PlayersTabSetup } from "../components/Players/PlayersTabSetup";
 import type { DifficultyName } from "../entities/difficulty/difficulty";
@@ -72,8 +73,9 @@ export function GameSetupView() {
   }
 
   return (
-    <>
-      <div className="flex flex-col items-center lg:flex-row lg:justify-evenly">
+    <section className="mx-auto max-w-7xl px-3" style={{ "--border-color": "var(--color-panel)" } as CSSProperties}>
+      <SetupSeo />
+      <div className="flex flex-col items-center gap-10 xl:flex-row xl:items-start xl:justify-evenly">
         <PlayersTabSetup
           playerCount={playerCount}
           onSetPlayerCount={handleSetPlayerCount}
@@ -85,11 +87,11 @@ export function GameSetupView() {
           onSelectDifficulty={setDifficultyName}
         />
       </div>
-      <div className="flex flex-col lg:flex-row justify-between mt-10">
+      <div className="mt-8 mb-8 flex justify-center xl:justify-end">
         <StartButton
           onClick={() => handleStartGame(playerInputs, difficultyName)}
         />
       </div>
-    </>
+    </section>
   );
 }

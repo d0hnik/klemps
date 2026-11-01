@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { PLAYER_AVATARS, type NewPlayerInput } from "../../entities/player";
 import { MainButton } from "../Buttons/MainButton";
 import { Title } from "../Title/Title";
@@ -52,45 +52,65 @@ export function PlayersTabSetup({
   const { t } = useTranslation();
 
   return (
-    <section className="container-border relative box-border rounded-xl w-[98%] max-w-[510px] pt-7 pb-6 lg:pt-8 lg:px-6 lg:pb-6 lg:w-full">
-      <Title index="1" title="PLAYERS" />
+    <section className="relative w-full min-w-0 max-w-[510px]">
+      <Title index="1" title={t("players.players")} className="z-10" />
 
-      <div className="h-[255px] overflow-y-auto pr-2 overflow-visible pr-0 sm:max-h-[360px] md:max-h-[360px]">
-        <ol className="relative mb-4 flex flex-col items-center gap-y-3">
-          {players.map((player, index) => {
-            const playerIndex = index + 1;
+      <div className="secondary-pixel-corners bg-black/15 px-2 pt-8 pb-5 sm:px-5">
+        <p className="mb-4 text-sm text-cyan-100">{t("setupUi.playersHint")}</p>
 
-            const selectedAvatarIndex =
-              selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
+        <div className="setup-player-list h-76 snap-y snap-mandatory overflow-y-auto">
+          <ol className="relative flex flex-col gap-2">
+            {players.map((player, index) => {
+              const playerIndex = index + 1;
 
-            player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
+              const selectedAvatarIndex =
+                selectedAvatarIndexes[index] ?? getDefaultAvatarIndex(index);
 
-            return (
-              <PlayerRowSetup
-                key={playerIndex}
-                playerIndex={playerIndex}
-                playerName={player.name}
-                avatarSrc={player.avatarSrc}
-                onNameChange={(name) => onSetPlayerName(playerIndex, name)}
-                onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
-                onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
-              />
-            );
-          })}
-        </ol>
-      </div>
+              player.avatarSrc = PLAYER_AVATARS[selectedAvatarIndex];
 
-      <span className="text-xl text-white">{t("game.selectPlayers")}: </span>
+              return (
+                <PlayerRowSetup
+                  key={playerIndex}
+                  playerIndex={playerIndex}
+                  playerName={player.name}
+                  avatarSrc={player.avatarSrc}
+                  onNameChange={(name) => onSetPlayerName(playerIndex, name)}
+                  onPreviousAvatar={() => changePlayerAvatar(playerIndex, "left")}
+                  onNextAvatar={() => changePlayerAvatar(playerIndex, "right")}
+                />
+              );
+            })}
+            {playerCount < 3 && (
+              <li className="h-24 shrink-0 snap-start">
+                <button
+                  type="button"
+                  onClick={() => onSetPlayerCount(3)}
+                  className="secondary-pixel-corners flex h-full w-full cursor-pointer items-center justify-center gap-3 bg-black/10 text-cyan-200 hover:bg-white/5 focus-visible:bg-white/10"
+                  style={{ "--border-color": "#315459" } as CSSProperties}
+                >
+                  <span aria-hidden="true" className="text-2xl">+</span>
+                  {t("setupUi.addPlayer")}
+                </button>
+              </li>
+            )}
+          </ol>
+        </div>
+        <p className="h-6 text-center text-xs leading-6 text-cyan-200">
+          {playerCount > 3 ? t("setupUi.scrollHint") : ""}
+        </p>
 
-      <div className="flex grid grid-cols-3 gap-3 w-[96%] pl-2 lg:w-full">
-        {PLAYER_COUNT_OPTIONS.map((count) => (
-          <MainButton
-            key={count}
-            text={String(count)}
-            active={playerCount === count}
-            onClick={() => onSetPlayerCount(count)}
-          />
-        ))}
+        <span className="mb-2 block text-lg text-white">{t("game.selectPlayers")}: </span>
+
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          {PLAYER_COUNT_OPTIONS.map((count) => (
+            <MainButton
+              key={count}
+              text={String(count)}
+              active={playerCount === count}
+              onClick={() => onSetPlayerCount(count)}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
