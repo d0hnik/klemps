@@ -1,31 +1,25 @@
-use std::{io, sync::Arc};
+use std::io;
 
-use actix_web::{web, App, HttpServer};
-use klemps_api::{middleware, routes::health::health_routes, state::Services};
+use actix_web::{App, HttpServer, middleware::Logger, web::{self, Data}};
+use env_logger::{Env, init_from_env};
+use klemps_api::{routes::health::health_routes, state::Services};
 
 #[actix_web::main]
 async fn main() -> io::Result<()> {
-    env_logger::init_from_env(
-        env_logger::Env::default().default_filter_or("info,actix_web=info"),
-    );
+    init_from_env(Env::default().default_filter_or("info"));
 
-    let services = web::Data::from(Arc::new(Services::new()));
-    let bind_addr = std::env::var("BIND_ADDR")
-        .unwrap_or_else(|_| "127.0.0.1:3000".to_owned());
+    let services = Data::new(Services::new());
 
     HttpServer::new(move || {
         App::new()
             .app_data(services.clone())
-            .wrap(middleware::logger())
+            .wrap(Logger::default())
             .service(
                 web::scope("/api")
-                    .service(
-                        web::scope("/v1")
-                            .service(health_routes()),
-                    ),
+                    .service(web::scope("/v1").service(health_routes())),
             )
     })
-    .bind(&bind_addr)?
+    .bind(("127.0.0.1", 3000))?
     .run()
     .await
 }

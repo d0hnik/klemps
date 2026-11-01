@@ -1,16 +1,10 @@
 use serde::Serialize;
+use typeshare::typeshare;
 
-use crate::domain::health::HealthStatus;
-
+#[typeshare]
 #[derive(Debug, Serialize)]
 pub struct HealthResponse {
-    pub status: &'static str,
+    pub status: String,
 }
 
-impl From<HealthStatus> for HealthResponse {
-    fn from(status: HealthStatus) -> Self {
-        match status {
-            HealthStatus::Healthy => Self { status: "ok" },
-        }
-    }
-}
+crate::impl_json_responder!(HealthResponse);

@@ -1,4 +1,4 @@
-use crate::domain::health::HealthStatus;
+use crate::{domain::health::HealthStatus, dto::health::HealthResponse};
 
 pub struct HealthService;
 
@@ -7,13 +7,9 @@ impl HealthService {
         Self
     }
 
-    pub fn check(&self) -> HealthStatus {
-        HealthStatus::Healthy
-    }
-}
-
-impl Default for HealthService {
-    fn default() -> Self {
-        Self::new()
+    pub fn check(&self) -> HealthResponse {
+        HealthResponse {
+            status: HealthStatus::Healthy.as_str().to_owned(),
+        }
     }
 }

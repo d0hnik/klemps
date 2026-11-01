@@ -1,12 +1,12 @@
-use actix_web::{Scope, get, web::{Data, Json, scope}};
+use actix_web::{get, web::{self, Data}, Scope};
 
 use crate::{dto::health::HealthResponse, state::Services};
 
 #[get("/health")]
-async fn check(services: Data<Services>) -> Json<HealthResponse> {
-    Json(services.health.check().into())
+async fn check(services: Data<Services>) -> HealthResponse {
+    services.health.check()
 }
 
 pub fn health_routes() -> Scope {
-    scope("").service(check)
+    web::scope("").service(check)
 }
