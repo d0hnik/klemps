@@ -52,5 +52,29 @@
     "giveOut": "GIVE OUT",
     "take": "TAKE",
     "drinks": "DRINKS"
+  },
+  "home": {
+    "tableCaption": "One deck. Four guesses.",
+    "eyebrow": "The next card is anyone’s guess",
+    "title": "Good friends.",
+    "titleAccent": "Bad guesses.",
+    "description": "Klemps is a party card game of luck and a little nerve. Gather your friends, guess the cards, and see who gets it right.",
+    "playGame": "Play game",
+    "howToPlay": "How to play",
+    "note": "Pass the screen. Take your chances.",
+    "rules": {
+      "eyebrow": "A quick deal",
+      "close": "Close rules",
+      "intro": "Add your players, choose a difficulty, then take turns making four guesses.",
+      "rounds": {
+        "RED_BLACK": "Guess the colour of your first card.",
+        "HIGH_LOW": "Will your second card rank higher or lower than your first?",
+        "INSIDE_OUTSIDE": "Will your third card fall between the first two ranks, or outside them?",
+        "SUIT": "Guess the suit of your fourth card: hearts, diamonds, spades or clubs."
+      },
+      "outcome": "Guess right? Give out drinks. Guess wrong? Take them. The amount depends on the round and difficulty.",
+      "note": "Keep it friendly. Alcohol is optional.",
+      "done": "Got it"
+    }
   }
 }

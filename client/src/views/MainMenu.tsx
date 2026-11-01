@@ -1,80 +1,81 @@
-import { useRef } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { HowToPlayModal } from "../components/Modals/HowToPlayModal";
 import "@fontsource/pixelify-sans/400.css";
 import "@fontsource/pixelify-sans/700.css";
-import "./mainMenu.css";
 
-const rounds = [
-  ["Red or black", "Guess the colour of your first card."],
-  ["Higher or lower", "Will your second card rank higher or lower than your first?"],
-  ["Inside or outside", "Will your third card fall between the first two ranks, or outside them?"],
-  ["Pick a suit", "Guess the suit of your fourth card: hearts, diamonds, spades or clubs."],
+const decorativeCards = [
+  { src: "/cards/k-spade.png", size: 256, className: "-left-[39px] top-1 -rotate-19" },
+  { src: "/cards/back.png", size: 512, className: "-right-10 top-1 rotate-19" },
+  { src: "/cards/a-heart.png", size: 256, className: "left-[22px] top-6 -rotate-3" },
 ];
 
 export function MainMenuView() {
-  const rulesRef = useRef<HTMLDialogElement>(null);
+  const { t } = useTranslation();
+  const [rulesOpen, setRulesOpen] = useState(false);
 
   return (
-    <section className="landing" aria-labelledby="landing-title">
-      <div className="landing__table" aria-hidden="true">
-        <span className="landing__table-label">ONE DECK. FOUR GUESSES.</span>
-        <div className="landing__cards">
-          <img className="landing__card landing__card--left" src="/cards/k-spade.png" alt="" width="256" height="256" />
-          <img className="landing__card landing__card--right" src="/cards/back.png" alt="" width="512" height="512" />
-          <img className="landing__card landing__card--front" src="/cards/a-heart.png" alt="" width="256" height="256" />
+    <section
+      aria-labelledby="landing-title"
+      className="mx-auto mb-12 grid grid-cols-1 w-[calc(100%-40px)] max-w-[460px] items-center gap-8 text-[var(--color-card)] md:mt-3 md:mb-20 md:w-[calc(100%-48px)] md:max-w-[1040px] md:grid-cols-[1fr_1.1fr] md:gap-16"
+    >
+      <div
+        aria-hidden="true"
+        className="relative row-start-2 grid min-h-[260px] place-items-center overflow-hidden rounded-[28px] border-3 border-[var(--color-panel)] bg-[#073039] shadow-[inset_0_0_0_7px_#062f36,inset_0_0_0_9px_#f6c45330,0_8px_0_#00181e] md:row-start-auto md:min-h-[390px]"
+      >
+        <span className="absolute top-3.5 text-xs tracking-[2px] text-[#c4d7ce] uppercase md:top-6 md:text-sm">
+          {t("home.tableCaption")}
+        </span>
+        <div className="relative h-60 w-[300px] scale-[.78] md:h-[260px] md:scale-[.85] lg:scale-100">
+          {decorativeCards.map(({ src, size, className }) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              width={size}
+              height={size}
+              className={`absolute size-64 object-contain [image-rendering:pixelated] drop-shadow-[0_8px_0_#00181e80] ${className}`}
+            />
+          ))}
         </div>
-        <span className="landing__table-suit">♦</span>
+        <span className="absolute bottom-2 text-xl text-[var(--color-panel)] md:bottom-4 md:text-[26px]">♦</span>
       </div>
-      <div className="landing__intro">
-        <p className="landing__eyebrow">THE NEXT CARD IS ANYONE’S GUESS</p>
-        <h1 id="landing-title">Good friends.<br /><span>Bad guesses.</span></h1>
-        <p className="landing__description">
-          Klemps is a party card game of luck and a little nerve.
-          Gather your friends, guess the cards, and see who gets it right.
+
+      <div className="text-center md:text-left">
+        <p className="mb-4 text-[11px] tracking-[1.1px] text-[#8ed3d2] uppercase md:text-[13px] md:tracking-[1.7px]">
+          {t("home.eyebrow")}
         </p>
-        <div className="landing__actions">
-          <Link className="landing__button landing__button--play" to="/setup">
-            <span>Play game</span><span aria-hidden="true">→</span>
+        <h1
+          id="landing-title"
+          className="text-[clamp(42px,10vw,60px)] leading-[1.02] font-bold tracking-[-1.5px] text-shadow-[3px_4px_0_#00181e] md:text-[clamp(44px,5.3vw,66px)]"
+        >
+          {t("home.title")}<br />
+          <span className="text-[var(--color-panel)]">{t("home.titleAccent")}</span>
+        </h1>
+        <p className="mx-auto mt-5 mb-6 max-w-[400px] text-lg leading-normal text-[#c4d7ce] md:mx-0 md:mt-6 md:mb-7 md:text-xl">
+          {t("home.description")}
+        </p>
+        <div className="mx-auto flex flex-col gap-3.5 md:mx-0 md:max-w-[340px]">
+          <Link
+            to="/setup"
+            className="flex min-h-[58px] cursor-pointer items-center justify-center gap-5 rounded-[3px] border-2 border-[#ffe3a0] bg-[var(--color-panel)] px-6 py-2.5 text-[25px] leading-tight text-[#102c34] shadow-[0_5px_0_#9d6d23,0_8px_0_#00181e] transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-offset-5 focus-visible:outline-[var(--color-card)] active:translate-y-0.5 motion-reduce:transition-none"
+          >
+            <span>{t("home.playGame")}</span>
+            <span aria-hidden="true" className="ml-auto">→</span>
           </Link>
-          <button className="landing__button landing__button--rules" type="button" onClick={() => rulesRef.current?.showModal()}>
-            How to play
+          <button
+            type="button"
+            onClick={() => setRulesOpen(true)}
+            className="flex min-h-[58px] cursor-pointer items-center justify-center rounded-[3px] border-2 border-[#51bfc8] bg-[#102f41] px-6 py-2.5 text-[25px] leading-tight text-[#b5f1f0] shadow-[0_4px_0_#00181e] transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-offset-5 focus-visible:outline-[var(--color-card)] active:translate-y-0.5 motion-reduce:transition-none"
+          >
+            {t("home.howToPlay")}
           </button>
         </div>
-        <p className="landing__note">Pass the screen. Take your chances.</p>
+        <p className="mt-[22px] text-[15px] text-[#8aaeb0]">{t("home.note")}</p>
       </div>
-      <dialog
-        ref={rulesRef}
-        className="landing-rules"
-        aria-labelledby="rules-title"
-        aria-describedby="rules-intro"
-        onClick={(event) => {
-          if (event.target !== event.currentTarget) return;
-          const bounds = event.currentTarget.getBoundingClientRect();
-          if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
-            event.currentTarget.close();
-          }
-        }}
-      >
-        <div className="landing-rules__header">
-          <p className="landing__eyebrow">A QUICK DEAL</p>
-          <form method="dialog">
-            <button className="landing-rules__close" aria-label="Close rules" autoFocus>×</button>
-          </form>
-        </div>
-        <h2 id="rules-title">How to play</h2>
-        <p id="rules-intro">Add your players, choose a difficulty, then take turns making four guesses.</p>
-        <ol className="landing-rules__rounds">
-          {rounds.map(([title, description], index) => (
-            <li key={title}>
-              <span className="landing-rules__number" aria-hidden="true">0{index + 1}</span>
-              <div><h3>{title}</h3><p>{description}</p></div>
-            </li>
-          ))}
-        </ol>
-        <p className="landing-rules__outcome">Guess right? Give out drinks. Guess wrong? Take them. The amount depends on the round and difficulty.</p>
-        <p className="landing-rules__note">Keep it friendly. Alcohol is optional.</p>
-        <form method="dialog"><button className="landing__button landing__button--play landing-rules__done">Got it</button></form>
-      </dialog>
+
+      {rulesOpen && <HowToPlayModal onClose={() => setRulesOpen(false)} />}
     </section>
   );
 }
