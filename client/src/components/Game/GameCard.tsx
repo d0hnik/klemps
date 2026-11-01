@@ -4,11 +4,12 @@ import "./game-card.css";
 type Props = {
   card: Card;
   revealed: boolean;
+  animateReveal: boolean;
   isCurrent: boolean;
   onRevealEnd?: () => void;
 };
 
-export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
+export function GameCard({ card, revealed, animateReveal, isCurrent, onRevealEnd }: Props) {
   const frontSrc = getCardImageSrc(card, true);
   const backSrc = getCardImageSrc(card, false);
 
@@ -21,7 +22,7 @@ export function GameCard({ card, revealed, isCurrent, onRevealEnd }: Props) {
       <div
         className={`game-card__inner ${
           revealed ? "game-card__inner--revealed" : ""
-        }`}
+        } ${animateReveal ? "game-card__inner--animated" : ""}`}
         onTransitionEnd={(event) => {
           if (event.propertyName === "transform") {
             onRevealEnd?.();

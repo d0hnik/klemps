@@ -36,7 +36,7 @@ export function GameField({
       />
 
       <div className="secondary-pixel-corners bg-black/15 px-1 pt-8 pb-3 sm:px-3 sm:pt-10">
-        <div className="grid grid-cols-4 items-center overflow-hidden py-3 sm:gap-2">
+        <div className="grid grid-cols-4 items-center overflow-hidden py-3 sm:gap-2 lg:mx-auto lg:max-w-2xl">
           {currentPlayer.hand.map((card, index) => {
             const revealedByRound = isCardRevealed(
               gameState.currentRoundType,
@@ -49,9 +49,10 @@ export function GameField({
             const isCurrent = isCurrentCard(gameState.currentRoundType, index);
             return (
               <GameCard
-                key={`${card.rank}-${card.suit}`}
+                key={index}
                 card={card}
                 revealed={revealed}
+                animateReveal={revealedByCurrentGuess}
                 isCurrent={isCurrent}
                 onRevealEnd={revealedByCurrentGuess ? onRevealEnd : undefined}
               />

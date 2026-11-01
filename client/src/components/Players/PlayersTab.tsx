@@ -52,7 +52,7 @@ export function PlayersTab({ players, currentPlayerIndex }: Props) {
 
       <div className="secondary-pixel-corners bg-black/15 px-1 pt-8 pb-3 sm:px-3">
 
-        <div ref={listRef} className="game-player-list max-h-76 overflow-y-auto pr-1 pl-3 sm:pl-5">
+        <div ref={listRef} className="game-player-list max-h-76 overflow-y-auto px-3 sm:px-5">
           <ol className="relative flex flex-col gap-2">
             {currentPlayer && (
               <ActivePlayerArrow top={arrowTop} playerName={currentPlayer.name} />
