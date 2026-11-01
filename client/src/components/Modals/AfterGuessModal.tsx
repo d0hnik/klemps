@@ -1,151 +1,77 @@
+import { useState, type CSSProperties } from "react";
 import { Check, Close } from "@nsmr/pixelart-react";
 import { useTranslation } from "react-i18next";
-import { ROUND_ORDER } from "../../entities/roundType";
 import type { GameState } from "../../entities/gameState";
+import { getDrinksForRound, type DrinkAllocation } from "../../entities/turn";
 import { PlayerRowDrinksGiver } from "../Players/PlayerRowDrinksGiver";
+import { GameModal } from "./GameModal";
 
-type AfterGuessModalProps = {
+type Props = {
   isCorrect: boolean;
   gameState: GameState;
-  onClose: () => void;
+  saveError: boolean;
+  onContinue: (allocation: DrinkAllocation) => void;
 };
 
-const AFTER_GUESS_MODAL_CONFIG = {
-  correct: {
-    titleKey: "guessResult.correctTitle",
-    messageKey: "guessResult.correctMessage",
-    borderColor: "var(--color-green)",
-    titleColor: "text-green-400",
-    buttonColor: "bg-green-600 hover:bg-green-500",
-    giveTake: "guessResult.giveOut",
-    drinks: "guessResult.drinks",
-    icon: (
-      <Check
-        size={58}
-        color="green"
-        className=" [filter:drop-shadow(1px_0_0_currentColor)_drop-shadow(-1px_0_0_currentColor)_drop-shadow(0_1px_0_currentColor)_drop-shadow(0_-1px_0_currentColor)]"
-      />
-    ),
-  },
-  wrong: {
-    titleKey: "guessResult.wrongTitle",
-    messageKey: "guessResult.wrongMessage",
-    borderColor: "var(--color-red)",
-    titleColor: "text-red-400",
-    buttonColor: "bg-red-600 hover:bg-red-500",
-    giveTake: "guessResult.take",
-    drinks: "guessResult.drinks",
-    icon: <Close size={52} color="red" />,
-  },
-} as const;
-
-export function AfterGuessModal({
-  isCorrect,
-  gameState,
-  onClose,
-}: AfterGuessModalProps) {
+export function AfterGuessModal({ isCorrect, gameState, saveError, onContinue }: Props) {
   const { t } = useTranslation();
+  const [allocation, setAllocation] = useState<DrinkAllocation>({});
+  const drinks = getDrinksForRound(gameState);
+  const remaining = drinks - Object.values(allocation).reduce((sum, count) => sum + count, 0);
 
-  const drinksAmount =
-    gameState.difficulty.drinksPerRound[
-      ROUND_ORDER.indexOf(gameState.currentRoundType)
-    ];
+  function changeAllocation(playerId: string, change: number) {
+    setAllocation((current) => {
+      const assigned = Object.values(current).reduce((sum, count) => sum + count, 0);
+      const amount = (current[playerId] || 0) + change;
+      if (amount < 0 || (change > 0 && assigned >= drinks)) return current;
+      return { ...current, [playerId]: amount };
+    });
+  }
 
-  const variant = isCorrect ? "correct" : "wrong";
-
-  const config = AFTER_GUESS_MODAL_CONFIG[variant];
+  const footer = (
+    <>
+      {isCorrect && (
+        <p role="status" className="mb-3 text-center text-amber-200">
+          {remaining === 0 ? t("drinkAllocation.complete") : t("drinkAllocation.remaining", { count: remaining })}
+        </p>
+      )}
+      {saveError && <p role="alert" className="mb-3 text-red-200">{t("drinkAllocation.saveError")}</p>}
+      <button
+        type="button"
+        disabled={isCorrect && remaining !== 0}
+        onClick={() => onContinue(allocation)}
+        className="secondary-pixel-corners min-h-12 w-full cursor-pointer bg-green-500 px-4 py-3 text-xl font-bold text-green-950 hover:bg-green-400 disabled:cursor-not-allowed disabled:opacity-40"
+        style={{ "--border-color": "#86efac" } as CSSProperties}
+      >
+        {t("drinkAllocation.continue")}
+      </button>
+    </>
+  );
 
   return (
-    <div
-      className="
-        fixed inset-0 z-50
-        flex items-center justify-center
-        bg-black/60 p-4
-      "
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="guess-result-title"
-    >
-      <div
-        className="
-          w-full max-w-md max-h-[90dvh] overflow-y-auto
-          rounded-2xl border-5 border-[var(--result-color)]
-          bg-[var(--color-dark-bg)] p-6 text-white
-          shadow-2xl
-        "
-        style={
-          {
-            "--result-color": config.borderColor,
-          } as React.CSSProperties
-        }
-      >
-        <div className="flex flex-col items-center">
-          {config.icon}
-          <h2 id="guess-result-title" className="text-center text-3xl tracking-wider text-white sm:text-4xl">
-            {t(config.titleKey)}
-          </h2>
-
-          <div className="mt-3 flex w-full max-w-[320px] items-center justify-center">
-            <div
-              className="h-[2px] flex-1 bg-[var(--result-color)]"
-              style={
-                {
-                  "--result-color": config.borderColor,
-                } as React.CSSProperties
-              }
-            />
-
-            <div
-              className="mx-2 size-2 rotate-45 border-2 border-[var(--result-color)] bg-slate-900"
-              style={
-                {
-                  "--result-color": config.borderColor,
-                } as React.CSSProperties
-              }
-            />
-
-            <div
-              className="h-[2px] flex-1 bg-[var(--result-color)]"
-              style={
-                {
-                  "--result-color": config.borderColor,
-                } as React.CSSProperties
-              }
-            />
-          </div>
-
-          <div className="flex mt-2 flex-col justify-center items-center gap-2">
-            <p>{t(config.messageKey)}</p>
-            <p
-              className="text-3xl tracking-wider text-[var(--result-color)]"
-              style={
-                {
-                  "--result-color": config.borderColor,
-                } as React.CSSProperties
-              }
-            >
-              {t(config.giveTake)} {drinksAmount} {t(config.drinks)}
-            </p>
-          </div>
-          {isCorrect &&
-            gameState.players.map((player, index) => (
-              <PlayerRowDrinksGiver
-                key={index}
-                playerIndex={index + 1}
-                player={player}
-              />
-            ))}
-          <div className="mt-4 flex w-full justify-center">
-            <button
-              type="button"
-              className="flex justify-center button-animation items-center text-2xl text-white pixel-corners min-h-[50px] min-w-[140px] w-full max-w-80 bg-[var(--color-bg)]"
-              onClick={() => onClose()}
-            >
-              CONTINUE
-            </button>
-          </div>
-        </div>
+    <GameModal title={t(isCorrect ? "guessResult.correctTitle" : "guessResult.wrongTitle")} borderColor={isCorrect ? "#86efac" : "#fca5a5"} footer={footer}>
+      <div className="mb-4 flex justify-center" aria-hidden="true">
+        {isCorrect ? <Check size={40} color="#86efac" /> : <Close size={40} color="#fca5a5" />}
       </div>
-    </div>
+      <p className="text-center text-cyan-100">{t(isCorrect ? "guessResult.correctMessage" : "guessResult.wrongMessage")}</p>
+      <p className={`my-3 text-center text-2xl ${isCorrect ? "text-green-200" : "text-red-200"}`}>
+        {t(isCorrect ? "guessResult.giveOut" : "guessResult.take")} {drinks} {t(drinks === 1 ? "drinks.single" : "drinks.plural")}
+      </p>
+      {isCorrect && (
+        <div className="space-y-3">
+          {gameState.players.map((player, index) => index !== gameState.currentPlayerIndex && (
+            <PlayerRowDrinksGiver
+              key={player.id}
+              playerIndex={index + 1}
+              player={player}
+              amount={allocation[player.id] || 0}
+              canIncrease={remaining > 0}
+              onIncrease={() => changeAllocation(player.id, 1)}
+              onDecrease={() => changeAllocation(player.id, -1)}
+            />
+          ))}
+        </div>
+      )}
+    </GameModal>
   );
 }

@@ -95,5 +95,24 @@
     "heading": "Klemps card game",
     "title": "Play Klemps — Card Game",
     "description": "Take turns guessing the cards in your Klemps game. Follow the current player, reveal each card, and track the scores."
+  },
+  "drinkAllocation": {
+    "add": "Give a drink to {{name}}",
+    "remove": "Remove a drink from {{name}}",
+    "assigned": "Drinks assigned to {{name}}",
+    "remaining_one": "{{count}} drink left to assign",
+    "remaining_other": "{{count}} drinks left to assign",
+    "complete": "All drinks assigned. Ready to continue!",
+    "continue": "Continue",
+    "saveError": "Could not save the game. Your changes are still here. Please try again."
+  },
+  "gameOver": {
+    "title": "Game over",
+    "summary_one": "Four rounds complete. {{count}} player, one deck.",
+    "summary_other": "Four rounds complete. {{count}} players, one deck.",
+    "statistics": "Final player statistics",
+    "joke": "The cards have no memory. Your friends might.",
+    "playAgain": "Play again",
+    "mainMenu": "Main menu"
   }
 }
