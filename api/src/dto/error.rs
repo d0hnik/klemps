@@ -1,6 +1,7 @@
 use serde::Serialize;
 use typeshare::typeshare;
 
+/// Stable, machine-readable error codes shared with TypeScript.
 #[typeshare]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]

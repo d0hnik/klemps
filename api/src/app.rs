@@ -1,8 +1,4 @@
-use actix_web::{
-    HttpResponse, ResponseError,
-    error::JsonPayloadError,
-    web::{self, JsonConfig, PathConfig, QueryConfig},
-};
+use actix_web::{HttpResponse, ResponseError, error::JsonPayloadError, web};
 
 use crate::{
     config::RateLimitSettings,
@@ -20,16 +16,18 @@ pub fn configure_routes(
     limits: &RateLimitSettings,
 ) {
     cfg.service(
-        web::scope("/api").service(health_routes()).service(
-            web::scope("/v1")
-                .wrap(rate_limit(limits, limiter_store))
-                .default_service(web::to(not_found)),
-        ),
+        web::scope("/api")
+            .service(
+                web::scope("/v1")
+                    .wrap(rate_limit(limits, limiter_store))
+                    .default_service(web::to(not_found)),
+            )
+            .service(health_routes()),
     );
 }
 
-pub fn json_config() -> JsonConfig {
-    JsonConfig::default()
+pub fn json_config() -> web::JsonConfig {
+    web::JsonConfig::default()
         .limit(MAX_JSON_BYTES)
         .error_handler(|err, _request| {
             let code = match err {
@@ -41,13 +39,13 @@ pub fn json_config() -> JsonConfig {
         })
 }
 
-pub fn query_config() -> QueryConfig {
-    QueryConfig::default()
+pub fn query_config() -> web::QueryConfig {
+    web::QueryConfig::default()
         .error_handler(|_err, _request| ApiError::new(ErrorCode::InvalidRequest).into())
 }
 
-pub fn path_config() -> PathConfig {
-    PathConfig::default()
+pub fn path_config() -> web::PathConfig {
+    web::PathConfig::default()
         .error_handler(|_err, _request| ApiError::new(ErrorCode::InvalidRequest).into())
 }
 

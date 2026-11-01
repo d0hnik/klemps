@@ -1,8 +1,8 @@
 use actix_web::{
-    ResponseError,
     dev::ServiceResponse,
-    http::{StatusCode, header},
+    http::{header, StatusCode},
     middleware::{ErrorHandlerResponse, ErrorHandlers},
+    ResponseError,
 };
 
 use crate::error::ApiError;
@@ -21,6 +21,8 @@ pub fn errors<B: 'static>() -> ErrorHandlers<B> {
 }
 
 fn normalize_error<B>(response: ServiceResponse<B>) -> actix_web::Result<ErrorHandlerResponse<B>> {
+    // Error responses built by our ApiError or the rate limiter already have the
+    // documented JSON envelope. Never rewrite those or lose their body.
     let is_json = response
         .headers()
         .get(header::CONTENT_TYPE)
@@ -28,15 +30,15 @@ fn normalize_error<B>(response: ServiceResponse<B>) -> actix_web::Result<ErrorHa
         .is_some_and(|value| value.starts_with("application/json"));
 
     if is_json {
-        return Ok(ErrorHandlerResponse::Response(
-            response.map_into_left_body(),
-        ));
+        return Ok(ErrorHandlerResponse::Response(response.map_into_left_body()));
     }
 
     let error = ApiError::from_status(response.status());
     let (request, original) = response.into_parts();
     let mut replacement = error.error_response();
 
+    // Keep protocol/security headers if we replace an Actix/CORS-produced body.
+    // Never copy the original Content-Type or Content-Length.
     for name in [
         header::ALLOW,
         header::RETRY_AFTER,

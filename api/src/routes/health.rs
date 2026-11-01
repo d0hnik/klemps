@@ -1,6 +1,7 @@
 use actix_web::{
-    Scope, get,
+    get,
     web::{self, Data, Json},
+    Scope,
 };
 
 use crate::{dto::health::HealthResponse, state::Services};

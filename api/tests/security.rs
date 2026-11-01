@@ -131,3 +131,44 @@ async fn forwarded_for_does_not_override_peer_ip() {
     let second = test::call_service(&app, call("192.0.2.11")).await;
     assert_eq!(second.status(), StatusCode::TOO_MANY_REQUESTS);
 }
+
+#[actix_web::test]
+async fn distinct_app_instances_share_the_same_rate_limit_store() {
+    let config = Config::parse_all(
+        "127.0.0.1", "3000", "http://localhost:5173", "1", "60",
+    )
+    .unwrap();
+    let store = middleware::rate_limit::new_store();
+    let first_app = test::init_service(
+        App::new()
+            .wrap(middleware::errors::errors())
+            .configure(|cfg| {
+                app::configure_routes(cfg, store.clone(), &config.rate_limit)
+            }),
+    )
+    .await;
+    let second_app = test::init_service(
+        App::new()
+            .wrap(middleware::errors::errors())
+            .configure(|cfg| {
+                app::configure_routes(cfg, store.clone(), &config.rate_limit)
+            }),
+    )
+    .await;
+
+    let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 45001);
+    let request = || {
+        test::TestRequest::get()
+            .uri("/api/v1/missing")
+            .peer_addr(address)
+            .to_request()
+    };
+    assert_eq!(
+        test::call_service(&first_app, request()).await.status(),
+        StatusCode::NOT_FOUND,
+    );
+    assert_eq!(
+        test::call_service(&second_app, request()).await.status(),
+        StatusCode::TOO_MANY_REQUESTS,
+    );
+}
