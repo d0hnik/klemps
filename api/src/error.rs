@@ -1,11 +1,9 @@
 use std::fmt;
 
-use actix_web::{http::StatusCode, HttpResponse, ResponseError};
+use actix_web::{HttpResponse, ResponseError, http::StatusCode};
 
 use crate::dto::error::{ErrorBody, ErrorCode, ErrorResponse};
 
-/// Application errors are intentionally separate from transport DTOs.
-/// Add domain-specific codes here as new services are introduced.
 #[derive(Debug, Clone, Copy)]
 pub struct ApiError {
     pub code: ErrorCode,
@@ -25,6 +23,7 @@ impl ApiError {
             ErrorCode::MethodNotAllowed => StatusCode::METHOD_NOT_ALLOWED,
             ErrorCode::Conflict => StatusCode::CONFLICT,
             ErrorCode::PayloadTooLarge => StatusCode::PAYLOAD_TOO_LARGE,
+            ErrorCode::RateLimited => StatusCode::TOO_MANY_REQUESTS,
             ErrorCode::InternalError => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
@@ -38,6 +37,7 @@ impl ApiError {
             ErrorCode::MethodNotAllowed => "Method not allowed",
             ErrorCode::Conflict => "Resource conflict",
             ErrorCode::PayloadTooLarge => "Request body too large",
+            ErrorCode::RateLimited => "Too many requests",
             ErrorCode::InternalError => "Internal server error",
         }
     }
@@ -51,6 +51,7 @@ impl ApiError {
             StatusCode::METHOD_NOT_ALLOWED => ErrorCode::MethodNotAllowed,
             StatusCode::CONFLICT => ErrorCode::Conflict,
             StatusCode::PAYLOAD_TOO_LARGE => ErrorCode::PayloadTooLarge,
+            StatusCode::TOO_MANY_REQUESTS => ErrorCode::RateLimited,
             _ => ErrorCode::InternalError,
         };
         Self::new(code)
@@ -68,7 +69,7 @@ impl ApiError {
 
 impl fmt::Display for ApiError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.message())
+        f.write_str(self.message())
     }
 }
 

@@ -11,6 +11,7 @@ export enum ErrorCode {
 	MethodNotAllowed = "METHOD_NOT_ALLOWED",
 	Conflict = "CONFLICT",
 	PayloadTooLarge = "PAYLOAD_TOO_LARGE",
+	RateLimited = "RATE_LIMITED",
 	InternalError = "INTERNAL_ERROR",
 }
 

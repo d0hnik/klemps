@@ -1,40 +1,53 @@
 use actix_web::{error::JsonPayloadError, web, HttpResponse, ResponseError};
 
-use crate::{dto::error::ErrorCode, error::ApiError, routes::health::health_routes};
+use crate::{
+    config::RateLimitSettings,
+    dto::error::ErrorCode,
+    error::ApiError,
+    middleware::rate_limit::{rate_limit, SharedStore},
+    routes::health::health_routes,
+};
 
-/// The same route registration is used by production and request tests.
-pub fn configure_routes(cfg: &mut web::ServiceConfig) {
+pub const MAX_JSON_BYTES: usize = 64 * 1024;
+
+
+pub fn configure_routes(
+    cfg: &mut web::ServiceConfig,
+    limiter_store: SharedStore,
+    limits: &RateLimitSettings,
+) {
     cfg.service(
         web::scope("/api")
-            // Infrastructure endpoints are unversioned and don't require auth/DB.
             .service(health_routes())
-            .service(web::scope("/v1")),
+            .service(
+                web::scope("/v1")
+                    .wrap(rate_limit(limits, limiter_store))
+                    .default_service(web::to(not_found)),
+            ),
     );
 }
 
 pub fn json_config() -> web::JsonConfig {
-    web::JsonConfig::default().limit(16 * 1024).error_handler(|err, _request| {
-        let code = match err {
-            JsonPayloadError::Overflow { .. } | JsonPayloadError::OverflowKnownLength { .. } => {
-                ErrorCode::PayloadTooLarge
-            }
-            _ => ErrorCode::InvalidRequest,
-        };
-        // Do not expose a raw serde/deserialization error or request data.
-        ApiError::new(code).into()
-    })
+    web::JsonConfig::default()
+        .limit(MAX_JSON_BYTES)
+        .error_handler(|err, _request| {
+            let code = match err {
+                JsonPayloadError::Overflow { .. }
+                | JsonPayloadError::OverflowKnownLength { .. } => ErrorCode::PayloadTooLarge,
+                _ => ErrorCode::InvalidRequest,
+            };
+            ApiError::new(code).into()
+        })
 }
 
 pub fn query_config() -> web::QueryConfig {
-    web::QueryConfig::default().error_handler(|_err, _request| {
-        ApiError::new(ErrorCode::InvalidRequest).into()
-    })
+    web::QueryConfig::default()
+        .error_handler(|_err, _request| ApiError::new(ErrorCode::InvalidRequest).into())
 }
 
 pub fn path_config() -> web::PathConfig {
-    web::PathConfig::default().error_handler(|_err, _request| {
-        ApiError::new(ErrorCode::InvalidRequest).into()
-    })
+    web::PathConfig::default()
+        .error_handler(|_err, _request| ApiError::new(ErrorCode::InvalidRequest).into())
 }
 
 pub async fn not_found() -> HttpResponse {

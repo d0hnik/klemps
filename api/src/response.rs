@@ -1,5 +1,3 @@
-/// Implements Actix Responder for a serializable DTO, so handlers can return
-/// the DTO directly: `async fn check(...) -> HealthResponse { ... }`.
 #[macro_export]
 macro_rules! impl_json_responder {
     ($response:ty) => {

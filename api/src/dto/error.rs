@@ -13,6 +13,7 @@ pub enum ErrorCode {
     MethodNotAllowed,
     Conflict,
     PayloadTooLarge,
+    RateLimited,
     InternalError,
 }
 
