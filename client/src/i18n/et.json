@@ -52,5 +52,29 @@
     "giveOut": "ANNA",
     "take": "VÕTA",
     "drinks": "JOOKI"
+  },
+  "home": {
+    "tableCaption": "Üks kaardipakk. Neli arvamist.",
+    "eyebrow": "Kes teab, mis kaart järgmisena tuleb?",
+    "title": "Head sõbrad.",
+    "titleAccent": "Halvad pakkumised.",
+    "description": "Klemps on seltskondlik kaardimäng, kus läheb vaja õnne ja pisut julgust. Kutsu sõbrad kokku, arva kaarte ja vaata, kellel veab.",
+    "playGame": "Mängi",
+    "howToPlay": "Kuidas mängida",
+    "note": "Anna ekraan edasi. Proovi õnne.",
+    "rules": {
+      "eyebrow": "Kiire ülevaade",
+      "close": "Sulge reeglid",
+      "intro": "Lisa mängijad, vali raskusaste ja arva kordamööda nelja kaarti.",
+      "rounds": {
+        "RED_BLACK": "Arva, kas sinu esimene kaart on punane või must.",
+        "HIGH_LOW": "Kas teine kaart on esimesest suurem või väiksem?",
+        "INSIDE_OUTSIDE": "Kas kolmas kaart jääb kahe esimese kaardi väärtuste vahele või mitte?",
+        "SUIT": "Arva neljanda kaardi mast: ärtu, ruutu, poti või risti."
+      },
+      "outcome": "Arvasid õigesti? Jaga jooke. Arvasid valesti? Võta ise. Kogus sõltub voorust ja raskusastmest.",
+      "note": "Mängige sõbralikult. Alkohol pole kohustuslik.",
+      "done": "Selge"
+    }
   }
 }
