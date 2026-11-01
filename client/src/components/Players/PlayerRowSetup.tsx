@@ -27,8 +27,8 @@ export function PlayerRowSetup({
     t("players.player") + " " + playerIndex + " " + t("players.name");
 
   return (
-    <div
-      className="secondary-pixel-corners flex min-h-20 w-full bg-black/20"
+    <li
+      className="secondary-pixel-corners flex h-24 w-full shrink-0 snap-start bg-black/20"
       style={
         {
           "--player-color": color.color,
@@ -76,6 +76,6 @@ export function PlayerRowSetup({
       >
         <img src="/icons/arrowRight.svg" alt="" />
       </button>
-    </div>
+    </li>
   );
 }

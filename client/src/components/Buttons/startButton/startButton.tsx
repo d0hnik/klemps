@@ -14,7 +14,7 @@ export function StartButton({ onClick }: Props) {
       type="button"
       style={
         {
-          "--border-color": "var(--color-secondary)",
+          "--border-color": "#86efac",
         } as React.CSSProperties
       }
       onClick={onClick}

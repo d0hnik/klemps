@@ -83,6 +83,8 @@
     "description": "Seadista Klempsi kaardimäng 2–7 mängijale. Lisa mängijad, vali avatarid ja raskusaste ning alusta sõpradega mängimist."
   },
   "setupUi": {
+    "addPlayer": "Lisa mängija",
+    "scrollHint": "Keri, et näha teisi mängijaid",
     "playersHint": "Vali igale mängijale avatar ja lisa nimi.",
     "previousAvatar": "Mängija {{number}} eelmine avatar",
     "nextAvatar": "Mängija {{number}} järgmine avatar",

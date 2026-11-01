@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { PLAYER_AVATARS, type NewPlayerInput } from "../../entities/player";
 import { MainButton } from "../Buttons/MainButton";
 import { Title } from "../Title/Title";
@@ -58,8 +58,8 @@ export function PlayersTabSetup({
       <div className="secondary-pixel-corners bg-black/15 px-2 pt-8 pb-5 sm:px-5">
         <p className="mb-4 text-sm text-cyan-100">{t("setupUi.playersHint")}</p>
 
-        <div className="setup-player-list h-80 overflow-y-auto pr-2">
-          <ol className="relative mb-4 flex flex-col gap-3">
+        <div className="setup-player-list h-76 snap-y snap-mandatory overflow-y-auto">
+          <ol className="relative flex flex-col gap-2">
             {players.map((player, index) => {
               const playerIndex = index + 1;
 
@@ -80,8 +80,24 @@ export function PlayersTabSetup({
                 />
               );
             })}
+            {playerCount < 3 && (
+              <li className="h-24 shrink-0 snap-start">
+                <button
+                  type="button"
+                  onClick={() => onSetPlayerCount(3)}
+                  className="secondary-pixel-corners flex h-full w-full cursor-pointer items-center justify-center gap-3 bg-black/10 text-cyan-200 hover:bg-white/5 focus-visible:bg-white/10"
+                  style={{ "--border-color": "#315459" } as CSSProperties}
+                >
+                  <span aria-hidden="true" className="text-2xl">+</span>
+                  {t("setupUi.addPlayer")}
+                </button>
+              </li>
+            )}
           </ol>
         </div>
+        <p className="h-6 text-center text-xs leading-6 text-cyan-200">
+          {playerCount > 3 ? t("setupUi.scrollHint") : ""}
+        </p>
 
         <span className="mb-2 block text-lg text-white">{t("game.selectPlayers")}: </span>
 
