@@ -1,0 +1,48 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.90.0
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: api -> target
+      - name: Install Typeshare
+        run: cargo install typeshare-cli --version 1.13.4 --locked
+      - name: Check generated API types
+        run: make -C api check-types
+      - name: Check Rust formatting
+        run: cargo fmt --manifest-path api/Cargo.toml --check
+      - name: Lint backend
+        run: cargo clippy --manifest-path api/Cargo.toml --locked --all-targets -- -D warnings
+      - name: Test backend
+        run: cargo test --manifest-path api/Cargo.toml --locked
+      - name: Install frontend dependencies
+        run: npm --prefix client ci
+      - name: Build frontend
+        run: npm --prefix client run build
+      - name: Lint frontend
+        run: npm --prefix client run lint
+      - name: Test frontend
+        run: npm --prefix client test -- --run

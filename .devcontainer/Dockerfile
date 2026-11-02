@@ -11,3 +11,4 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && rustc --version \
     && cargo --version \
     && make --version
+RUN cargo install --root /usr/local typeshare-cli --version 1.13.4 --locked
