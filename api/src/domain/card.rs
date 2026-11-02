@@ -2,7 +2,12 @@
 pub struct Card {
     suit: Suit,
     rank: Rank,
-    is_revealed: bool,
+}
+
+impl Card {
+    pub fn new(suit: Suit, rank: Rank) -> Self {
+        Card { suit, rank }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

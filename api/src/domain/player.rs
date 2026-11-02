@@ -1,12 +1,18 @@
-use uuid::Uuid;
+use crate::domain::{
+    card::Card,
+    ids::{GuestId, UserId},
+};
 
-use crate::domain::card::Card;
+#[derive()]
+pub enum PlayerIdentity {
+    Guest(GuestId),
+    User(UserId),
+}
 
-pub struct Player {
-    id: Uuid,
+pub struct GamePlayer {
+    identity: PlayerIdentity,
     name: String,
-    drinksGiven: u8,
-    drinksTaken: u8,
-    avatarSrc: String,
     hand: Vec<Card>,
+    drinks_given: u16,
+    drinks_taken: u16,
 }
