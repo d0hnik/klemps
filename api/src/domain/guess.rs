@@ -1,6 +1,6 @@
 use crate::domain::card::Card;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub enum ColorGuess {
     Red,
     Black,
@@ -32,7 +32,7 @@ mod tests {
             let card = Card::new(suit, Rank::Ace);
 
             assert_eq!(
-                guess_color(guess, card),
+                guess_color(guess.clone(), card),
                 expected,
                 "Failed for suit {:?} and guess {:?}",
                 suit,
