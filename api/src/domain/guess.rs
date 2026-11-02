@@ -6,14 +6,43 @@ pub enum HigherLowerGuess {
     Lower,
 }
 
+#[derive(PartialEq, Debug, Clone, Copy, Eq)]
+pub enum InsideOutsideGuess {
+    Inside,
+    Outside,
+}
+
 pub fn guess_color(guess: CardColor, card: Card) -> bool {
     guess == card.suit().color()
 }
 
-pub fn guess_higher_lower(guess: HigherLowerGuess, first_card: Card, second_card: Card) -> bool {
+pub fn guess_higher_lower(
+    guess: HigherLowerGuess,
+    previous_card: Card,
+    current_card: Card,
+) -> bool {
     match guess {
-        HigherLowerGuess::Higher => first_card.rank().value() < second_card.rank().value(),
-        HigherLowerGuess::Lower => first_card.rank().value() > second_card.rank().value(),
+        HigherLowerGuess::Higher => previous_card.rank().value() < current_card.rank().value(),
+        HigherLowerGuess::Lower => previous_card.rank().value() > current_card.rank().value(),
+    }
+}
+
+pub fn guess_inside_outside(
+    guess: InsideOutsideGuess,
+    first_card: Card,
+    second_card: Card,
+    current_card: Card,
+) -> bool {
+    let min_rank = first_card.rank().value().min(second_card.rank().value());
+    let max_rank = first_card.rank().value().max(second_card.rank().value());
+
+    let current_rank = current_card.rank().value();
+
+    let is_inside = current_rank >= min_rank && current_rank <= max_rank;
+
+    match guess {
+        InsideOutsideGuess::Inside => is_inside,
+        InsideOutsideGuess::Outside => !is_inside,
     }
 }
 
@@ -122,5 +151,69 @@ mod tests {
 
         assert!(!guess_higher_lower(HigherLowerGuess::Higher, ace, king));
         assert!(!guess_higher_lower(HigherLowerGuess::Lower, king, ace));
+    }
+
+    #[test]
+    fn inside_outside_all_combinations() {
+        let cases = [
+            (Rank::Five, Rank::Ten, Rank::Seven, true, false),
+            (Rank::Five, Rank::Ten, Rank::Two, false, true),
+            (Rank::Five, Rank::Ten, Rank::King, false, true),
+            (Rank::Five, Rank::Ten, Rank::Five, true, false),
+            (Rank::Five, Rank::Ten, Rank::Ten, true, false),
+            (Rank::Ten, Rank::Five, Rank::Seven, true, false),
+            (Rank::Ten, Rank::Five, Rank::Two, false, true),
+            (Rank::Seven, Rank::Seven, Rank::Seven, true, false),
+            (Rank::Seven, Rank::Seven, Rank::Six, false, true),
+            (Rank::Seven, Rank::Seven, Rank::Eight, false, true),
+            (Rank::Two, Rank::Ace, Rank::King, true, false),
+            (Rank::Two, Rank::Ace, Rank::Ace, true, false),
+        ];
+
+        for (first, second, current, expected_inside, expected_outside) in cases {
+            let first_card = card(first, Suit::Club);
+            let second_card = card(second, Suit::Club);
+            let current_card = card(current, Suit::Club);
+
+            for (guess, expected) in [
+                (InsideOutsideGuess::Inside, expected_inside),
+                (InsideOutsideGuess::Outside, expected_outside),
+            ] {
+                assert_eq!(
+                    guess_inside_outside(guess, first_card, second_card, current_card),
+                    expected,
+                    "Failed for {:?}, {:?}, {:?}, guess {:?}",
+                    first,
+                    second,
+                    current,
+                    guess
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn suits_do_not_affect_result() {
+        let suits = [Suit::Heart, Suit::Diamond, Suit::Club, Suit::Spade];
+
+        for suit in suits {
+            let first = Card::new(suit, Rank::Five);
+            let second = Card::new(suit, Rank::Ten);
+            let current = Card::new(suit, Rank::Seven);
+
+            assert!(guess_inside_outside(
+                InsideOutsideGuess::Inside,
+                first,
+                second,
+                current,
+            ));
+
+            assert!(!guess_inside_outside(
+                InsideOutsideGuess::Outside,
+                first,
+                second,
+                current,
+            ));
+        }
     }
 }
