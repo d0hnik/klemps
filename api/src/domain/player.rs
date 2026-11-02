@@ -11,8 +11,8 @@ pub enum PlayerIdentity {
 
 pub struct GamePlayer {
     identity: PlayerIdentity,
-    name: String,
-    hand: Vec<Card>,
-    drinks_given: u16,
-    drinks_taken: u16,
+    pub name: String,
+    pub hand: Vec<Card>,
+    pub drinks_given: u16,
+    pub drinks_taken: u16,
 }

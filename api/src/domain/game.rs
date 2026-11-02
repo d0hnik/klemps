@@ -5,10 +5,10 @@ use crate::domain::{
 
 pub struct Game {
     id: GameId,
-    players: Vec<GamePlayer>,
+    pub players: Vec<GamePlayer>,
     deck: Deck,
     difficulty: Difficulty,
-    current_player_index: u8,
+    pub current_player_index: usize,
     current_round_type: RoundType,
     game_state: GameState,
 }

@@ -1,4 +1,21 @@
-use crate::domain::card::{Card, CardColor, Suit};
+use crate::domain::{
+    card::{Card, CardColor, Suit},
+    game::Game,
+};
+
+#[derive(PartialEq, Debug, Clone, Copy, Eq)]
+pub enum Guess {
+    Color(CardColor),
+    HigherLower(HigherLowerGuess),
+    InsideOutside(InsideOutsideGuess),
+    Suit(Suit),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum GuessError {
+    PlayerNotFound,
+    MissingReferenceCards,
+}
 
 #[derive(PartialEq, Debug, Clone, Copy, Eq)]
 pub enum HigherLowerGuess {
@@ -12,26 +29,55 @@ pub enum InsideOutsideGuess {
     Outside,
 }
 
-pub fn guess_color(guess: CardColor, card: Card) -> bool {
+pub fn evaluate_guess(guess: Guess, game: &Game) -> Result<bool, GuessError> {
+    let current_player = game.players.get(game.current_player_index);
+
+    if let Some(current_player) = current_player {
+        let first_card = get_nth_card(0, &current_player.hand)?;
+        let second_card = get_nth_card(1, &current_player.hand)?;
+        let third_card = get_nth_card(2, &current_player.hand)?;
+        let fourth_card = get_nth_card(3, &current_player.hand)?;
+
+        return match guess {
+            Guess::Color(guess) => Ok(guess_color(guess, first_card)),
+            Guess::HigherLower(guess) => Ok(guess_higher_lower(guess, first_card, second_card)),
+            Guess::InsideOutside(guess) => Ok(guess_inside_outside(
+                guess,
+                first_card,
+                second_card,
+                third_card,
+            )),
+            Guess::Suit(guess) => Ok(guess_suit(guess, fourth_card)),
+        };
+    }
+
+    Err(GuessError::PlayerNotFound)
+}
+
+fn get_nth_card(index: usize, player_deck: &[Card]) -> Result<&Card, GuessError> {
+    let optional_card = player_deck.get(index);
+    if let Some(card) = optional_card {
+        return Ok(card);
+    }
+    Err(GuessError::MissingReferenceCards)
+}
+
+fn guess_color(guess: CardColor, card: &Card) -> bool {
     guess == card.suit().color()
 }
 
-pub fn guess_higher_lower(
-    guess: HigherLowerGuess,
-    previous_card: Card,
-    current_card: Card,
-) -> bool {
+fn guess_higher_lower(guess: HigherLowerGuess, previous_card: &Card, current_card: &Card) -> bool {
     match guess {
         HigherLowerGuess::Higher => previous_card.rank().value() < current_card.rank().value(),
         HigherLowerGuess::Lower => previous_card.rank().value() > current_card.rank().value(),
     }
 }
 
-pub fn guess_inside_outside(
+fn guess_inside_outside(
     guess: InsideOutsideGuess,
-    first_card: Card,
-    second_card: Card,
-    current_card: Card,
+    first_card: &Card,
+    second_card: &Card,
+    current_card: &Card,
 ) -> bool {
     let min_rank = first_card.rank().value().min(second_card.rank().value());
     let max_rank = first_card.rank().value().max(second_card.rank().value());
@@ -46,7 +92,7 @@ pub fn guess_inside_outside(
     }
 }
 
-pub fn guess_suit(guess: Suit, card: Card) -> bool {
+fn guess_suit(guess: Suit, card: &Card) -> bool {
     guess == card.suit()
 }
 
@@ -78,7 +124,7 @@ mod tests {
             let card = Card::new(suit, Rank::Ace);
 
             assert_eq!(
-                guess_color(guess, card),
+                guess_color(guess, &card),
                 expected,
                 "Failed for suit {:?} and guess {:?}",
                 suit,
@@ -102,7 +148,7 @@ mod tests {
             let second = card(rank, Suit::Spade);
 
             assert_eq!(
-                guess_higher_lower(HigherLowerGuess::Higher, first, second),
+                guess_higher_lower(HigherLowerGuess::Higher, &first, &second),
                 expected,
                 "Higher guess failed for {:?} -> {:?}",
                 first.rank(),
@@ -126,7 +172,7 @@ mod tests {
             let second = card(rank, Suit::Spade);
 
             assert_eq!(
-                guess_higher_lower(HigherLowerGuess::Lower, first, second),
+                guess_higher_lower(HigherLowerGuess::Lower, &first, &second),
                 expected,
                 "Lower guess failed for {:?} -> {:?}",
                 first.rank(),
@@ -141,7 +187,7 @@ mod tests {
         let second = card(Rank::Seven, Suit::Club);
 
         for guess in [HigherLowerGuess::Higher, HigherLowerGuess::Lower] {
-            assert!(!guess_higher_lower(guess, first, second));
+            assert!(!guess_higher_lower(guess, &first, &second));
         }
     }
 
@@ -151,12 +197,12 @@ mod tests {
         let king = card(Rank::King, Suit::Heart);
         let two = card(Rank::Two, Suit::Diamond);
 
-        assert!(guess_higher_lower(HigherLowerGuess::Higher, king, ace));
-        assert!(guess_higher_lower(HigherLowerGuess::Lower, ace, king));
-        assert!(guess_higher_lower(HigherLowerGuess::Higher, two, ace));
+        assert!(guess_higher_lower(HigherLowerGuess::Higher, &king, &ace));
+        assert!(guess_higher_lower(HigherLowerGuess::Lower, &ace, &king));
+        assert!(guess_higher_lower(HigherLowerGuess::Higher, &two, &ace));
 
-        assert!(!guess_higher_lower(HigherLowerGuess::Higher, ace, king));
-        assert!(!guess_higher_lower(HigherLowerGuess::Lower, king, ace));
+        assert!(!guess_higher_lower(HigherLowerGuess::Higher, &ace, &king));
+        assert!(!guess_higher_lower(HigherLowerGuess::Lower, &king, &ace));
     }
 
     #[test]
@@ -186,7 +232,7 @@ mod tests {
                 (InsideOutsideGuess::Outside, expected_outside),
             ] {
                 assert_eq!(
-                    guess_inside_outside(guess, first_card, second_card, current_card),
+                    guess_inside_outside(guess, &first_card, &second_card, &current_card),
                     expected,
                     "Failed for {:?}, {:?}, {:?}, guess {:?}",
                     first,
@@ -209,16 +255,16 @@ mod tests {
 
             assert!(guess_inside_outside(
                 InsideOutsideGuess::Inside,
-                first,
-                second,
-                current,
+                &first,
+                &second,
+                &current,
             ));
 
             assert!(!guess_inside_outside(
                 InsideOutsideGuess::Outside,
-                first,
-                second,
-                current,
+                &first,
+                &second,
+                &current,
             ));
         }
     }
@@ -231,7 +277,7 @@ mod tests {
                 let expected = guess == card_suit;
 
                 assert_eq!(
-                    guess_suit(guess, card),
+                    guess_suit(guess, &card),
                     expected,
                     "Failed for card suit {:?} and guess {:?}",
                     card_suit,
