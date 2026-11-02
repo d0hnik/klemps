@@ -1,6 +1,5 @@
 use crate::domain::{
     card::{Card, CardColor, Suit},
-    game::Game,
     round_type::RoundType,
 };
 
@@ -14,7 +13,6 @@ pub enum Guess {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GuessError {
-    PlayerNotFound,
     MissingReferenceCards,
     WrongGuessForRound,
 }
@@ -37,7 +35,7 @@ pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<
     let third_card = get_nth_card(2, hand)?;
     let fourth_card = get_nth_card(3, hand)?;
 
-    return match guess {
+    match guess {
         Guess::Color(guess) => {
             if round != &RoundType::RedOrBlack {
                 return Err(GuessError::WrongGuessForRound);
@@ -67,7 +65,7 @@ pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<
             }
             Ok(guess_suit(guess, fourth_card))
         }
-    };
+    }
 }
 
 fn get_nth_card(index: usize, player_deck: &[Card]) -> Result<&Card, GuessError> {
@@ -121,6 +119,15 @@ mod tests {
 
     fn card(rank: Rank, suit: Suit) -> Card {
         Card::new(suit, rank)
+    }
+
+    fn hand() -> Vec<Card> {
+        return vec![
+            Card::new(Suit::Heart, Rank::Five),
+            Card::new(Suit::Spade, Rank::Ten),
+            Card::new(Suit::Diamond, Rank::Seven),
+            Card::new(Suit::Club, Rank::Ace),
+        ];
     }
 
     #[test]
@@ -300,6 +307,122 @@ mod tests {
                     guess
                 );
             }
+        }
+    }
+
+    #[test]
+    fn evaluates_valid_guesses() {
+        let hand = hand();
+
+        let cases = [
+            (RoundType::RedOrBlack, Guess::Color(CardColor::Red), true),
+            (RoundType::RedOrBlack, Guess::Color(CardColor::Black), false),
+            (
+                RoundType::HigherLower,
+                Guess::HigherLower(HigherLowerGuess::Higher),
+                true,
+            ),
+            (
+                RoundType::HigherLower,
+                Guess::HigherLower(HigherLowerGuess::Lower),
+                false,
+            ),
+            (
+                RoundType::InsideOutside,
+                Guess::InsideOutside(InsideOutsideGuess::Inside),
+                true,
+            ),
+            (
+                RoundType::InsideOutside,
+                Guess::InsideOutside(InsideOutsideGuess::Outside),
+                false,
+            ),
+            (RoundType::Suit, Guess::Suit(Suit::Club), true),
+            (RoundType::Suit, Guess::Suit(Suit::Heart), false),
+        ];
+
+        for (round, guess, expected) in cases {
+            let result = evaluate_guess(&round, guess, &hand);
+
+            assert!(
+                matches!(result, Ok(value) if value == expected),
+                "Unexpected result for round {:?}: {:?}",
+                round,
+                result
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_wrong_guess_for_round() {
+        let hand = hand();
+
+        let rounds = [
+            RoundType::RedOrBlack,
+            RoundType::HigherLower,
+            RoundType::InsideOutside,
+            RoundType::Suit,
+        ];
+
+        for round in rounds {
+            let guesses = [
+                (RoundType::RedOrBlack, Guess::Color(CardColor::Red)),
+                (
+                    RoundType::HigherLower,
+                    Guess::HigherLower(HigherLowerGuess::Higher),
+                ),
+                (
+                    RoundType::InsideOutside,
+                    Guess::InsideOutside(InsideOutsideGuess::Inside),
+                ),
+                (RoundType::Suit, Guess::Suit(Suit::Heart)),
+            ];
+
+            for (expected_round, guess) in guesses {
+                if round == expected_round {
+                    continue;
+                }
+
+                let result = evaluate_guess(&round, guess, &hand);
+
+                assert!(
+                    matches!(result, Err(GuessError::WrongGuessForRound)),
+                    "Expected WrongGuessForRound, got {:?}",
+                    result
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn returns_error_when_cards_are_missing() {
+        let full_hand = hand();
+
+        let cases = [
+            (RoundType::RedOrBlack, Guess::Color(CardColor::Red), 0),
+            (
+                RoundType::HigherLower,
+                Guess::HigherLower(HigherLowerGuess::Higher),
+                1,
+            ),
+            (
+                RoundType::InsideOutside,
+                Guess::InsideOutside(InsideOutsideGuess::Inside),
+                2,
+            ),
+            (RoundType::Suit, Guess::Suit(Suit::Club), 3),
+        ];
+
+        for (round, guess, available_cards) in cases {
+            let partial_hand = &full_hand[..available_cards];
+
+            let result = evaluate_guess(&round, guess, partial_hand);
+
+            assert!(
+                matches!(result, Err(GuessError::MissingReferenceCards)),
+                "Expected MissingReferenceCards, got {:?}",
+                result
+            );
         }
     }
 }
