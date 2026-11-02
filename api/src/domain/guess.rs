@@ -52,6 +52,8 @@ pub fn guess_suit(guess: Suit, card: Card) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use strum::IntoEnumIterator;
+
     use super::*;
     use crate::domain::card::{Rank, Suit};
 
