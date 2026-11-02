@@ -1,4 +1,4 @@
-use crate::domain::card::{Card, CardColor};
+use crate::domain::card::{Card, CardColor, Suit};
 
 #[derive(PartialEq, Debug, Clone, Copy, Eq)]
 pub enum HigherLowerGuess {
@@ -44,6 +44,10 @@ pub fn guess_inside_outside(
         InsideOutsideGuess::Inside => is_inside,
         InsideOutsideGuess::Outside => !is_inside,
     }
+}
+
+pub fn guess_suit(guess: Suit, card: Card) -> bool {
+    guess == card.suit()
 }
 
 #[cfg(test)]
@@ -214,6 +218,24 @@ mod tests {
                 second,
                 current,
             ));
+        }
+    }
+
+    #[test]
+    fn guess_suit_all_combinations() {
+        for card_suit in Suit::iter() {
+            for guess in Suit::iter() {
+                let card = Card::new(card_suit, Rank::Ace);
+                let expected = guess == card_suit;
+
+                assert_eq!(
+                    guess_suit(guess, card),
+                    expected,
+                    "Failed for card suit {:?} and guess {:?}",
+                    card_suit,
+                    guess
+                );
+            }
         }
     }
 }
