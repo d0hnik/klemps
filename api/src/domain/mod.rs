@@ -3,6 +3,7 @@ pub mod deck;
 pub mod difficulty;
 pub mod game;
 pub mod game_state;
+pub mod guess;
 pub mod health;
 pub mod ids;
 pub mod player;
