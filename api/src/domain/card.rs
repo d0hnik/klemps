@@ -1,7 +1,5 @@
 use strum::EnumIter;
 
-use crate::domain::guess::ColorGuess;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Card {
     suit: Suit,
@@ -31,10 +29,10 @@ pub enum Suit {
 }
 
 impl Suit {
-    pub fn color(&self) -> ColorGuess {
+    pub fn color(&self) -> CardColor {
         match self {
-            Suit::Spade | Suit::Club => ColorGuess::Black,
-            Suit::Diamond | Suit::Heart => ColorGuess::Red,
+            Suit::Spade | Suit::Club => CardColor::Black,
+            Suit::Diamond | Suit::Heart => CardColor::Red,
         }
     }
 }
@@ -61,4 +59,10 @@ impl Rank {
     pub fn value(self) -> u8 {
         self as u8
     }
+}
+
+#[derive(PartialEq, Debug, Clone, Copy, Eq)]
+pub enum CardColor {
+    Red,
+    Black,
 }
