@@ -1,12 +1,10 @@
-use uuid::Uuid;
-
 use crate::domain::{
-    card::Card, difficulty::Difficulty, game_state::GameState, player::GamePlayer,
+    card::Card, difficulty::Difficulty, game_state::GameState, ids::GameId, player::GamePlayer,
     round_type::RoundType,
 };
 
 pub struct Game {
-    id: Uuid,
+    id: GameId,
     players: Vec<GamePlayer>,
     deck: Vec<Card>,
     difficulty: Difficulty,

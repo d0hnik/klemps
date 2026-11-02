@@ -3,7 +3,7 @@ use crate::domain::{
     ids::{GuestId, UserId},
 };
 
-#[derive()]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PlayerIdentity {
     Guest(GuestId),
     User(UserId),

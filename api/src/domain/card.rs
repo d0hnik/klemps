@@ -8,6 +8,14 @@ impl Card {
     pub fn new(suit: Suit, rank: Rank) -> Self {
         Card { suit, rank }
     }
+
+    pub fn rank(&self) -> Rank {
+        self.rank
+    }
+
+    pub fn suit(&self) -> Suit {
+        self.suit
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
