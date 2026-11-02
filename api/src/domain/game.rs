@@ -5,10 +5,24 @@ use crate::domain::{
 
 pub struct Game {
     id: GameId,
-    pub players: Vec<GamePlayer>,
+    players: Vec<GamePlayer>,
     deck: Deck,
     difficulty: Difficulty,
-    pub current_player_index: usize,
+    current_player_index: usize,
     current_round_type: RoundType,
     game_state: GameState,
+}
+
+impl Game {
+    pub fn get_players(&self) -> &[GamePlayer] {
+        &self.players
+    }
+
+    pub fn get_current_player_index(&self) -> &usize {
+        &self.current_player_index
+    }
+
+    pub fn get_current_round_type(&self) -> &RoundType {
+        &self.current_round_type
+    }
 }

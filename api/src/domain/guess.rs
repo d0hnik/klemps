@@ -1,6 +1,7 @@
 use crate::domain::{
     card::{Card, CardColor, Suit},
     game::Game,
+    round_type::RoundType,
 };
 
 #[derive(PartialEq, Debug, Clone, Copy, Eq)]
@@ -15,6 +16,7 @@ pub enum Guess {
 pub enum GuessError {
     PlayerNotFound,
     MissingReferenceCards,
+    WrongGuessForRound,
 }
 
 #[derive(PartialEq, Debug, Clone, Copy, Eq)]
@@ -29,29 +31,43 @@ pub enum InsideOutsideGuess {
     Outside,
 }
 
-pub fn evaluate_guess(guess: Guess, game: &Game) -> Result<bool, GuessError> {
-    let current_player = game.players.get(game.current_player_index);
+pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<bool, GuessError> {
+    let first_card = get_nth_card(0, hand)?;
+    let second_card = get_nth_card(1, hand)?;
+    let third_card = get_nth_card(2, hand)?;
+    let fourth_card = get_nth_card(3, hand)?;
 
-    if let Some(current_player) = current_player {
-        let first_card = get_nth_card(0, &current_player.hand)?;
-        let second_card = get_nth_card(1, &current_player.hand)?;
-        let third_card = get_nth_card(2, &current_player.hand)?;
-        let fourth_card = get_nth_card(3, &current_player.hand)?;
-
-        return match guess {
-            Guess::Color(guess) => Ok(guess_color(guess, first_card)),
-            Guess::HigherLower(guess) => Ok(guess_higher_lower(guess, first_card, second_card)),
-            Guess::InsideOutside(guess) => Ok(guess_inside_outside(
+    return match guess {
+        Guess::Color(guess) => {
+            if round != &RoundType::RedOrBlack {
+                return Err(GuessError::WrongGuessForRound);
+            }
+            Ok(guess_color(guess, first_card))
+        }
+        Guess::HigherLower(guess) => {
+            if round != &RoundType::HigherLower {
+                return Err(GuessError::WrongGuessForRound);
+            }
+            Ok(guess_higher_lower(guess, first_card, second_card))
+        }
+        Guess::InsideOutside(guess) => {
+            if round != &RoundType::InsideOutside {
+                return Err(GuessError::WrongGuessForRound);
+            }
+            Ok(guess_inside_outside(
                 guess,
                 first_card,
                 second_card,
                 third_card,
-            )),
-            Guess::Suit(guess) => Ok(guess_suit(guess, fourth_card)),
-        };
-    }
-
-    Err(GuessError::PlayerNotFound)
+            ))
+        }
+        Guess::Suit(guess) => {
+            if round != &RoundType::Suit {
+                return Err(GuessError::WrongGuessForRound);
+            }
+            Ok(guess_suit(guess, fourth_card))
+        }
+    };
 }
 
 fn get_nth_card(index: usize, player_deck: &[Card]) -> Result<&Card, GuessError> {
