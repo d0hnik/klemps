@@ -2,6 +2,7 @@
 pub struct Card {
     suit: Suit,
     rank: Rank,
+    is_revealed: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
