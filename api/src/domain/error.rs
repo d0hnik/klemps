@@ -6,4 +6,6 @@ pub enum GameError {
     InvalidPlayerCount,
     NoMoreCards,
     InvalidGameStateToStartGame,
+    NotInLobby,
+    DuplicatePlayer,
 }

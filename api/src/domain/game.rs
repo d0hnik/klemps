@@ -16,14 +16,9 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(id: GameId, difficulty: Difficulty, rng: Option<&mut impl Rng>) -> Self {
-        let deck = if let Some(rng) = rng {
-            let mut deck = Deck::new();
-            deck.shuffle(rng);
-            deck
-        } else {
-            Deck::new_shuffled()
-        };
+    pub fn new(id: GameId, difficulty: Difficulty, rng: &mut impl Rng) -> Self {
+        let mut deck = Deck::new();
+        deck.shuffle(rng);
 
         Game {
             id,
@@ -37,6 +32,19 @@ impl Game {
     }
 
     pub fn add_player(&mut self, player: GamePlayer) -> Result<(), GameError> {
+        if self.game_state != GameState::Lobby {
+            return Err(GameError::NotInLobby);
+        }
+
+        let already_joined = self
+            .players
+            .iter()
+            .any(|existing| existing.identity() == player.identity());
+
+        if already_joined {
+            return Err(GameError::DuplicatePlayer);
+        }
+
         if self.players.len() >= MAX_PLAYERS {
             return Err(GameError::TooManyPlayers);
         }

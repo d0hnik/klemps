@@ -32,4 +32,8 @@ impl GamePlayer {
     pub fn set_hand(&mut self, hand: Vec<Card>) {
         self.hand = hand
     }
+
+    pub fn identity(&self) -> PlayerIdentity {
+        self.identity
+    }
 }
