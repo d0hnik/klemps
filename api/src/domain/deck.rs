@@ -57,6 +57,10 @@ impl Deck {
 
         Ok(hand)
     }
+
+    pub fn cards(&self) -> &[Card] {
+        &self.cards
+    }
 }
 
 impl Default for Deck {

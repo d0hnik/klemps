@@ -1,4 +1,4 @@
-.PHONY: run-api run-frontend build-api check-api test-api lint-api fmt-check-api types check-types
+.PHONY: run-api run-frontend build-api check-api test-api lint-api fmt-check-api types check-types test
 
 # Relative to api/, matching the build script's frontend path setting.
 KLEMPS_FRONTEND_DIR ?= ../client
@@ -8,6 +8,9 @@ run-api:
 
 run-frontend:
 	npm --prefix client run dev -- --host 0.0.0.0 --port 5173 --strictPort
+
+test:
+	make test-api
 
 test-api:
 	cargo test --manifest-path api/Cargo.toml --locked

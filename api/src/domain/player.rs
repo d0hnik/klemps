@@ -36,4 +36,8 @@ impl GamePlayer {
     pub fn identity(&self) -> PlayerIdentity {
         self.identity
     }
+
+    pub fn hand(&self) -> &[Card] {
+        &self.hand
+    }
 }
