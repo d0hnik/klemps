@@ -56,6 +56,8 @@ impl Game {
 
         self.deal_hands_to_players()?;
 
+        self.game_state = GameState::GameInProgress;
+
         Ok(())
     }
 
