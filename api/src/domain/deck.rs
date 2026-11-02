@@ -1,8 +1,12 @@
 use rand::{Rng, seq::SliceRandom};
 use strum::IntoEnumIterator;
 
-use crate::domain::card::{Card, Rank, Suit};
+use crate::domain::{
+    card::{Card, Rank, Suit},
+    error::GameError,
+};
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Deck {
     cards: Vec<Card>,
 }
@@ -30,8 +34,28 @@ impl Deck {
         self.cards.shuffle(rng);
     }
 
-    pub fn draw(&mut self) -> Option<Card> {
-        self.cards.pop()
+    pub fn draw(&mut self) -> Result<Card, GameError> {
+        let card = self.cards.pop();
+
+        if let Some(card) = card {
+            return Ok(card);
+        } else {
+            return Err(GameError::NoMoreCards);
+        }
+    }
+
+    pub fn draw_hand(&mut self) -> Result<Vec<Card>, GameError> {
+        if self.cards.len() < 4 {
+            return Err(GameError::NoMoreCards);
+        }
+
+        let mut hand = Vec::with_capacity(4);
+
+        for _ in 0..4 {
+            hand.push(self.draw()?);
+        }
+
+        Ok(hand)
     }
 }
 
@@ -78,7 +102,7 @@ mod tests {
 
         let card = deck.draw();
 
-        assert!(card.is_some());
+        assert!(card.is_ok());
         assert_eq!(deck.cards.len(), 51);
     }
 
@@ -103,10 +127,10 @@ mod tests {
         let mut deck = Deck::new();
 
         for _ in 0..52 {
-            deck.draw();
+            let _ = deck.draw();
         }
 
-        assert!(deck.draw().is_none());
+        assert!(deck.draw().is_err());
         assert!(deck.cards.is_empty());
     }
 
@@ -120,8 +144,8 @@ mod tests {
         for _ in 0..52 {
             assert_eq!(first.draw(), second.draw());
         }
-        assert!(first.draw().is_none());
-        assert!(second.draw().is_none());
+        assert!(first.draw().is_err());
+        assert!(second.draw().is_err());
     }
 
     #[test]

@@ -1,5 +1,6 @@
 use crate::domain::{
     card::{Card, CardColor, Suit},
+    error::GameError,
     round_type::RoundType,
 };
 
@@ -9,12 +10,6 @@ pub enum Guess {
     HigherLower(HigherLowerGuess),
     InsideOutside(InsideOutsideGuess),
     Suit(Suit),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum GuessError {
-    MissingReferenceCards,
-    WrongGuessForRound,
 }
 
 #[derive(PartialEq, Debug, Clone, Copy, Eq)]
@@ -29,7 +24,7 @@ pub enum InsideOutsideGuess {
     Outside,
 }
 
-pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<bool, GuessError> {
+pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<bool, GameError> {
     let first_card = get_nth_card(0, hand)?;
     let second_card = get_nth_card(1, hand)?;
     let third_card = get_nth_card(2, hand)?;
@@ -38,19 +33,19 @@ pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<
     match guess {
         Guess::Color(guess) => {
             if round != &RoundType::RedOrBlack {
-                return Err(GuessError::WrongGuessForRound);
+                return Err(GameError::WrongGuessForRound);
             }
             Ok(guess_color(guess, first_card))
         }
         Guess::HigherLower(guess) => {
             if round != &RoundType::HigherLower {
-                return Err(GuessError::WrongGuessForRound);
+                return Err(GameError::WrongGuessForRound);
             }
             Ok(guess_higher_lower(guess, first_card, second_card))
         }
         Guess::InsideOutside(guess) => {
             if round != &RoundType::InsideOutside {
-                return Err(GuessError::WrongGuessForRound);
+                return Err(GameError::WrongGuessForRound);
             }
             Ok(guess_inside_outside(
                 guess,
@@ -61,19 +56,19 @@ pub fn evaluate_guess(round: &RoundType, guess: Guess, hand: &[Card]) -> Result<
         }
         Guess::Suit(guess) => {
             if round != &RoundType::Suit {
-                return Err(GuessError::WrongGuessForRound);
+                return Err(GameError::WrongGuessForRound);
             }
             Ok(guess_suit(guess, fourth_card))
         }
     }
 }
 
-fn get_nth_card(index: usize, player_deck: &[Card]) -> Result<&Card, GuessError> {
+fn get_nth_card(index: usize, player_deck: &[Card]) -> Result<&Card, GameError> {
     let optional_card = player_deck.get(index);
     if let Some(card) = optional_card {
         return Ok(card);
     }
-    Err(GuessError::MissingReferenceCards)
+    Err(GameError::MissingReferenceCards)
 }
 
 fn guess_color(guess: CardColor, card: &Card) -> bool {
@@ -386,7 +381,7 @@ mod tests {
                 let result = evaluate_guess(&round, guess, &hand);
 
                 assert!(
-                    matches!(result, Err(GuessError::WrongGuessForRound)),
+                    matches!(result, Err(GameError::WrongGuessForRound)),
                     "Expected WrongGuessForRound, got {:?}",
                     result
                 );
@@ -419,7 +414,7 @@ mod tests {
             let result = evaluate_guess(&round, guess, partial_hand);
 
             assert!(
-                matches!(result, Err(GuessError::MissingReferenceCards)),
+                matches!(result, Err(GameError::MissingReferenceCards)),
                 "Expected MissingReferenceCards, got {:?}",
                 result
             );

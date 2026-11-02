@@ -9,6 +9,7 @@ pub enum PlayerIdentity {
     User(UserId),
 }
 
+#[derive(PartialEq, Debug, Clone, Eq)]
 pub struct GamePlayer {
     identity: PlayerIdentity,
     name: String,
@@ -26,5 +27,9 @@ impl GamePlayer {
             drinks_given: 0,
             drinks_taken: 0,
         }
+    }
+
+    pub fn set_hand(&mut self, hand: Vec<Card>) {
+        self.hand = hand
     }
 }
