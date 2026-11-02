@@ -1,3 +1,5 @@
+use strum::EnumIter;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Card {
     suit: Suit,
@@ -18,7 +20,7 @@ impl Card {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 pub enum Suit {
     Spade,
     Club,
@@ -26,7 +28,7 @@ pub enum Suit {
     Diamond,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter)]
 #[repr(u8)]
 pub enum Rank {
     Two = 2,

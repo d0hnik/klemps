@@ -1,4 +1,5 @@
 pub mod card;
+pub mod deck;
 pub mod difficulty;
 pub mod game;
 pub mod game_state;
