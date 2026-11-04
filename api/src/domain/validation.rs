@@ -61,6 +61,10 @@ pub fn validate_assign_drinks(
     caller: &PlayerIdentity,
     allocations: &[DrinkAllocation],
 ) -> Result<u16, GameError> {
+    if allocations.is_empty() {
+        return Err(GameError::EmptyAllocations);
+    }
+
     if game.get_game_state() != &GameState::AwaitingDrinkAllocation {
         return Err(GameError::InvalidGameStateToAssignDrinks);
     }

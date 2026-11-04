@@ -575,20 +575,29 @@ mod tests {
         let actor = *game.players[0].identity();
 
         let cases = [
-            (vec![allocation(&game, 1, 3)], "below budget"),
-            (vec![allocation(&game, 1, 5)], "above budget"),
-            (vec![], "empty allocations"),
+            (
+                vec![allocation(&game, 1, 3)],
+                "below budget",
+                GameError::InvalidAllocationTotal,
+            ),
+            (
+                vec![allocation(&game, 1, 5)],
+                "above budget",
+                GameError::InvalidAllocationTotal,
+            ),
+            (vec![], "empty allocations", GameError::EmptyAllocations),
             (
                 vec![allocation(&game, 1, u16::MAX), allocation(&game, 2, 1)],
                 "overflow",
+                GameError::InvalidAllocationTotal,
             ),
         ];
 
-        for (allocations, description) in cases {
+        for (allocations, description, expected_error) in cases {
             let result = game.assign_drinks(actor, &allocations);
 
             assert!(
-                matches!(result, Err(GameError::InvalidAllocationTotal)),
+                matches!(result, Err(expected_error)),
                 "Failed case: {description}, got {result:?}"
             );
         }

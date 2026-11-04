@@ -15,4 +15,5 @@ pub enum GameError {
     DuplicateDrinkAllocation,
     InvalidAllocationTotal,
     CallerInDrinkAllocations,
+    EmptyAllocations,
 }
