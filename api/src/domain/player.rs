@@ -40,4 +40,8 @@ impl GamePlayer {
     pub fn hand(&self) -> &[Card] {
         &self.hand
     }
+
+    pub fn add_drinks_taken(&mut self, amount: u16) {
+        self.drinks_taken += amount;
+    }
 }

@@ -6,8 +6,9 @@ use crate::domain::{
     difficulty::Difficulty,
     error::GameError,
     game_state::GameState,
+    guess::{Guess, evaluate_guess},
     ids::GameId,
-    player::GamePlayer,
+    player::{GamePlayer, PlayerIdentity},
     round_type::RoundType,
 };
 
@@ -35,6 +36,48 @@ impl Game {
             current_round_type: RoundType::RedOrBlack,
             game_state: GameState::Lobby,
         }
+    }
+
+    pub fn get_players(&self) -> &[GamePlayer] {
+        &self.players
+    }
+
+    pub fn get_current_player_index(&self) -> &usize {
+        &self.current_player_index
+    }
+
+    pub fn get_current_round_type(&self) -> &RoundType {
+        &self.current_round_type
+    }
+
+    pub fn deck(&self) -> &Deck {
+        &self.deck
+    }
+
+    pub fn get_drinks_count(&self) -> u16 {
+        self.difficulty
+            .get_drinks_by_round_type(self.get_current_round_type())
+    }
+
+    pub fn get_current_player(&self) -> Result<&GamePlayer, GameError> {
+        self.players
+            .get(self.current_player_index)
+            .ok_or(GameError::PlayerNotFound)
+    }
+
+    fn get_current_player_mut(&mut self) -> Result<&mut GamePlayer, GameError> {
+        self.players
+            .get_mut(self.current_player_index)
+            .ok_or(GameError::PlayerNotFound)
+    }
+
+    fn deal_hands_to_players(&mut self) -> Result<(), GameError> {
+        for player in self.players.iter_mut() {
+            let hand = self.deck.draw_hand()?;
+            player.set_hand(hand);
+        }
+
+        Ok(())
     }
 
     pub fn add_player(&mut self, player: GamePlayer) -> Result<(), GameError> {
@@ -76,29 +119,34 @@ impl Game {
         Ok(())
     }
 
-    fn deal_hands_to_players(&mut self) -> Result<(), GameError> {
-        for player in self.players.iter_mut() {
-            let hand = self.deck.draw_hand()?;
-            player.set_hand(hand);
+    pub fn make_a_guess(
+        &mut self,
+        identity: PlayerIdentity,
+        guess: Guess,
+    ) -> Result<bool, GameError> {
+        if self.game_state != GameState::GameInProgress {
+            return Err(GameError::InvalidGameStateToMakeAGuess);
         }
 
-        Ok(())
-    }
+        let current_player = self.get_current_player()?;
 
-    pub fn get_players(&self) -> &[GamePlayer] {
-        &self.players
-    }
+        if current_player.identity() != identity {
+            return Err(GameError::NotYourTurn);
+        }
 
-    pub fn get_current_player_index(&self) -> &usize {
-        &self.current_player_index
-    }
+        let guess_result =
+            evaluate_guess(self.get_current_round_type(), guess, current_player.hand())?;
 
-    pub fn get_current_round_type(&self) -> &RoundType {
-        &self.current_round_type
-    }
+        if !guess_result {
+            let drinks_count = self.get_drinks_count();
+            let mutable_player = self.get_current_player_mut()?;
 
-    pub fn deck(&self) -> &Deck {
-        &self.deck
+            mutable_player.add_drinks_taken(drinks_count);
+        } else {
+            self.game_state = GameState::AwaitingDrinkAllocation;
+        }
+
+        Ok(guess_result)
     }
 }
 

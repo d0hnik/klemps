@@ -8,4 +8,7 @@ pub enum GameError {
     InvalidGameStateToStartGame,
     NotInLobby,
     DuplicatePlayer,
+    PlayerNotFound,
+    InvalidGameStateToMakeAGuess,
+    NotYourTurn,
 }
