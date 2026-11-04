@@ -55,10 +55,10 @@ by hand. Typeshare emits TypeScript enums, which the frontend compiler allows.
 To regenerate explicitly, including after restoring or deleting the output:
 
 ```sh
-make -C api types
+make types
 ```
 
-`make -C api check-types` regenerates the file and fails if it differs from the
+`make check-types` regenerates the file and fails if it differs from the
 committed version. CI runs this check alongside Rust formatting, Clippy, backend
 tests, and the frontend build, lint, and tests.
 
@@ -71,3 +71,13 @@ cargo install typeshare-cli --version 1.13.4 --locked
 Set `KLEMPS_FRONTEND_DIR` at build time to use another frontend directory, or
 `KLEMPS_SKIP_TS_GENERATION=1` for backend-only builds without the frontend or
 generator. Committed types still need to pass the generation check before merging.
+
+## Backend checks
+
+Run these commands from the repository root using the root Makefile:
+
+```sh
+make test-api
+make fmt-check-api
+make lint-api
+```

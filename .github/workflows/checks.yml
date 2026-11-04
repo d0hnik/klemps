@@ -31,13 +31,13 @@ jobs:
       - name: Install Typeshare
         run: cargo install typeshare-cli --version 1.13.4 --locked
       - name: Check generated API types
-        run: make -C api check-types
+        run: make check-types
       - name: Check Rust formatting
-        run: cargo fmt --manifest-path api/Cargo.toml --check
+        run: make fmt-check-api
       - name: Lint backend
-        run: cargo clippy --manifest-path api/Cargo.toml --locked --all-targets -- -D warnings
+        run: make lint-api
       - name: Test backend
-        run: cargo test --manifest-path api/Cargo.toml --locked
+        run: make test-api
       - name: Install frontend dependencies
         run: npm --prefix client ci
       - name: Build frontend
