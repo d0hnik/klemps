@@ -1,9 +1,6 @@
-use std::collections::HashSet;
-
 use rand::Rng;
 
 use crate::domain::{
-    constants::{MAX_PLAYERS, MIN_PLAYERS},
     deck::Deck,
     difficulty::Difficulty,
     drink_allocation::DrinkAllocation,
@@ -204,6 +201,7 @@ mod tests {
 
     use crate::domain::{
         card::{Card, CardColor},
+        constants::{MAX_PLAYERS, MIN_PLAYERS},
         ids::GuestId,
         player::PlayerIdentity,
     };
