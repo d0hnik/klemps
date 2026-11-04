@@ -42,6 +42,10 @@ impl Game {
         }
     }
 
+    pub fn get_id(&self) -> &GameId {
+        &self.id
+    }
+
     pub fn get_players(&self) -> &[GamePlayer] {
         &self.players
     }
@@ -387,7 +391,7 @@ mod tests {
         let mut game = game_with_players(3);
         game.start().unwrap();
 
-        let identity = game.get_current_player().unwrap().identity().clone();
+        let identity = *game.get_current_player().unwrap().identity();
         let guess = wrong_color_guess(&game);
 
         let result = game.make_a_guess(&identity, guess);
@@ -405,7 +409,7 @@ mod tests {
 
         game.current_player_index = 2;
 
-        let identity = game.get_current_player().unwrap().identity().clone();
+        let identity = *game.get_current_player().unwrap().identity();
         let guess = wrong_color_guess(&game);
 
         let result = game.make_a_guess(&identity, guess);
@@ -459,7 +463,7 @@ mod tests {
         let mut game = game_with_players(2);
         game.start().unwrap();
 
-        let previous_identity = game.get_current_player().unwrap().identity().clone();
+        let previous_identity = *game.get_current_player().unwrap().identity();
         let guess = wrong_color_guess(&game);
 
         assert!(matches!(

@@ -117,12 +117,12 @@ mod tests {
     }
 
     fn hand() -> Vec<Card> {
-        return vec![
+        vec![
             Card::new(Suit::Heart, Rank::Five),
             Card::new(Suit::Spade, Rank::Ten),
             Card::new(Suit::Diamond, Rank::Seven),
             Card::new(Suit::Club, Rank::Ace),
-        ];
+        ]
     }
 
     #[test]
