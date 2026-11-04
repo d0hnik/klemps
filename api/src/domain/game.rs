@@ -597,7 +597,7 @@ mod tests {
             let result = game.assign_drinks(actor, &allocations);
 
             assert!(
-                matches!(result, Err(expected_error)),
+                matches!(result, Err(error) if error == expected_error),
                 "Failed case: {description}, got {result:?}"
             );
         }
