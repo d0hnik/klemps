@@ -6,9 +6,12 @@ pub enum GameError {
     InvalidPlayerCount,
     NoMoreCards,
     InvalidGameStateToStartGame,
+    InvalidGameStateToAssignDrinks,
     NotInLobby,
     DuplicatePlayer,
     PlayerNotFound,
     InvalidGameStateToMakeAGuess,
     NotYourTurn,
+    DuplicateDrinkAllocation,
+    InvalidAllocationTotal,
 }

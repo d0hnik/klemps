@@ -1,23 +1,23 @@
 use serde::Deserialize;
 use typeshare::typeshare;
 
-use crate::{domain::drink_allocation::DrinkAllocation, dto::player::PlayerIdentityDto};
+use crate::{domain::drink_allocation::DrinkAllocation, dto::player::PlayerIdentityDTO};
 
 #[typeshare]
 #[derive(Debug, Deserialize)]
 pub struct AssignDrinksRequest {
-    pub allocations: Vec<DrinkAllocationDto>,
+    pub allocations: Vec<DrinkAllocationDTO>,
 }
 
 #[typeshare]
 #[derive(Debug, Deserialize)]
-pub struct DrinkAllocationDto {
-    pub recipient: PlayerIdentityDto,
+pub struct DrinkAllocationDTO {
+    pub recipient: PlayerIdentityDTO,
     pub amount: u16,
 }
 
-impl From<DrinkAllocationDto> for DrinkAllocation {
-    fn from(value: DrinkAllocationDto) -> Self {
+impl From<DrinkAllocationDTO> for DrinkAllocation {
+    fn from(value: DrinkAllocationDTO) -> Self {
         Self {
             recipient: value.recipient.into(),
             amount: value.amount,

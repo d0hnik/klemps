@@ -1,9 +1,12 @@
+use std::collections::HashSet;
+
 use rand::Rng;
 
 use crate::domain::{
     constants::{MAX_PLAYERS, MIN_PLAYERS},
     deck::Deck,
     difficulty::Difficulty,
+    drink_allocation::DrinkAllocation,
     error::GameError,
     game_state::GameState,
     guess::{Guess, evaluate_guess},
@@ -42,6 +45,10 @@ impl Game {
         &self.players
     }
 
+    pub fn get_players_identities(&self) -> Vec<&PlayerIdentity> {
+        self.get_players().iter().map(|p| p.identity()).collect()
+    }
+
     pub fn get_current_player_index(&self) -> &usize {
         &self.current_player_index
     }
@@ -68,6 +75,13 @@ impl Game {
     fn get_current_player_mut(&mut self) -> Result<&mut GamePlayer, GameError> {
         self.players
             .get_mut(self.current_player_index)
+            .ok_or(GameError::PlayerNotFound)
+    }
+
+    fn get_player_mut(&mut self, identity: &PlayerIdentity) -> Result<&mut GamePlayer, GameError> {
+        self.players
+            .iter_mut()
+            .find(|player| player.identity() == identity)
             .ok_or(GameError::PlayerNotFound)
     }
 
@@ -121,7 +135,7 @@ impl Game {
 
     pub fn make_a_guess(
         &mut self,
-        identity: PlayerIdentity,
+        identity: &PlayerIdentity,
         guess: Guess,
     ) -> Result<bool, GameError> {
         if self.game_state != GameState::GameInProgress {
@@ -170,6 +184,64 @@ impl Game {
         } else {
             self.current_player_index += 1;
         }
+    }
+
+    pub fn assign_drinks(
+        &mut self,
+        actor: PlayerIdentity,
+        allocations: &[DrinkAllocation],
+    ) -> Result<(), GameError> {
+        if self.game_state != GameState::AwaitingDrinkAllocation {
+            return Err(GameError::InvalidGameStateToAssignDrinks);
+        }
+
+        let current_player = self.get_current_player()?;
+
+        if current_player.identity() != &actor {
+            return Err(GameError::NotYourTurn);
+        }
+
+        let all_players_exist = allocations.iter().all(|allocation| {
+            self.players
+                .iter()
+                .any(|player| player.identity() == &allocation.recipient)
+        });
+
+        if !all_players_exist {
+            return Err(GameError::PlayerNotFound);
+        }
+
+        let mut seen = HashSet::new();
+
+        let has_duplicates = allocations
+            .iter()
+            .any(|allocation| !seen.insert(allocation.recipient));
+
+        if has_duplicates {
+            return Err(GameError::DuplicateDrinkAllocation);
+        }
+
+        let sum_of_drinks: u16 = allocations.into_iter().map(|a| a.amount).sum();
+
+        if sum_of_drinks != self.get_drinks_count() {
+            return Err(GameError::InvalidAllocationTotal);
+        }
+
+        let mutable_current_player = self.get_current_player_mut()?;
+
+        mutable_current_player.add_drinks_given(sum_of_drinks);
+
+        for allocation in allocations {
+            let player_mut = self.get_player_mut(&allocation.recipient)?;
+
+            player_mut.add_drinks_taken(allocation.amount);
+        }
+
+        self.game_state = GameState::GameInProgress;
+
+        self.advance_turn();
+
+        Ok(())
     }
 }
 
@@ -352,10 +424,10 @@ mod tests {
         let mut game = game_with_players(3);
         game.start().unwrap();
 
-        let identity = game.get_current_player().unwrap().identity();
+        let identity = game.get_current_player().unwrap().identity().clone();
         let guess = wrong_color_guess(&game);
 
-        let result = game.make_a_guess(identity, guess);
+        let result = game.make_a_guess(&identity, guess);
 
         assert!(matches!(result, Ok(false)));
         assert_eq!(game.current_player_index, 1);
@@ -370,10 +442,10 @@ mod tests {
 
         game.current_player_index = 2;
 
-        let identity = game.get_current_player().unwrap().identity();
+        let identity = game.get_current_player().unwrap().identity().clone();
         let guess = wrong_color_guess(&game);
 
-        let result = game.make_a_guess(identity, guess);
+        let result = game.make_a_guess(&identity, guess);
 
         assert!(matches!(result, Ok(false)));
         assert_eq!(game.current_player_index, 0);
@@ -424,11 +496,11 @@ mod tests {
         let mut game = game_with_players(2);
         game.start().unwrap();
 
-        let previous_identity = game.get_current_player().unwrap().identity();
+        let previous_identity = game.get_current_player().unwrap().identity().clone();
         let guess = wrong_color_guess(&game);
 
         assert!(matches!(
-            game.make_a_guess(previous_identity, guess),
+            game.make_a_guess(&previous_identity, guess),
             Ok(false)
         ));
 
@@ -436,7 +508,7 @@ mod tests {
 
         let drinks_before = game.players[0].drinks_taken();
 
-        let result = game.make_a_guess(previous_identity, Guess::Color(CardColor::Red));
+        let result = game.make_a_guess(&previous_identity, Guess::Color(CardColor::Red));
 
         assert!(matches!(result, Err(GameError::NotYourTurn)));
 
