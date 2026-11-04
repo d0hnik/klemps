@@ -5,3 +5,14 @@ pub enum RoundType {
     InsideOutside,
     Suit,
 }
+
+impl RoundType {
+    pub fn get_next_round_type(&self) -> RoundType {
+        return match self {
+            RoundType::RedOrBlack => RoundType::HigherLower,
+            RoundType::HigherLower => RoundType::InsideOutside,
+            RoundType::InsideOutside => RoundType::Suit,
+            RoundType::Suit => RoundType::RedOrBlack,
+        };
+    }
+}

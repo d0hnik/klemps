@@ -142,11 +142,34 @@ impl Game {
             let mutable_player = self.get_current_player_mut()?;
 
             mutable_player.add_drinks_taken(drinks_count);
+
+            self.advance_turn();
         } else {
             self.game_state = GameState::AwaitingDrinkAllocation;
         }
 
         Ok(guess_result)
+    }
+
+    fn advance_turn(&mut self) {
+        let current_player_index = self.get_current_player_index();
+
+        let players_len = self.get_players().len();
+
+        if *current_player_index == players_len - 1 {
+            if self.get_current_round_type() == &RoundType::Suit {
+                self.game_state = GameState::Finished;
+                return;
+            }
+
+            self.current_player_index = 0;
+
+            let next_round_type = self.get_current_round_type().get_next_round_type();
+
+            self.current_round_type = next_round_type;
+        } else {
+            self.current_player_index += 1;
+        }
     }
 }
 
@@ -157,7 +180,11 @@ mod tests {
     use std::collections::HashSet;
     use uuid::Uuid;
 
-    use crate::domain::{card::Card, ids::GuestId, player::PlayerIdentity};
+    use crate::domain::{
+        card::{Card, CardColor},
+        ids::GuestId,
+        player::PlayerIdentity,
+    };
 
     fn create_game() -> Game {
         let mut rng = StdRng::seed_from_u64(42);
@@ -192,6 +219,18 @@ mod tests {
             .iter()
             .flat_map(|player| player.hand().iter().copied())
             .collect()
+    }
+
+    fn wrong_color_guess(game: &Game) -> Guess {
+        let player = game.get_current_player().unwrap();
+        let card = player.hand()[0];
+
+        let guess = match card.suit().color() {
+            CardColor::Red => CardColor::Black,
+            CardColor::Black => CardColor::Red,
+        };
+
+        Guess::Color(guess)
     }
 
     #[test]
@@ -306,5 +345,104 @@ mod tests {
                 "Incorrect remaining deck size for {count} players"
             );
         }
+    }
+
+    #[test]
+    fn wrong_guess_advances_to_next_player() {
+        let mut game = game_with_players(3);
+        game.start().unwrap();
+
+        let identity = game.get_current_player().unwrap().identity();
+        let guess = wrong_color_guess(&game);
+
+        let result = game.make_a_guess(identity, guess);
+
+        assert!(matches!(result, Ok(false)));
+        assert_eq!(game.current_player_index, 1);
+        assert_eq!(game.current_round_type, RoundType::RedOrBlack);
+        assert_eq!(game.game_state, GameState::GameInProgress);
+    }
+
+    #[test]
+    fn last_player_advances_to_next_round() {
+        let mut game = game_with_players(3);
+        game.start().unwrap();
+
+        game.current_player_index = 2;
+
+        let identity = game.get_current_player().unwrap().identity();
+        let guess = wrong_color_guess(&game);
+
+        let result = game.make_a_guess(identity, guess);
+
+        assert!(matches!(result, Ok(false)));
+        assert_eq!(game.current_player_index, 0);
+        assert_eq!(game.current_round_type, RoundType::HigherLower);
+        assert_eq!(game.game_state, GameState::GameInProgress);
+    }
+
+    #[test]
+    fn advance_turn_transitions_through_all_rounds() {
+        let mut game = game_with_players(2);
+        game.start().unwrap();
+
+        let transitions = [
+            (RoundType::RedOrBlack, RoundType::HigherLower),
+            (RoundType::HigherLower, RoundType::InsideOutside),
+            (RoundType::InsideOutside, RoundType::Suit),
+        ];
+
+        for (current_round, next_round) in transitions {
+            game.current_round_type = current_round;
+            game.current_player_index = 1;
+
+            game.advance_turn();
+
+            assert_eq!(game.current_player_index, 0);
+            assert_eq!(game.current_round_type, next_round);
+            assert_eq!(game.game_state, GameState::GameInProgress);
+        }
+    }
+
+    #[test]
+    fn final_turn_finishes_game() {
+        let mut game = game_with_players(2);
+        game.start().unwrap();
+
+        game.current_round_type = RoundType::Suit;
+        game.current_player_index = 1;
+
+        game.advance_turn();
+
+        assert_eq!(game.game_state, GameState::Finished);
+        assert_eq!(game.current_round_type, RoundType::Suit);
+        assert_eq!(game.current_player_index, 1);
+    }
+
+    #[test]
+    fn previous_player_cannot_guess_again() {
+        let mut game = game_with_players(2);
+        game.start().unwrap();
+
+        let previous_identity = game.get_current_player().unwrap().identity();
+        let guess = wrong_color_guess(&game);
+
+        assert!(matches!(
+            game.make_a_guess(previous_identity.clone(), guess),
+            Ok(false)
+        ));
+
+        assert_eq!(game.current_player_index, 1);
+
+        let drinks_before = game.players[0].drinks_taken();
+
+        let result = game.make_a_guess(previous_identity, Guess::Color(CardColor::Red));
+
+        assert!(matches!(result, Err(GameError::NotYourTurn)));
+
+        assert_eq!(game.current_player_index, 1);
+        assert_eq!(game.current_round_type, RoundType::RedOrBlack);
+        assert_eq!(game.game_state, GameState::GameInProgress);
+        assert_eq!(game.players[0].drinks_taken(), drinks_before);
     }
 }
