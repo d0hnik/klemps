@@ -428,7 +428,7 @@ mod tests {
         let guess = wrong_color_guess(&game);
 
         assert!(matches!(
-            game.make_a_guess(previous_identity.clone(), guess),
+            game.make_a_guess(previous_identity, guess),
             Ok(false)
         ));
 

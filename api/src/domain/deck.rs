@@ -39,9 +39,9 @@ impl Deck {
 
         if let Some(card) = card {
             return Ok(card);
-        } else {
-            return Err(GameError::NoMoreCards);
         }
+
+        Err(GameError::NoMoreCards)
     }
 
     pub fn draw_hand(&mut self) -> Result<Vec<Card>, GameError> {
