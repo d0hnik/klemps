@@ -60,7 +60,7 @@ pub fn validate_assign_drinks(
     game: &Game,
     caller: &PlayerIdentity,
     allocations: &[DrinkAllocation],
-) -> Result<(), GameError> {
+) -> Result<u16, GameError> {
     if game.get_game_state() != &GameState::AwaitingDrinkAllocation {
         return Err(GameError::InvalidGameStateToAssignDrinks);
     }
@@ -91,11 +91,17 @@ pub fn validate_assign_drinks(
         return Err(GameError::DuplicateDrinkAllocation);
     }
 
-    let sum_of_drinks: u16 = allocations.into_iter().map(|a| a.amount).sum();
+    let mut total = 0u16;
 
-    if sum_of_drinks != game.get_drinks_count() {
+    for allocation in allocations {
+        total = total
+            .checked_add(allocation.amount)
+            .ok_or(GameError::InvalidAllocationTotal)?;
+    }
+
+    if total != game.get_drinks_count() {
         return Err(GameError::InvalidAllocationTotal);
     }
 
-    Ok(())
+    Ok(total)
 }

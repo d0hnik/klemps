@@ -170,13 +170,11 @@ impl Game {
         actor: PlayerIdentity,
         allocations: &[DrinkAllocation],
     ) -> Result<(), GameError> {
-        validate_assign_drinks(self, &actor, allocations)?;
+        let total = validate_assign_drinks(self, &actor, allocations)?;
 
         let mutable_current_player = self.get_current_player_mut()?;
 
-        let sum_of_drinks: u16 = allocations.into_iter().map(|a| a.amount).sum();
-
-        mutable_current_player.add_drinks_given(sum_of_drinks);
+        mutable_current_player.add_drinks_given(total);
 
         for allocation in allocations {
             let player_mut = self.get_player_mut(&allocation.recipient)?;
@@ -251,6 +249,23 @@ mod tests {
         };
 
         Guess::Color(guess)
+    }
+
+    fn ready_for_allocation(player_count: usize, round: RoundType) -> Game {
+        let mut game = game_with_players(player_count);
+        game.start().unwrap();
+
+        game.current_round_type = round;
+        game.game_state = GameState::AwaitingDrinkAllocation;
+
+        game
+    }
+
+    fn allocation(game: &Game, player_index: usize, amount: u16) -> DrinkAllocation {
+        DrinkAllocation {
+            recipient: *game.players[player_index].identity(),
+            amount,
+        }
     }
 
     #[test]
@@ -464,5 +479,192 @@ mod tests {
         assert_eq!(game.current_round_type, RoundType::RedOrBlack);
         assert_eq!(game.game_state, GameState::GameInProgress);
         assert_eq!(game.players[0].drinks_taken(), drinks_before);
+    }
+
+    #[test]
+    fn assigning_full_budget_to_one_recipient() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+        let allocations = [allocation(&game, 1, 4)];
+
+        assert!(game.assign_drinks(actor, &allocations).is_ok());
+
+        assert_eq!(game.players[0].drinks_given(), 4);
+        assert_eq!(game.players[1].drinks_taken(), 4);
+        assert_eq!(game.players[2].drinks_taken(), 0);
+
+        assert_eq!(game.game_state, GameState::GameInProgress);
+        assert_eq!(game.current_player_index, 1);
+    }
+
+    #[test]
+    fn splitting_budget_between_recipients() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+
+        let allocations = [allocation(&game, 1, 1), allocation(&game, 2, 3)];
+
+        assert!(game.assign_drinks(actor, &allocations).is_ok());
+
+        assert_eq!(game.players[0].drinks_given(), 4);
+        assert_eq!(game.players[1].drinks_taken(), 1);
+        assert_eq!(game.players[2].drinks_taken(), 3);
+
+        assert_eq!(game.current_player_index, 1);
+    }
+
+    #[test]
+    fn rejects_wrong_phase_and_actor() {
+        let mut game = game_with_players(3);
+        game.start().unwrap();
+
+        let actor = *game.players[0].identity();
+        let wrong_actor = *game.players[1].identity();
+
+        let allocations = [allocation(&game, 1, 1)];
+
+        assert!(matches!(
+            game.assign_drinks(actor, &allocations),
+            Err(GameError::InvalidGameStateToAssignDrinks)
+        ));
+
+        game.game_state = GameState::AwaitingDrinkAllocation;
+
+        assert!(matches!(
+            game.assign_drinks(wrong_actor, &allocations),
+            Err(GameError::NotYourTurn)
+        ));
+    }
+
+    #[test]
+    fn rejects_unknown_recipients_and_duplicates() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+
+        let unknown_identity = *player(Uuid::new_v4(), "Unknown").identity();
+
+        let unknown_allocations = [DrinkAllocation {
+            recipient: unknown_identity,
+            amount: 4,
+        }];
+
+        assert!(matches!(
+            game.assign_drinks(actor, &unknown_allocations),
+            Err(GameError::PlayerNotFound)
+        ));
+
+        let duplicate_allocations = [allocation(&game, 1, 2), allocation(&game, 1, 2)];
+
+        assert!(matches!(
+            game.assign_drinks(actor, &duplicate_allocations),
+            Err(GameError::DuplicateDrinkAllocation)
+        ));
+    }
+
+    #[test]
+    fn rejects_invalid_allocation_totals() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+
+        let cases = [
+            (vec![allocation(&game, 1, 3)], "below budget"),
+            (vec![allocation(&game, 1, 5)], "above budget"),
+            (vec![], "empty allocations"),
+            (
+                vec![allocation(&game, 1, u16::MAX), allocation(&game, 2, 1)],
+                "overflow",
+            ),
+        ];
+
+        for (allocations, description) in cases {
+            let result = game.assign_drinks(actor, &allocations);
+
+            assert!(
+                matches!(result, Err(GameError::InvalidAllocationTotal)),
+                "Failed case: {description}, got {result:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn rejected_allocations_preserve_game_state() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+
+        let original_given: Vec<_> = game.players.iter().map(|p| p.drinks_given()).collect();
+
+        let original_taken: Vec<_> = game.players.iter().map(|p| p.drinks_taken()).collect();
+
+        let original_index = game.current_player_index;
+        let original_round = game.current_round_type;
+        let original_state = game.game_state;
+
+        let invalid_cases = [
+            vec![allocation(&game, 1, 3)],
+            vec![allocation(&game, 1, 5)],
+            vec![allocation(&game, 1, 2), allocation(&game, 1, 2)],
+            vec![allocation(&game, 1, u16::MAX), allocation(&game, 2, 1)],
+        ];
+
+        for allocations in invalid_cases {
+            assert!(game.assign_drinks(actor, &allocations).is_err());
+
+            let current_given: Vec<_> = game.players.iter().map(|p| p.drinks_given()).collect();
+
+            let current_taken: Vec<_> = game.players.iter().map(|p| p.drinks_taken()).collect();
+
+            assert_eq!(current_given, original_given);
+            assert_eq!(current_taken, original_taken);
+
+            assert_eq!(game.current_player_index, original_index);
+            assert_eq!(game.current_round_type, original_round);
+            assert_eq!(game.game_state, original_state);
+        }
+    }
+
+    #[test]
+    fn repeated_submission_is_rejected() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        let actor = *game.players[0].identity();
+        let allocations = [allocation(&game, 1, 4)];
+
+        game.assign_drinks(actor, &allocations).unwrap();
+
+        let result = game.assign_drinks(actor, &allocations);
+
+        assert!(matches!(
+            result,
+            Err(GameError::InvalidGameStateToAssignDrinks)
+        ));
+
+        assert_eq!(game.players[0].drinks_given(), 4);
+        assert_eq!(game.players[1].drinks_taken(), 4);
+        assert_eq!(game.current_player_index, 1);
+        assert_eq!(game.game_state, GameState::GameInProgress);
+    }
+
+    #[test]
+    fn final_turn_allocation_finishes_game() {
+        let mut game = ready_for_allocation(3, RoundType::Suit);
+
+        game.current_player_index = game.players.len() - 1;
+
+        let actor = *game.players[2].identity();
+        let allocations = [allocation(&game, 0, 4)];
+
+        assert!(game.assign_drinks(actor, &allocations).is_ok());
+
+        assert_eq!(game.players[2].drinks_given(), 4);
+        assert_eq!(game.players[0].drinks_taken(), 4);
+
+        assert_eq!(game.game_state, GameState::Finished);
+        assert_eq!(game.current_round_type, RoundType::Suit);
+        assert_eq!(game.current_player_index, 2);
     }
 }
