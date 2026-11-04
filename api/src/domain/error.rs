@@ -14,4 +14,5 @@ pub enum GameError {
     NotYourTurn,
     DuplicateDrinkAllocation,
     InvalidAllocationTotal,
+    CallerInDrinkAllocations,
 }

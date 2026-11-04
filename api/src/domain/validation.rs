@@ -71,6 +71,14 @@ pub fn validate_assign_drinks(
         return Err(GameError::NotYourTurn);
     }
 
+    let caller_in_allocations = allocations
+        .iter()
+        .all(|allocation| &allocation.recipient == caller);
+
+    if caller_in_allocations {
+        return Err(GameError::CallerInDrinkAllocations);
+    }
+
     let all_players_exist = allocations.iter().all(|allocation| {
         game.get_players()
             .iter()
