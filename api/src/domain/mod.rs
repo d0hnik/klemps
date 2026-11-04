@@ -11,3 +11,4 @@ pub mod health;
 pub mod ids;
 pub mod player;
 pub mod round_type;
+pub mod validation;

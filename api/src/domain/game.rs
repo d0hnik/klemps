@@ -13,6 +13,10 @@ use crate::domain::{
     ids::GameId,
     player::{GamePlayer, PlayerIdentity},
     round_type::RoundType,
+    validation::{
+        validate_adding_player_to_game, validate_assign_drinks, validate_make_guess,
+        validate_start_game,
+    },
 };
 
 pub struct Game {
@@ -57,6 +61,10 @@ impl Game {
         &self.current_round_type
     }
 
+    pub fn get_game_state(&self) -> &GameState {
+        &self.game_state
+    }
+
     pub fn deck(&self) -> &Deck {
         &self.deck
     }
@@ -95,22 +103,7 @@ impl Game {
     }
 
     pub fn add_player(&mut self, player: GamePlayer) -> Result<(), GameError> {
-        if self.game_state != GameState::Lobby {
-            return Err(GameError::NotInLobby);
-        }
-
-        let already_joined = self
-            .players
-            .iter()
-            .any(|existing| existing.identity() == player.identity());
-
-        if already_joined {
-            return Err(GameError::DuplicatePlayer);
-        }
-
-        if self.players.len() >= MAX_PLAYERS {
-            return Err(GameError::TooManyPlayers);
-        }
+        validate_adding_player_to_game(self, &player)?;
 
         self.players.push(player);
 
@@ -118,13 +111,7 @@ impl Game {
     }
 
     pub fn start(&mut self) -> Result<(), GameError> {
-        if self.game_state != GameState::Lobby {
-            return Err(GameError::InvalidGameStateToStartGame);
-        }
-
-        if self.players.len() < MIN_PLAYERS || self.players.len() > MAX_PLAYERS {
-            return Err(GameError::InvalidPlayerCount);
-        }
+        validate_start_game(self)?;
 
         self.deal_hands_to_players()?;
 
@@ -138,18 +125,13 @@ impl Game {
         identity: &PlayerIdentity,
         guess: Guess,
     ) -> Result<bool, GameError> {
-        if self.game_state != GameState::GameInProgress {
-            return Err(GameError::InvalidGameStateToMakeAGuess);
-        }
+        validate_make_guess(self, identity)?;
 
-        let current_player = self.get_current_player()?;
-
-        if current_player.identity() != identity {
-            return Err(GameError::NotYourTurn);
-        }
-
-        let guess_result =
-            evaluate_guess(self.get_current_round_type(), guess, current_player.hand())?;
+        let guess_result = evaluate_guess(
+            self.get_current_round_type(),
+            guess,
+            self.get_current_player()?.hand(),
+        )?;
 
         if !guess_result {
             let drinks_count = self.get_drinks_count();
@@ -191,43 +173,11 @@ impl Game {
         actor: PlayerIdentity,
         allocations: &[DrinkAllocation],
     ) -> Result<(), GameError> {
-        if self.game_state != GameState::AwaitingDrinkAllocation {
-            return Err(GameError::InvalidGameStateToAssignDrinks);
-        }
-
-        let current_player = self.get_current_player()?;
-
-        if current_player.identity() != &actor {
-            return Err(GameError::NotYourTurn);
-        }
-
-        let all_players_exist = allocations.iter().all(|allocation| {
-            self.players
-                .iter()
-                .any(|player| player.identity() == &allocation.recipient)
-        });
-
-        if !all_players_exist {
-            return Err(GameError::PlayerNotFound);
-        }
-
-        let mut seen = HashSet::new();
-
-        let has_duplicates = allocations
-            .iter()
-            .any(|allocation| !seen.insert(allocation.recipient));
-
-        if has_duplicates {
-            return Err(GameError::DuplicateDrinkAllocation);
-        }
-
-        let sum_of_drinks: u16 = allocations.into_iter().map(|a| a.amount).sum();
-
-        if sum_of_drinks != self.get_drinks_count() {
-            return Err(GameError::InvalidAllocationTotal);
-        }
+        validate_assign_drinks(self, &actor, allocations)?;
 
         let mutable_current_player = self.get_current_player_mut()?;
+
+        let sum_of_drinks: u16 = allocations.into_iter().map(|a| a.amount).sum();
 
         mutable_current_player.add_drinks_given(sum_of_drinks);
 
