@@ -2,6 +2,7 @@ pub mod card;
 pub mod constants;
 pub mod deck;
 pub mod difficulty;
+pub mod drink_allocation;
 pub mod error;
 pub mod game;
 pub mod game_state;
